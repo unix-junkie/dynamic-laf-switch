@@ -128,6 +128,7 @@ abstract class Main {
 					final JarInputStream jis = new JarInputStream(in);
 					try {
 						JarEntry entry;
+						nextClass:
 						while ((entry = jis.getNextJarEntry()) != null) {
 							if (entry.isDirectory()) {
 								/*
@@ -152,9 +153,10 @@ abstract class Main {
 								continue;
 							}
 
-							final String packageName = className.substring(0, className.lastIndexOf('.'));
-							if (packagesToSkip.contains(packageName)) {
-								continue;
+							for (final String packageToSkip : packagesToSkip) {
+								if (className.startsWith(packageToSkip + '.')) {
+									continue nextClass;
+								}
 							}
 
 							try {
@@ -285,7 +287,21 @@ abstract class Main {
 	 * @param args
 	 */
 	public static void main(final String args[]) {
-		final List<String> packagesToSkip = asList("com.sun.management", "com.sun.org.apache.xml.internal.security.utils");
+		final List<String> packagesToSkip = asList(
+				"com.apple.crypto",
+				"com.oracle",
+				"com.sun.crypto",
+				"com.sun.management",
+				"com.sun.net.ssl",
+				"com.sun.org.apache.xml.internal.security.utils",
+				"com.sun.security",
+				"java",
+				"javax.crypto",
+				"javax.net.ssl",
+				"oracle",
+				"sun",
+				"sunw"
+		);
 
 		setDefaultLookAndFeelDecorated(true);
 
