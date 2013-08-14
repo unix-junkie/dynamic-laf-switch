@@ -1,5 +1,5 @@
 /*-
- * $Id: 21280a520375e9fb1974838d869de4447835bdf1 $
+ * $Id$
  */
 package com.example;
 
