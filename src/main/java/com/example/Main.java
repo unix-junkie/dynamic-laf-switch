@@ -181,12 +181,10 @@ abstract class Main {
 	/**
 	 * @param lookAndFeel
 	 * @param themeMenu
-	 * @param themeMenuGroup
 	 * @param c
 	 */
 	private static JRadioButtonMenuItem fromLookAndFeel(final @Nullable LookAndFeel lookAndFeel,
 			final JMenu themeMenu,
-			final ButtonGroup themeMenuGroup,
 			final JFrame frame) {
 		if (lookAndFeel == null) {
 			throw new IllegalArgumentException();
@@ -221,10 +219,9 @@ abstract class Main {
 
 	/**
 	 * @param metalTheme
-	 * @param themeMenuGroup
 	 * @param c
 	 */
-	private static JRadioButtonMenuItem fromMetalTheme(final @Nullable MetalTheme metalTheme, final ButtonGroup themeMenuGroup, final Component c) {
+	private static JRadioButtonMenuItem fromMetalTheme(final @Nullable MetalTheme metalTheme, final Component c) {
 		if (metalTheme == null) {
 			throw new IllegalArgumentException();
 		}
@@ -269,7 +266,7 @@ abstract class Main {
 		themeMenu.setMnemonic('T');
 		for (final Class<? extends MetalTheme> clazz : listDescendants(MetalTheme.class, false, false, true, true, true)) {
 			try {
-				final JRadioButtonMenuItem menuItem = fromMetalTheme(clazz.newInstance(), themeMenuGroup, frame);
+				final JRadioButtonMenuItem menuItem = fromMetalTheme(clazz.newInstance(), frame);
 				themeMenu.add(menuItem);
 				themeMenuGroup.add(menuItem);
 			} catch (final InstantiationException | IllegalAccessException e) {
@@ -286,7 +283,7 @@ abstract class Main {
 		descendants.removeAll(exclusions);
 		for (final Class<? extends LookAndFeel> clazz : descendants) {
 			try {
-				final JRadioButtonMenuItem menuItem = fromLookAndFeel(clazz.newInstance(), themeMenu, themeMenuGroup, frame);
+				final JRadioButtonMenuItem menuItem = fromLookAndFeel(clazz.newInstance(), themeMenu, frame);
 				lookAndFeelMenu.add(menuItem);
 				lookAndFeelMenuGroup.add(menuItem);
 			} catch (final InstantiationException | IllegalAccessException e) {
