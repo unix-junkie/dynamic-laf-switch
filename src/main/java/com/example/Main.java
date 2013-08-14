@@ -266,6 +266,7 @@ abstract class Main {
 		final ButtonGroup themeMenuGroup = new ButtonGroup();
 		themeMenu.setText("Themes");
 		themeMenu.setMnemonic('T');
+		themeMenu.setEnabled(getLookAndFeel() instanceof MetalLookAndFeel);
 		for (final Class<? extends MetalTheme> clazz : listDescendants(MetalTheme.class, false, false, true, true, true)) {
 			try {
 				final JRadioButtonMenuItem menuItem = fromMetalTheme(clazz.newInstance(), frame);
