@@ -316,7 +316,7 @@ abstract class Main {
 		final Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(320, 240));
 		contentPane.setLayout(new BorderLayout());
-		contentPane.add(new JButton("Кнопочка-мозгоёбочка"), CENTER);
+		contentPane.add(new JButton("РљРЅРѕРїРѕС‡РєР°-РјРѕР·РіРѕС‘Р±РѕС‡РєР°"), CENTER);
 
 		frame.pack();
 		frame.setVisible(true);
