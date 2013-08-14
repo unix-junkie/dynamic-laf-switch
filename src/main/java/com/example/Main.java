@@ -172,7 +172,7 @@ abstract class Main {
 					} catch (final OutOfMemoryError oome) {
 						throw oome;
 					} catch (final Throwable t) {
-						t.printStackTrace();
+						// ignore
 					}
 				}
 			} catch (final IOException ioe) {
