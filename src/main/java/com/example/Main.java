@@ -9,7 +9,9 @@ import static java.lang.System.getProperty;
 import static java.util.Arrays.asList;
 import static java.util.Collections.list;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import static javax.swing.JFrame.isDefaultLookAndFeelDecorated;
 import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
+import static javax.swing.JRootPane.FRAME;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.SwingUtilities.updateComponentTreeUI;
 import static javax.swing.UIManager.getLookAndFeel;
@@ -208,9 +210,12 @@ abstract class Main {
 					themeMenu.setEnabled(lookAndFeel instanceof MetalLookAndFeel);
 					updateComponentTreeUI(frame);
 
-					frame.dispose();
-					frame.setUndecorated(lookAndFeel instanceof MetalLookAndFeel);
-					frame.setVisible(true);
+					if (isDefaultLookAndFeelDecorated()) {
+						frame.dispose();
+						frame.setUndecorated(lookAndFeel instanceof MetalLookAndFeel);
+						frame.getRootPane().setWindowDecorationStyle(FRAME);
+						frame.setVisible(true);
+					}
 				} catch (final Exception e1) {
 					menuItem.setEnabled(false);
 				}
