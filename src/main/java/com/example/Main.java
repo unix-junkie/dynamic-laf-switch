@@ -87,13 +87,19 @@ abstract class Main {
 	 * @param skipNonPublic
 	 * @param skipAbstract
 	 * @param skipDeprecated
+	 * @param packagesToSkip
 	 */
 	private static <T> SortedSet<Class<? extends T>> listDescendants(final Class<T> baseClass,
 			final boolean skipInnerClasses,
 			final boolean skipAnonymousClasses,
 			final boolean skipNonPublic,
 			final boolean skipAbstract,
-			final boolean skipDeprecated) {
+			final boolean skipDeprecated,
+			final @Nullable List<String> packagesToSkip) {
+		if (packagesToSkip == null) {
+			throw new IllegalArgumentException();
+		}
+
 		final String javaClassPath = getProperty("java.class.path");
 		final String sunBootClassPath = getProperty("sun.boot.class.path");
 		final List<String> pathEntries = new ArrayList<String>();
@@ -143,6 +149,11 @@ abstract class Main {
 							}
 
 							if (skipInnerClasses && className.indexOf('$') != -1) {
+								continue;
+							}
+
+							final String packageName = className.substring(0, className.lastIndexOf('.'));
+							if (packagesToSkip.contains(packageName)) {
 								continue;
 							}
 
@@ -274,6 +285,8 @@ abstract class Main {
 	 * @param args
 	 */
 	public static void main(final String args[]) {
+		final List<String> packagesToSkip = asList("com.sun.management", "com.sun.org.apache.xml.internal.security.utils");
+
 		setDefaultLookAndFeelDecorated(true);
 
 		final JFrame frame = new JFrame();
@@ -285,7 +298,7 @@ abstract class Main {
 		themeMenu.setText("Themes");
 		themeMenu.setMnemonic('T');
 		themeMenu.setEnabled(getLookAndFeel() instanceof MetalLookAndFeel);
-		for (final Class<? extends MetalTheme> clazz : listDescendants(MetalTheme.class, false, false, true, true, true)) {
+		for (final Class<? extends MetalTheme> clazz : listDescendants(MetalTheme.class, false, false, true, true, true, packagesToSkip)) {
 			try {
 				final JRadioButtonMenuItem menuItem = fromMetalTheme(clazz.newInstance(), frame);
 				themeMenu.add(menuItem);
@@ -301,7 +314,7 @@ abstract class Main {
 		final ButtonGroup lookAndFeelMenuGroup = new ButtonGroup();
 		lookAndFeelMenu.setText("Look & Feel");
 		lookAndFeelMenu.setMnemonic('L');
-		final SortedSet<Class<? extends LookAndFeel>> descendants = listDescendants(LookAndFeel.class, false, false, true, true, true);
+		final SortedSet<Class<? extends LookAndFeel>> descendants = listDescendants(LookAndFeel.class, false, false, true, true, true, packagesToSkip);
 		/*-
 		 * See the discussions at
 		 *
