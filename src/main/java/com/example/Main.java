@@ -1,5 +1,5 @@
 /*-
- * $Id$
+ * $Id: 5ee1907e4dd0eba1f11991a8b179ad89e9620da5 $
  */
 package com.example;
 
@@ -340,7 +340,7 @@ abstract class Main {
 		final Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(320, 240));
 		contentPane.setLayout(new BorderLayout());
-		contentPane.add(new JButton("��������-����������"), CENTER);
+		contentPane.add(new JButton("Кнопочка-мозгоёбочка"), CENTER);
 
 		frame.pack();
 		frame.setVisible(true);
