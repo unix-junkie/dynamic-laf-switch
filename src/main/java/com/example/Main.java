@@ -167,6 +167,8 @@ abstract class Main {
 						classes.add(class2);
 					} catch (final ClassNotFoundException | UnsatisfiedLinkError | ExceptionInInitializerError | NoClassDefFoundError e) {
 						// ignore
+					} catch (final OutOfMemoryError oome) {
+						throw oome;
 					} catch (final Throwable t) {
 						t.printStackTrace();
 					}
