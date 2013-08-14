@@ -9,7 +9,9 @@ import static java.lang.System.getProperty;
 import static java.util.Arrays.asList;
 import static java.util.Collections.list;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import static javax.swing.JFrame.isDefaultLookAndFeelDecorated;
 import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
+import static javax.swing.JRootPane.FRAME;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.SwingUtilities.updateComponentTreeUI;
 import static javax.swing.UIManager.getLookAndFeel;
@@ -25,8 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -96,10 +96,10 @@ abstract class Main {
 			final boolean skipDeprecated) {
 		final String javaClassPath = getProperty("java.class.path");
 		final String sunBootClassPath = getProperty("sun.boot.class.path");
-		final List<String> pathEntries = new ArrayList<>();
+		final List<String> pathEntries = new ArrayList<String>();
 		pathEntries.addAll(asList(split(javaClassPath)));
 		pathEntries.addAll(asList(split(sunBootClassPath)));
-		final SortedSet<Class<? extends T>> classes = new TreeSet<>(new Comparator<Class<? extends T>>() {
+		final SortedSet<Class<? extends T>> classes = new TreeSet<Class<? extends T>>(new Comparator<Class<? extends T>>() {
 			/**
 			 * @see Comparator#compare
 			 */
@@ -116,62 +116,79 @@ abstract class Main {
 			if (!file.exists() || file.isDirectory() || !file.isFile()) {
 				continue;
 			}
-			try (final InputStream in = new FileInputStream(file);
-					final JarInputStream jis = new JarInputStream(in)) {
-				JarEntry entry;
-				while ((entry = jis.getNextJarEntry()) != null) {
-					if (entry.isDirectory()) {
-						/*
-						 * Skip directories.
-						 */
-						continue;
-					}
-					final String entryName = entry.getName();
-					final int indexOfDotClass = entryName.indexOf(".class");
-					if (indexOfDotClass == -1) {
-						/*
-						 * Skip resources.
-						 */
-						continue;
-					}
-					final String className = entryName.substring(0, indexOfDotClass).replace('/', '.');
-					if (skipAnonymousClasses && className.matches(".*[^\\$](\\$\\d+)+$")) {
-						continue;
-					}
-
-					if (skipInnerClasses && className.indexOf('$') != -1) {
-						continue;
-					}
-
+			try {
+				final FileInputStream in = new FileInputStream(file);
+				try {
+					final JarInputStream jis = new JarInputStream(in);
 					try {
-						final Class<?> clazz = forName(className);
-						if (!baseClass.isAssignableFrom(clazz)) {
-							continue;
-						}
+						JarEntry entry;
+						while ((entry = jis.getNextJarEntry()) != null) {
+							if (entry.isDirectory()) {
+								/*
+								 * Skip directories.
+								 */
+								continue;
+							}
+							final String entryName = entry.getName();
+							final int indexOfDotClass = entryName.indexOf(".class");
+							if (indexOfDotClass == -1) {
+								/*
+								 * Skip resources.
+								 */
+								continue;
+							}
+							final String className = entryName.substring(0, indexOfDotClass).replace('/', '.');
+							if (skipAnonymousClasses && className.matches(".*[^\\$](\\$\\d+)+$")) {
+								continue;
+							}
 
-						final int modifiers = clazz.getModifiers();
-						if (skipNonPublic && (modifiers & ACC_PUBLIC) == 0) {
-							continue;
-						}
+							if (skipInnerClasses && className.indexOf('$') != -1) {
+								continue;
+							}
 
-						if (skipAbstract && (clazz.getModifiers() & ACC_ABSTRACT) != 0) {
-							continue;
-						}
+							try {
+								final Class<?> clazz = forName(className);
+								if (!baseClass.isAssignableFrom(clazz)) {
+									continue;
+								}
 
-						if (skipDeprecated && clazz.isAnnotationPresent(Deprecated.class)) {
-							continue;
-						}
+								final int modifiers = clazz.getModifiers();
+								if (skipNonPublic && (modifiers & ACC_PUBLIC) == 0) {
+									continue;
+								}
 
-						@SuppressWarnings("unchecked")
-						final Class<? extends T> class2 = (Class<? extends T>) clazz;
-						classes.add(class2);
-					} catch (final ClassNotFoundException | UnsatisfiedLinkError | ExceptionInInitializerError | NoClassDefFoundError e) {
-						// ignore
-					} catch (final Throwable t) {
-						t.printStackTrace();
+								if (skipAbstract && (clazz.getModifiers() & ACC_ABSTRACT) != 0) {
+									continue;
+								}
+
+								if (skipDeprecated && clazz.isAnnotationPresent(Deprecated.class)) {
+									continue;
+								}
+
+								@SuppressWarnings("unchecked")
+								final Class<? extends T> class2 = (Class<? extends T>) clazz;
+								classes.add(class2);
+							} catch (final ClassNotFoundException cnfe) {
+								// ignore
+							} catch (final UnsatisfiedLinkError ule) {
+								// ignore
+							} catch (final ExceptionInInitializerError eiie) {
+								// ignore
+							} catch (final NoClassDefFoundError ncdfe) {
+								// ignore
+							} catch (final OutOfMemoryError oome) {
+								throw oome;
+							} catch (final Throwable t) {
+								// ignore
+							}
+						}
+					} finally {
+						jis.close();
 					}
+				} finally {
+					in.close();
 				}
-			} catch (final IOException ioe) {
+			} catch (final Exception ioe) {
 				// ignore
 			}
 		}
@@ -181,17 +198,15 @@ abstract class Main {
 	/**
 	 * @param lookAndFeel
 	 * @param themeMenu
-	 * @param themeMenuGroup
 	 * @param c
 	 */
 	private static JRadioButtonMenuItem fromLookAndFeel(final @Nullable LookAndFeel lookAndFeel,
 			final JMenu themeMenu,
-			final ButtonGroup themeMenuGroup,
 			final JFrame frame) {
 		if (lookAndFeel == null) {
 			throw new IllegalArgumentException();
 		}
-
+		
 		final JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem();
 		menuItem.setText(lookAndFeel.getName());
 		menuItem.setToolTipText(lookAndFeel.getClass().getName());
@@ -208,9 +223,12 @@ abstract class Main {
 					themeMenu.setEnabled(lookAndFeel instanceof MetalLookAndFeel);
 					updateComponentTreeUI(frame);
 
-					frame.dispose();
-					frame.setUndecorated(lookAndFeel instanceof MetalLookAndFeel);
-					frame.setVisible(true);
+					if (isDefaultLookAndFeelDecorated()) {
+						frame.dispose();
+						frame.setUndecorated(lookAndFeel instanceof MetalLookAndFeel);
+						frame.getRootPane().setWindowDecorationStyle(FRAME);						
+						frame.setVisible(true);
+					}
 				} catch (final Exception e1) {
 					menuItem.setEnabled(false);
 				}
@@ -221,10 +239,9 @@ abstract class Main {
 
 	/**
 	 * @param metalTheme
-	 * @param themeMenuGroup
 	 * @param c
 	 */
-	private static JRadioButtonMenuItem fromMetalTheme(final @Nullable MetalTheme metalTheme, final ButtonGroup themeMenuGroup, final Component c) {
+	private static JRadioButtonMenuItem fromMetalTheme(final @Nullable MetalTheme metalTheme, final Component c) {
 		if (metalTheme == null) {
 			throw new IllegalArgumentException();
 		}
@@ -267,12 +284,15 @@ abstract class Main {
 		final ButtonGroup themeMenuGroup = new ButtonGroup();
 		themeMenu.setText("Themes");
 		themeMenu.setMnemonic('T');
+		themeMenu.setEnabled(getLookAndFeel() instanceof MetalLookAndFeel);
 		for (final Class<? extends MetalTheme> clazz : listDescendants(MetalTheme.class, false, false, true, true, true)) {
 			try {
-				final JRadioButtonMenuItem menuItem = fromMetalTheme(clazz.newInstance(), themeMenuGroup, frame);
+				final JRadioButtonMenuItem menuItem = fromMetalTheme(clazz.newInstance(), frame);
 				themeMenu.add(menuItem);
 				themeMenuGroup.add(menuItem);
-			} catch (final InstantiationException | IllegalAccessException e) {
+			} catch (final InstantiationException ie) {
+				// ignore
+			} catch (final IllegalAccessException iae) {
 				// ignore
 			}
 		}
@@ -282,14 +302,23 @@ abstract class Main {
 		lookAndFeelMenu.setText("Look & Feel");
 		lookAndFeelMenu.setMnemonic('L');
 		final SortedSet<Class<? extends LookAndFeel>> descendants = listDescendants(LookAndFeel.class, false, false, true, true, true);
+		/*-
+		 * See the discussions at
+		 *
+		 * http://stackoverflow.com/questions/3981579/java-type-safety-a-generic-array-of-a-is-created-for-a-varargs-parameter and
+		 * http://stackoverflow.com/questions/1445233/is-it-possible-to-solve-the-a-generic-array-of-t-is-created-for-a-varargs-param 
+		 */
+		@SuppressWarnings("unchecked")
 		final List<Class<? extends LookAndFeel>> exclusions = asList(MultiLookAndFeel.class, SynthLookAndFeel.class);
 		descendants.removeAll(exclusions);
 		for (final Class<? extends LookAndFeel> clazz : descendants) {
 			try {
-				final JRadioButtonMenuItem menuItem = fromLookAndFeel(clazz.newInstance(), themeMenu, themeMenuGroup, frame);
+				final JRadioButtonMenuItem menuItem = fromLookAndFeel(clazz.newInstance(), themeMenu, frame);
 				lookAndFeelMenu.add(menuItem);
 				lookAndFeelMenuGroup.add(menuItem);
-			} catch (final InstantiationException | IllegalAccessException e) {
+			} catch (final InstantiationException ie) {
+				// ignore
+			} catch (final IllegalAccessException iae) {
 				// ignore
 			}
 		}
@@ -311,7 +340,7 @@ abstract class Main {
 		final Container contentPane = frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(320, 240));
 		contentPane.setLayout(new BorderLayout());
-		contentPane.add(new JButton("Кнопочка-мозгоёбочка"), CENTER);
+		contentPane.add(new JButton("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"), CENTER);
 
 		frame.pack();
 		frame.setVisible(true);
