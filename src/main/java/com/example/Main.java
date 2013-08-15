@@ -19,8 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -34,7 +34,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
-import javax.swing.plaf.multi.MultiLookAndFeel;
 
 /**
  * @author Andrew ``Bass'' Shcheglov (mailto:andrewbass@gmail.com)
@@ -117,11 +116,11 @@ abstract class Main {
 			try {
 				final FileInputStream in = new FileInputStream(file);
 				try {
-					final JarInputStream jis = new JarInputStream(in);
+					final ZipInputStream jis = new ZipInputStream(in);
 					try {
-						JarEntry entry;
+						ZipEntry entry;
 						nextClass:
-						while ((entry = jis.getNextJarEntry()) != null) {
+						while ((entry = jis.getNextEntry()) != null) {
 							if (entry.isDirectory()) {
 								/*
 								 * Skip directories.
@@ -274,6 +273,7 @@ abstract class Main {
 				"java",
 				"javax.crypto",
 				"javax.net.ssl",
+				"javax.swing.text",
 				"oracle",
 				"org.apache.xalan.extensions",
 				"sun",
@@ -318,14 +318,6 @@ abstract class Main {
 		lookAndFeelMenu.setText("Look & Feel");
 		lookAndFeelMenu.setMnemonic('L');
 		final SortedSet descendants = listDescendants(LookAndFeel.class, false, false, true, true, packagesToSkip);
-		/*-
-		 * See the discussions at
-		 *
-		 * http://stackoverflow.com/questions/3981579/java-type-safety-a-generic-array-of-a-is-created-for-a-varargs-parameter and
-		 * http://stackoverflow.com/questions/1445233/is-it-possible-to-solve-the-a-generic-array-of-t-is-created-for-a-varargs-param
-		 */
-		final List exclusions = Arrays.asList(new Class[] {MultiLookAndFeel.class});
-		descendants.removeAll(exclusions);
 		for (final Iterator it = descendants.iterator(); it.hasNext(); ) {
 			try {
 				final Class clazz = (Class) it.next();
