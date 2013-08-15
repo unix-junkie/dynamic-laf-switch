@@ -3,52 +3,37 @@
  */
 package com.example;
 
-import static java.awt.BorderLayout.CENTER;
-import static java.lang.Class.forName;
-import static java.lang.System.getProperty;
-import static java.util.Arrays.asList;
-import static java.util.Collections.list;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
-import static javax.swing.JFrame.isDefaultLookAndFeelDecorated;
-import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
-import static javax.swing.JRootPane.FRAME;
-import static javax.swing.SwingUtilities.invokeLater;
-import static javax.swing.SwingUtilities.updateComponentTreeUI;
-import static javax.swing.UIManager.getLookAndFeel;
-import static javax.swing.UIManager.setLookAndFeel;
-import static javax.swing.plaf.metal.MetalLookAndFeel.getCurrentTheme;
-import static javax.swing.plaf.metal.MetalLookAndFeel.setCurrentTheme;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
 import javax.swing.plaf.multi.MultiLookAndFeel;
-import javax.swing.plaf.synth.SynthLookAndFeel;
-
-import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * @author Andrew ``Bass'' Shcheglov (mailto:andrewbass@gmail.com)
@@ -71,11 +56,11 @@ abstract class Main {
 	/**
 	 * @param path
 	 */
-	private static String[] split(@Nullable final String path) {
+	private static String[] split(final String path) {
 		if (path == null || path.length() == 0) {
 			return new String[0];
 		}
-		final String pathSeparator = getProperty("path.separator");
+		final String pathSeparator = System.getProperty("path.separator");
 		final String[] entries = path.split("\\Q" + pathSeparator + "\\E");
 		return entries == null ? new String[0] : entries;
 	}
@@ -85,38 +70,37 @@ abstract class Main {
 	 * @param skipInnerClasses
 	 * @param skipAnonymousClasses
 	 * @param skipNonPublic
-	 * @param skipAbstract
 	 * @param skipDeprecated
 	 * @param packagesToSkip
 	 */
-	private static <T> SortedSet<Class<? extends T>> listDescendants(final Class<T> baseClass,
+	private static SortedSet listDescendants(final Class baseClass,
 			final boolean skipInnerClasses,
 			final boolean skipAnonymousClasses,
 			final boolean skipNonPublic,
 			final boolean skipAbstract,
-			final boolean skipDeprecated,
-			final @Nullable List<String> packagesToSkip) {
+			final List packagesToSkip) {
 		if (packagesToSkip == null) {
 			throw new IllegalArgumentException();
 		}
 
-		final String javaClassPath = getProperty("java.class.path");
-		final String sunBootClassPath = getProperty("sun.boot.class.path");
-		final List<String> pathEntries = new ArrayList<String>();
-		pathEntries.addAll(asList(split(javaClassPath)));
-		pathEntries.addAll(asList(split(sunBootClassPath)));
-		final SortedSet<Class<? extends T>> classes = new TreeSet<Class<? extends T>>(new Comparator<Class<? extends T>>() {
+		final String javaClassPath = System.getProperty("java.class.path");
+		final String sunBootClassPath = System.getProperty("sun.boot.class.path");
+		final List pathEntries = new ArrayList();
+		pathEntries.addAll(Arrays.asList(split(javaClassPath)));
+		pathEntries.addAll(Arrays.asList(split(sunBootClassPath)));
+		final SortedSet classes = new TreeSet(new Comparator() {
 			/**
 			 * @see Comparator#compare
 			 */
-			public int compare(final @Nullable Class<? extends T> class0, final @Nullable Class<? extends T> class1) {
+			public int compare(final Object class0, final Object class1) {
 				if (class0 == null || class1 == null) {
 					throw new IllegalArgumentException();
 				}
-				return class0.getName().compareTo(class1.getName());
+				return ((Class) class0).getName().compareTo(((Class) class1).getName());
 			}
 		});
-		for (final String path : pathEntries) {
+		for (final Iterator it = pathEntries.iterator(); it.hasNext(); ) {
+			final String path = (String) it.next();
 			final File file = new File(path);
 			if (!file.exists() || file.isDirectory() || !file.isFile()) {
 				continue;
@@ -152,14 +136,15 @@ abstract class Main {
 								continue;
 							}
 
-							for (final String packageToSkip : packagesToSkip) {
+							for (final Iterator it2 = packagesToSkip.iterator(); it2.hasNext(); ) {
+								final String packageToSkip = (String) it2.next();
 								if (className.startsWith(packageToSkip + '.')) {
 									continue nextClass;
 								}
 							}
 
 							try {
-								final Class<?> clazz = forName(className);
+								final Class clazz = Class.forName(className);
 								if (!baseClass.isAssignableFrom(clazz)) {
 									continue;
 								}
@@ -173,13 +158,7 @@ abstract class Main {
 									continue;
 								}
 
-								if (skipDeprecated && clazz.isAnnotationPresent(Deprecated.class)) {
-									continue;
-								}
-
-								@SuppressWarnings("unchecked")
-								final Class<? extends T> class2 = (Class<? extends T>) clazz;
-								classes.add(class2);
+								classes.add(clazz);
 							} catch (final ClassNotFoundException cnfe) {
 								// ignore
 							} catch (final UnsatisfiedLinkError ule) {
@@ -212,7 +191,7 @@ abstract class Main {
 	 * @param themeMenu
 	 * @param c
 	 */
-	private static JRadioButtonMenuItem fromLookAndFeel(final @Nullable LookAndFeel lookAndFeel,
+	private static JRadioButtonMenuItem fromLookAndFeel(final LookAndFeel lookAndFeel,
 			final JMenu themeMenu,
 			final JFrame frame) {
 		if (lookAndFeel == null) {
@@ -223,21 +202,21 @@ abstract class Main {
 		menuItem.setText(lookAndFeel.getName());
 		menuItem.setToolTipText(lookAndFeel.getClass().getName());
 		menuItem.setEnabled(lookAndFeel.isSupportedLookAndFeel());
-		menuItem.setSelected(getLookAndFeel().getClass() == lookAndFeel.getClass());
+		menuItem.setSelected(UIManager.getLookAndFeel().getClass() == lookAndFeel.getClass());
 		menuItem.addActionListener(new ActionListener() {
 			/**
 			 * @see ActionListener#actionPerformed(ActionEvent)
 			 */
-			public void actionPerformed(final @Nullable ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				try {
-					setLookAndFeel(lookAndFeel);
+					UIManager.setLookAndFeel(lookAndFeel);
 					themeMenu.setEnabled(lookAndFeel instanceof MetalLookAndFeel);
-					updateComponentTreeUI(frame);
+					SwingUtilities.updateComponentTreeUI(frame);
 
-					if (isDefaultLookAndFeelDecorated()) {
+					if (JFrame.isDefaultLookAndFeelDecorated()) {
 						frame.dispose();
 						frame.setUndecorated(lookAndFeel instanceof MetalLookAndFeel);
-						frame.getRootPane().setWindowDecorationStyle(FRAME);
+						frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
 						frame.setVisible(true);
 					}
 				} catch (final Exception e1) {
@@ -252,7 +231,7 @@ abstract class Main {
 	 * @param metalTheme
 	 * @param c
 	 */
-	private static JRadioButtonMenuItem fromMetalTheme(final @Nullable MetalTheme metalTheme, final Component c) {
+	private static JRadioButtonMenuItem fromMetalTheme(final MetalTheme metalTheme, final Component c) {
 		if (metalTheme == null) {
 			throw new IllegalArgumentException();
 		}
@@ -266,12 +245,14 @@ abstract class Main {
 			/**
 			 * @see ActionListener#actionPerformed(ActionEvent)
 			 */
-			public void actionPerformed(final @Nullable ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				try {
-					setCurrentTheme(metalTheme);
-					setLookAndFeel(getLookAndFeel());
+					MetalLookAndFeel.setCurrentTheme(metalTheme);
+					UIManager.setLookAndFeel(UIManager.getLookAndFeel());
 
-					updateComponentTreeUI(c);
+					SwingUtilities.updateComponentTreeUI(c);
+
+					menuItem.setSelected(true);
 				} catch (final Exception e1) {
 					menuItem.setEnabled(false);
 				}
@@ -284,7 +265,7 @@ abstract class Main {
 	 * @param args
 	 */
 	public static void main(final String args[]) {
-		final List<String> packagesToSkip = asList(
+		final List packagesToSkip = Arrays.asList(new String[] {
 				"com.apple.crypto",
 				"com.oracle",
 				"com.sun.crypto",
@@ -296,24 +277,37 @@ abstract class Main {
 				"javax.crypto",
 				"javax.net.ssl",
 				"oracle",
+				"org.apache.xalan.extensions",
 				"sun",
 				"sunw"
-		);
+		});
 
-		setDefaultLookAndFeelDecorated(true);
+		JFrame.setDefaultLookAndFeelDecorated(true);
 
 		final JFrame frame = new JFrame();
-
-		final MetalTheme oldMetalTheme = getCurrentTheme();
 
 		final JMenu themeMenu = new JMenu();
 		final ButtonGroup themeMenuGroup = new ButtonGroup();
 		themeMenu.setText("Themes");
 		themeMenu.setMnemonic('T');
-		themeMenu.setEnabled(getLookAndFeel() instanceof MetalLookAndFeel);
-		for (final Class<? extends MetalTheme> clazz : listDescendants(MetalTheme.class, false, false, true, true, true, packagesToSkip)) {
+		themeMenu.setEnabled(UIManager.getLookAndFeel() instanceof MetalLookAndFeel);
+		int i = 0;
+		for (final Iterator it = listDescendants(MetalTheme.class, false, false, true, true, packagesToSkip).iterator(); it.hasNext(); i++) {
 			try {
-				final JRadioButtonMenuItem menuItem = fromMetalTheme(clazz.newInstance(), frame);
+				final Class clazz = (Class) it.next();
+				final MetalTheme metalTheme = (MetalTheme) clazz.newInstance();
+				final JRadioButtonMenuItem menuItem = fromMetalTheme(metalTheme, frame);
+				if (i == 0) {
+					/*-
+					 * In 1.4 and earlier versions, we have no mechanism
+					 * to determine currently selected metal theme.
+					 * 
+					 * So just select the first menu item
+					 * and set the appropriate theme.
+					 */
+					menuItem.setSelected(true);
+					MetalLookAndFeel.setCurrentTheme(metalTheme);
+				}
 				themeMenu.add(menuItem);
 				themeMenuGroup.add(menuItem);
 			} catch (final InstantiationException ie) {
@@ -327,19 +321,19 @@ abstract class Main {
 		final ButtonGroup lookAndFeelMenuGroup = new ButtonGroup();
 		lookAndFeelMenu.setText("Look & Feel");
 		lookAndFeelMenu.setMnemonic('L');
-		final SortedSet<Class<? extends LookAndFeel>> descendants = listDescendants(LookAndFeel.class, false, false, true, true, true, packagesToSkip);
+		final SortedSet descendants = listDescendants(LookAndFeel.class, false, false, true, true, packagesToSkip);
 		/*-
 		 * See the discussions at
 		 *
 		 * http://stackoverflow.com/questions/3981579/java-type-safety-a-generic-array-of-a-is-created-for-a-varargs-parameter and
 		 * http://stackoverflow.com/questions/1445233/is-it-possible-to-solve-the-a-generic-array-of-t-is-created-for-a-varargs-param
 		 */
-		@SuppressWarnings("unchecked")
-		final List<Class<? extends LookAndFeel>> exclusions = asList(MultiLookAndFeel.class, SynthLookAndFeel.class);
+		final List exclusions = Arrays.asList(new Class[] {MultiLookAndFeel.class});
 		descendants.removeAll(exclusions);
-		for (final Class<? extends LookAndFeel> clazz : descendants) {
+		for (final Iterator it = descendants.iterator(); it.hasNext(); ) {
 			try {
-				final JRadioButtonMenuItem menuItem = fromLookAndFeel(clazz.newInstance(), themeMenu, frame);
+				final Class clazz = (Class) it.next();
+				final JRadioButtonMenuItem menuItem = fromLookAndFeel((LookAndFeel) clazz.newInstance(), themeMenu, frame);
 				lookAndFeelMenu.add(menuItem);
 				lookAndFeelMenuGroup.add(menuItem);
 			} catch (final InstantiationException ie) {
@@ -349,70 +343,20 @@ abstract class Main {
 			}
 		}
 
-		/*
-		 * Custom LaFs can steal the default metal theme when loaded,
-		 * so we're restoring it here.
-		 */
-		setCurrentTheme(oldMetalTheme);
-
 		final JMenuBar menuBar = new JMenuBar();
 		menuBar.add(lookAndFeelMenu);
 		menuBar.add(themeMenu);
 
 		frame.setJMenuBar(menuBar);
-		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		frame.setUndecorated(getLookAndFeel() instanceof MetalLookAndFeel);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setUndecorated(UIManager.getLookAndFeel() instanceof MetalLookAndFeel);
 
-		final Container contentPane = frame.getContentPane();
+		final JPanel contentPane = (JPanel) frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(320, 240));
 		contentPane.setLayout(new BorderLayout());
-		contentPane.add(new JButton("Кнопочка-мозгоёбочка"), CENTER);
+		contentPane.add(new JButton("Кнопочка-мозгоёбочка"), BorderLayout.CENTER);
 
 		frame.pack();
 		frame.setVisible(true);
-
-		/*
-		 * Updates the theme menu by selecting the menu item which corresponds
-		 * to the currently selected metal theme.
-		 *
-		 * This is necessary because certain LaFs auto-refresh their themes on repaint.
-		 */
-		final Thread metalThemeChangeListener = new Thread("MetalThemeChangeListener") {
-			/**
-			 * @see Thread#run()
-			 */
-			@Override
-			public void run() {
-				while (!interrupted()) {
-					try {
-						if (getLookAndFeel() instanceof MetalLookAndFeel) {
-							invokeLater(new Runnable() {
-								/**
-								 * @see Runnable#run()
-								 */
-								public void run() {
-									final String themeClassName = getCurrentTheme().getClass().getName();
-									for (final AbstractButton button : list(themeMenuGroup.getElements())) {
-										if (themeClassName.equals(button.getName())) {
-											button.setSelected(true);
-											return;
-										}
-									}
-								}
-							});
-						}
-
-						/*
-						 * Once a second is more than enough.
-						 */
-						sleep(1000);
-					} catch (final InterruptedException ie) {
-						break;
-					}
-				}
-			}
-		};
-		metalThemeChangeListener.setDaemon(true);
-		metalThemeChangeListener.start();
 	}
 }
