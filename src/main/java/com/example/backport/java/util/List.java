@@ -7,6 +7,10 @@
 
 package com.example.backport.java.util;
 
+import java.util.Vector;
+
+import com.example.backport.java.lang.UnsupportedOperationException;
+
 /**
  * An ordered collection (also known as a <i>sequence</i>).  The user of this
  * interface has precise control over where in the list each element is
@@ -88,7 +92,7 @@ public interface List extends Collection {
     boolean isEmpty();
 
     /**
-     * 
+     *
      * Returns <tt>true</tt> if this list contains the specified element.
      * More formally, returns <tt>true</tt> if and only if this list contains
      * at least one element <tt>e</tt> such that
@@ -127,7 +131,7 @@ public interface List extends Collection {
      *		be stored, if it is big enough; otherwise, a new array of the
      * 		same runtime type is allocated for this purpose.
      * @return  an array containing the elements of this list.
-     * 
+     *
      * @throws ArrayStoreException if the runtime type of the specified array
      * 		  is not a supertype of the runtime type of every element in
      * 		  this list.
@@ -151,7 +155,7 @@ public interface List extends Collection {
      * @param o element to be appended to this list.
      * @return <tt>true</tt> (as per the general contract of the
      *            <tt>Collection.add</tt> method).
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>add</tt> method is not
      * 		  supported by this list.
      * @throws ClassCastException if the class of the specified element
@@ -162,7 +166,7 @@ public interface List extends Collection {
     boolean add(Object o);
 
     /**
-     * Removes the first occurrence in this list of the specified element 
+     * Removes the first occurrence in this list of the specified element
      * (optional operation).  If this list does not contain the element, it is
      * unchanged.  More formally, removes the element with the lowest index i
      * such that <tt>(o==null ? get(i)==null : o.equals(get(i)))</tt> (if
@@ -170,7 +174,7 @@ public interface List extends Collection {
      *
      * @param o element to be removed from this list, if present.
      * @return <tt>true</tt> if this list contained the specified element.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>remove</tt> method is
      *		  not supported by this list.
      */
@@ -180,14 +184,14 @@ public interface List extends Collection {
     // Bulk Modification Operations
 
     /**
-     * 
+     *
      * Returns <tt>true</tt> if this list contains all of the elements of the
      * specified collection.
      *
      * @param c collection to be checked for containment in this list.
      * @return <tt>true</tt> if this list contains all of the elements of the
      * 	       specified collection.
-     * 
+     *
      * @see #contains(Object)
      */
     boolean containsAll(Collection c);
@@ -202,17 +206,17 @@ public interface List extends Collection {
      *
      * @param c collection whose elements are to be added to this list.
      * @return <tt>true</tt> if this list changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>addAll</tt> method is
      *         not supported by this list.
-     * 
+     *
      * @throws ClassCastException if the class of an element in the specified
      * 	       collection prevents it from being added to this list.
-     * 
+     *
      * @throws IllegalArgumentException if some aspect of an element in the
      *         specified collection prevents it from being added to this
      *         list.
-     * 
+     *
      * @see #add(Object)
      */
     boolean addAll(Collection c);
@@ -232,7 +236,7 @@ public interface List extends Collection {
      *	            collection.
      * @param c elements to be inserted into this list.
      * @return <tt>true</tt> if this list changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>addAll</tt> method is
      *		  not supported by this list.
      * @throws ClassCastException if the class of one of elements of the
@@ -253,10 +257,10 @@ public interface List extends Collection {
      * @param c collection that defines which elements will be removed from
      *          this list.
      * @return <tt>true</tt> if this list changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>removeAll</tt> method
      * 		  is not supported by this list.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -269,12 +273,12 @@ public interface List extends Collection {
      * collection.
      *
      * @param c collection that defines which elements this set will retain.
-     * 
+     *
      * @return <tt>true</tt> if this list changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>retainAll</tt> method
      * 		  is not supported by this list.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -340,7 +344,7 @@ public interface List extends Collection {
      *
      * @param index index of element to return.
      * @return the element at the specified position in this list.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the index is out of range (index
      * 		  &lt; 0 || index &gt;= size()).
      */
@@ -353,7 +357,7 @@ public interface List extends Collection {
      * @param index index of element to replace.
      * @param element element to be stored at the specified position.
      * @return the element previously at the specified position.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>set</tt> method is not
      *		  supported by this list.
      * @throws    ClassCastException if the class of the specified element
@@ -372,7 +376,7 @@ public interface List extends Collection {
      *
      * @param index index at which the specified element is to be inserted.
      * @param element element to be inserted.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>add</tt> method is not
      *		  supported by this list.
      * @throws    ClassCastException if the class of the specified element
@@ -392,10 +396,10 @@ public interface List extends Collection {
      *
      * @param index the index of the element to removed.
      * @return the element previously at the specified position.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>remove</tt> method is
      *		  not supported by this list.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the index is out of range (index
      *            &lt; 0 || index &gt;= size()).
      */
@@ -479,7 +483,7 @@ public interface List extends Collection {
      * <pre>
      *	    list.subList(from, to).clear();
      * </pre>
-     * 
+     *
      * Similar idioms may be constructed for <tt>indexOf</tt> and
      * <tt>lastIndexOf</tt>, and all of the algorithms in the
      * <tt>Collections</tt> class can be applied to a subList.<p>
@@ -493,7 +497,7 @@ public interface List extends Collection {
      * @param fromIndex low endpoint (inclusive) of the subList.
      * @param toKey high endpoint (exclusive) of the subList.
      * @return a view of the specified range within this list.
-     * 
+     *
      * @throws IndexOutOfBoundsException for an illegal endpoint index value
      *     (fromIndex &lt; 0 || toIndex &gt; size || fromIndex &gt; toIndex).
      */

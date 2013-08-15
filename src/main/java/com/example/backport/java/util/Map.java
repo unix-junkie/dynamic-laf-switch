@@ -7,6 +7,10 @@
 
 package com.example.backport.java.util;
 
+import java.util.Hashtable;
+
+import com.example.backport.java.lang.UnsupportedOperationException;
+
 /**
  * An object that maps keys to values.  A map cannot contain duplicate keys;
  * each key can map to at most one value.<p>
@@ -75,7 +79,7 @@ public interface Map {
      * @param key key whose presence in this map is to be tested.
      * @return <tt>true</tt> if this map contains a mapping for the specified
      * key.
-     * 
+     *
      * @throws ClassCastException if the key is of an inappropriate type for
      * 		  this map.
      * @throws NullPointerException if the key is <tt>null</tt> and this map
@@ -108,12 +112,12 @@ public interface Map {
      * @param key key whose associated value is to be returned.
      * @return the value to which this map maps the specified key, or
      *	       <tt>null</tt> if the map contains no mapping for this key.
-     * 
+     *
      * @throws ClassCastException if the key is of an inappropriate type for
      * 		  this map.
      * @throws NullPointerException key is <tt>null</tt> and this map does not
      *		  not permit <tt>null</tt> keys.
-     * 
+     *
      * @see #containsKey(Object)
      */
     Object get(Object key);
@@ -132,7 +136,7 @@ public interface Map {
      *	       also indicate that the map previously associated <tt>null</tt>
      *	       with the specified key, if the implementation supports
      *	       <tt>null</tt> values.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>put</tt> operation is
      *	          not supported by this map.
      * @throws ClassCastException if the class of the specified key or value
@@ -169,16 +173,16 @@ public interface Map {
      * this map had for any of the keys currently in the specified map.
      *
      * @param t Mappings to be stored in this map.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>putAll</tt> method is
      * 		  not supported by this map.
-     * 
+     *
      * @throws ClassCastException if the class of a key or value in the
      * 	          specified map prevents it from being stored in this map.
-     * 
+     *
      * @throws IllegalArgumentException some aspect of a key or value in the
      *	          specified map prevents it from being stored in this map.
-     * 
+     *
      * @throws NullPointerException this map does not permit <tt>null</tt>
      *            keys or values, and the specified key or value is
      *            <tt>null</tt>.
@@ -278,7 +282,7 @@ public interface Map {
 	 *
 	 * @param value new value to be stored in this entry.
 	 * @return old value corresponding to the entry.
-         * 
+         *
 	 * @throws UnsupportedOperationException if the <tt>put</tt> operation
 	 *	      is not supported by the backing map.
 	 * @throws ClassCastException if the class of the specified value

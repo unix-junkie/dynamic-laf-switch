@@ -12,13 +12,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import com.example.backport.java.util.ArrayList;
-import com.example.backport.java.util.Arrays;
-import com.example.backport.java.util.Comparator;
-import com.example.backport.java.util.Iterator;
-import com.example.backport.java.util.List;
-import com.example.backport.java.util.SortedSet;
-import com.example.backport.java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -34,6 +27,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
+
+import com.example.backport.java.util.ArrayList;
+import com.example.backport.java.util.Arrays;
+import com.example.backport.java.util.Comparator;
+import com.example.backport.java.util.Iterator;
+import com.example.backport.java.util.List;
+import com.example.backport.java.util.SortedSet;
+import com.example.backport.java.util.TreeSet;
 
 /**
  * @author Andrew ``Bass'' Shcheglov (mailto:andrewbass@gmail.com)

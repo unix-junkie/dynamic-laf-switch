@@ -7,6 +7,10 @@
 
 package com.example.backport.java.util;
 
+import java.util.Vector;
+
+import com.example.backport.java.lang.UnsupportedOperationException;
+
 /**
  * The root interface in the <i>collection hierarchy</i>.  A collection
  * represents a group of objects, known as its <i>elements</i>.  Some
@@ -57,7 +61,7 @@ public interface Collection {
      * Returns the number of elements in this collection.  If this collection
      * contains more than <tt>Integer.MAX_VALUE</tt> elements, returns
      * <tt>Integer.MAX_VALUE</tt>.
-     * 
+     *
      * @return the number of elements in this collection
      */
     int size();
@@ -86,7 +90,7 @@ public interface Collection {
      * guarantees concerning the order in which the elements are returned
      * (unless this collection is an instance of some class that provides a
      * guarantee).
-     * 
+     *
      * @returns an <tt>Iterator</tt> over the elements in this collection
      */
     Iterator iterator();
@@ -147,12 +151,12 @@ public interface Collection {
      *        stored, if it is big enough; otherwise, a new array of the same
      *        runtime type is allocated for this purpose.
      * @return an array containing the elements of this collection
-     * 
+     *
      * @throws ArrayStoreException the runtime type of the specified array is
      *         not a supertype of the runtime type of every element in this
      *         collection.
      */
-    
+
     Object[] toArray(Object a[]);
 
     // Modification Operations
@@ -179,7 +183,7 @@ public interface Collection {
      * @param o element whose presence in this collection is to be ensured.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException add is not supported by this
      *         collection.
      * @throws ClassCastException class of the specified element prevents it
@@ -201,7 +205,7 @@ public interface Collection {
      * @param o element to be removed from this collection, if present.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException remove is not supported by this
      *         collection.
      */
@@ -232,7 +236,7 @@ public interface Collection {
      * @param c elements to be inserted into this collection.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException if this collection does not
      *         support the <tt>addAll</tt> method.
      * @throws ClassCastException if the class of an element of the specified
@@ -240,13 +244,13 @@ public interface Collection {
      * @throws IllegalArgumentException some aspect of an element of the
      *	       specified collection prevents it from being added to this
      *	       collection.
-     * 
+     *
      * @see #add(Object)
      */
     boolean addAll(Collection c);
 
     /**
-     * 
+     *
      * Removes all this collection's elements that are also contained in the
      * specified collection (optional operation).  After this call returns,
      * this collection will contain no elements in common with the specified
@@ -255,10 +259,10 @@ public interface Collection {
      * @param c elements to be removed from this collection.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>removeAll</tt> method
      * 	       is not supported by this collection.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -273,10 +277,10 @@ public interface Collection {
      * @param c elements to be retained in this collection.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>retainAll</tt> method
      * 	       is not supported by this Collection.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -323,7 +327,7 @@ public interface Collection {
      * @param o Object to be compared for equality with this collection.
      * @return <tt>true</tt> if the specified object is equal to this
      * collection
-     * 
+     *
      * @see Object#equals(Object)
      * @see Set#equals(Object)
      * @see List#equals(Object)
@@ -331,7 +335,7 @@ public interface Collection {
     boolean equals(Object o);
 
     /**
-     * 
+     *
      * Returns the hash code value for this collection.  While the
      * <tt>Collection</tt> interface adds no stipulations to the general
      * contract for the <tt>Object.hashCode</tt> method, programmers should
@@ -342,7 +346,7 @@ public interface Collection {
      * <tt>c1.hashCode()==c2.hashCode()</tt>.
      *
      * @return the hash code value for this collection
-     * 
+     *
      * @see Object#hashCode()
      * @see Object#equals(Object)
      */

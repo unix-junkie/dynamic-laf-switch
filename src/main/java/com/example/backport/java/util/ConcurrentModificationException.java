@@ -7,6 +7,9 @@
 
 package com.example.backport.java.util;
 
+import java.util.Hashtable;
+import java.util.Vector;
+
 /**
  * This exception may be thrown by methods that have detected concurrent
  * modification of a backing object when such modification is not permissible.
@@ -34,6 +37,8 @@ package com.example.backport.java.util;
  * @since   JDK1.2
  */
 public class ConcurrentModificationException extends RuntimeException {
+	private static final long serialVersionUID = 2786947999980965178L;
+
     /**
      * Constructs a ConcurrentModificationException with no
      * detail message.
@@ -45,7 +50,7 @@ public class ConcurrentModificationException extends RuntimeException {
      * Constructs a <tt>ConcurrentModificationException</tt> with the
      * specified detail message.
      */
-    public ConcurrentModificationException(String message) {
+    public ConcurrentModificationException(final String message) {
 	super(message);
     }
 }

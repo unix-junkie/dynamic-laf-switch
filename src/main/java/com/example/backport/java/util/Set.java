@@ -7,6 +7,8 @@
 
 package com.example.backport.java.util;
 
+import com.example.backport.java.lang.UnsupportedOperationException;
+
 /**
  * A collection that contains no duplicate elements.  More formally, sets
  * contain no pair of elements <code>e1</code> and <code>e2</code> such that
@@ -127,7 +129,7 @@ public interface Set extends Collection {
      * @param o element to be added to this set.
      * @return <tt>true</tt> if this set did not already contain the specified
      *         element.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>add</tt> method is not
      * 	       supported by this set.
      * @throws ClassCastException if the class of the specified element
@@ -178,7 +180,7 @@ public interface Set extends Collection {
      *
      * @param c collection whose elements are to be added to this set.
      * @return <tt>true</tt> if this set changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>addAll</tt> method is
      * 		  not supported by this set.
      * @throws ClassCastException if the class of some element of the
@@ -204,7 +206,7 @@ public interface Set extends Collection {
      *         call.
      * @throws UnsupportedOperationException if the <tt>retainAll</tt> method
      * 		  is not supported by this Collection.
-     * 
+     *
      * @see #remove(Object)
      */
     boolean retainAll(Collection c);
@@ -220,10 +222,10 @@ public interface Set extends Collection {
      * @param c collection that defines which elements will be removed from
      *          this set.
      * @return <tt>true</tt> if this set changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>removeAll</tt>
      * 		  method is not supported by this Collection.
-     * 
+     *
      * @see #remove(Object) */
     boolean removeAll(Collection c);
 
@@ -255,7 +257,7 @@ public interface Set extends Collection {
     boolean equals(Object o);
 
     /**
-     * 
+     *
      * Returns the hash code value for this set.  The hash code of a set is
      * defined to be the sum of the hash codes of the elements in the set,
      * where the hashcode of a <tt>null</tt> element is defined to be zero.

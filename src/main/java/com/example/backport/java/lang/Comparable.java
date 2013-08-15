@@ -97,11 +97,11 @@ public interface Comparable {
      * this condition should clearly indicate this fact.  The recommended
      * language is "Note: this class has a natural ordering that is
      * inconsistent with equals."
-     * 
+     *
      * @param   o the Object to be compared.
      * @return  a negative integer, zero, or a positive integer as this object
      *		is less than, equal to, or greater than the specified object.
-     * 
+     *
      * @throws ClassCastException if the specified object's type prevents it
      *         from being compared to this Object.
      */

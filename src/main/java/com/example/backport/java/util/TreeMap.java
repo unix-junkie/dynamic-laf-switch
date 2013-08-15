@@ -7,6 +7,8 @@
 
 package com.example.backport.java.util;
 
+import java.io.IOException;
+import java.util.Hashtable;
 import java.util.NoSuchElementException;
 
 import com.example.backport.java.lang.Comparable;
@@ -44,7 +46,7 @@ import com.example.backport.java.lang.Comparable;
  * synchronizing on some object that naturally encapsulates the map.  If no
  * such object exists, the map should be "wrapped" using the
  * <tt>Collections.synchronizedMap</tt> method.  This is best done at creation
- * time, to prevent accidental unsynchronized access to the map: 
+ * time, to prevent accidental unsynchronized access to the map:
  * <pre>
  *     Map m = Collections.synchronizedMap(new TreeMap(...));
  * </pre><p>
@@ -79,7 +81,7 @@ public class TreeMap extends AbstractMap
      *
      * @serial
      */
-    private Comparator comparator = null;
+    Comparator comparator = null;
 
     private transient Entry root = null;
 
@@ -91,10 +93,10 @@ public class TreeMap extends AbstractMap
     /**
      * The number of structural modifications to the tree.
      */
-    private transient int modCount = 0;
+    transient int modCount = 0;
 
-    private void incrementSize()   { modCount++; size++; }
-    private void decrementSize()   { modCount++; size--; }
+    private void incrementSize()   { this.modCount++; this.size++; }
+    private void decrementSize()   { this.modCount++; this.size--; }
 
     /**
      * Constructs a new, empty map, sorted according to the keys' natural
@@ -121,7 +123,7 @@ public class TreeMap extends AbstractMap
      * map that violates this constraint, the <tt>put(Object key, Object
      * value)</tt> call will throw a <tt>ClassCastException</tt>.
      */
-    public TreeMap(Comparator c) {
+    public TreeMap(final Comparator c) {
 	this.comparator = c;
     }
 
@@ -137,8 +139,8 @@ public class TreeMap extends AbstractMap
      * @throws    ClassCastException the keys in t are not Comparable, or
      * are not mutually comparable.
      */
-    public TreeMap(Map m) {
-	putAll(m);
+    public TreeMap(final Map m) {
+	this.putAll(m);
     }
 
     /**
@@ -146,12 +148,14 @@ public class TreeMap extends AbstractMap
      * <tt>SortedMap</tt>, sorted according to the same ordering.  This method
      * runs in linear time.
      */
-    public TreeMap(SortedMap m) {
-        comparator = m.comparator();
+    public TreeMap(final SortedMap m) {
+        this.comparator = m.comparator();
         try {
-            buildFromSorted(m.size(), m.entrySet().iterator(), null, null);
-        } catch (java.io.IOException cannotHappen) {
-        } catch (ClassNotFoundException cannotHappen) {
+            this.buildFromSorted(m.size(), m.entrySet().iterator(), null, null);
+        } catch (final IOException cannotHappen) {
+        	// ignore
+        } catch (final ClassNotFoundException cannotHappen) {
+        	// ignore
         }
     }
 
@@ -164,7 +168,7 @@ public class TreeMap extends AbstractMap
      * @return the number of key-value mappings in this map.
      */
     public int size() {
-	return size;
+	return this.size;
     }
 
     /**
@@ -172,7 +176,7 @@ public class TreeMap extends AbstractMap
      * key.
      *
      * @param key key whose presence in this map is to be tested.
-     * 
+     *
      * @return <tt>true</tt> if this map contains a mapping for the
      *            specified key.
      * @throws ClassCastException if the key cannot be compared with the keys
@@ -181,8 +185,8 @@ public class TreeMap extends AbstractMap
      *		  natural ordering, or its comparator does not tolerate
      *            <tt>null</tt> keys.
      */
-    public boolean containsKey(Object key) {
-	return getEntry(key) != null;
+    public boolean containsKey(final Object key) {
+	return this.getEntry(key) != null;
     }
 
     /**
@@ -196,29 +200,31 @@ public class TreeMap extends AbstractMap
      * @param value value whose presence in this Map is to be tested.
      * @since JDK1.2
      */
-    public boolean containsValue(Object value) {
-        return (root==null ? false :
-                (value==null ? valueSearchNull(root)
-        		     : valueSearchNonNull(root, value)));
+    public boolean containsValue(final Object value) {
+        return this.root==null ? false :
+                value==null ? this.valueSearchNull(this.root)
+        		     : this.valueSearchNonNull(this.root, value);
     }
 
-    private boolean valueSearchNull(Entry n) {
-        if (n.value == null)
-            return true;
+    private boolean valueSearchNull(final Entry n) {
+        if (n.value == null) {
+		return true;
+	}
 
         // Check left and right subtrees for value
-        return (n.left  != null && valueSearchNull(n.left)) ||
-               (n.right != null && valueSearchNull(n.right));
+        return n.left  != null && this.valueSearchNull(n.left) ||
+               n.right != null && this.valueSearchNull(n.right);
     }
 
-    private boolean valueSearchNonNull(Entry n, Object value) {
+    private boolean valueSearchNonNull(final Entry n, final Object value) {
         // Check this node for the value
-        if (value.equals(n.value))
-            return true;
+        if (value.equals(n.value)) {
+		return true;
+	}
 
         // Check left and right subtrees for value
-        return (n.left  != null && valueSearchNonNull(n.left, value)) ||
-               (n.right != null && valueSearchNonNull(n.right, value));
+        return n.left  != null && this.valueSearchNonNull(n.left, value) ||
+               n.right != null && this.valueSearchNonNull(n.right, value);
     }
 
     /**
@@ -237,12 +243,12 @@ public class TreeMap extends AbstractMap
      * @throws NullPointerException key is <tt>null</tt> and this map uses
      *		  natural ordering, or its comparator does not tolerate
      *		  <tt>null</tt> keys.
-     * 
+     *
      * @see #containsKey(Object)
      */
-    public Object get(Object key) {
-	Entry p = getEntry(key);
-	return (p==null ? null : p.value);
+    public Object get(final Object key) {
+	final Entry p = this.getEntry(key);
+	return p==null ? null : p.value;
     }
 
     /**
@@ -253,7 +259,7 @@ public class TreeMap extends AbstractMap
      * 	       <tt>null</tt> if it uses its keys' natural sort method.
      */
     public Comparator comparator() {
-        return comparator;
+        return this.comparator;
     }
 
     /**
@@ -263,7 +269,7 @@ public class TreeMap extends AbstractMap
      * @throws    NoSuchElementException Map is empty.
      */
     public Object firstKey() {
-        return key(firstEntry());
+        return key(this.firstEntry());
     }
 
     /**
@@ -273,7 +279,7 @@ public class TreeMap extends AbstractMap
      * @throws    NoSuchElementException Map is empty.
      */
     public Object lastKey() {
-        return key(lastEntry());
+        return key(this.lastEntry());
     }
 
     /**
@@ -284,21 +290,23 @@ public class TreeMap extends AbstractMap
      * @param t Mappings to be stored in this map.
      * @throws    ClassCastException class of a key or value in the specified
      * 	          map prevents it from being stored in this map.
-     * 
+     *
      * @throws NullPointerException this map does not permit <tt>null</tt>
      *            keys and a specified key is <tt>null</tt>.
      */
-    public void putAll(Map map) {
-        int mapSize = map.size();
-        if (size==0 && mapSize!=0 && map instanceof SortedMap) {
-            Comparator c = ((SortedMap)map).comparator();
-            if (c == comparator || (c != null && c.equals(comparator))) {
-              ++modCount;
+    public void putAll(final Map map) {
+        final int mapSize = map.size();
+        if (this.size==0 && mapSize!=0 && map instanceof SortedMap) {
+            final Comparator c = ((SortedMap)map).comparator();
+            if (c == this.comparator || c != null && c.equals(this.comparator)) {
+              ++this.modCount;
               try {
-                  buildFromSorted(mapSize, map.entrySet().iterator(),
+                  this.buildFromSorted(mapSize, map.entrySet().iterator(),
                                   null, null);
-              } catch (java.io.IOException cannotHappen) {
-              } catch (ClassNotFoundException cannotHappen) {
+              } catch (final java.io.IOException cannotHappen) {
+        	      // ignore
+              } catch (final ClassNotFoundException cannotHappen) {
+        	      // ignore
               }
               return;
             }
@@ -318,16 +326,17 @@ public class TreeMap extends AbstractMap
      *		  natural order, or its comparator does not tolerate *
      *		  <tt>null</tt> keys.
      */
-    private Entry getEntry(Object key) {
-	Entry p = root;
+    Entry getEntry(final Object key) {
+	Entry p = this.root;
 	while (p != null) {
-	    int cmp = compare(key,p.key);
-	    if (cmp == 0)
+	    final int cmp = this.compare(key,p.key);
+	    if (cmp == 0) {
 		return p;
-	    else if (cmp < 0)
+	} else if (cmp < 0) {
 		p = p.left;
-	    else
+	} else {
 		p = p.right;
+	}
 	}
 	return null;
     }
@@ -338,20 +347,22 @@ public class TreeMap extends AbstractMap
      * key; if no such entry exists (i.e., the greatest key in the Tree is less
      * than the specified key), returns <tt>null</tt>.
      */
-    private Entry getCeilEntry(Object key) {
-	Entry p = root;
-	if (p==null)
-	    return null;
+    Entry getCeilEntry(final Object key) {
+	Entry p = this.root;
+	if (p==null) {
+		return null;
+	}
 
 	while (true) {
-	    int cmp = compare(key, p.key);
+	    final int cmp = this.compare(key, p.key);
 	    if (cmp == 0) {
 		return p;
 	    } else if (cmp < 0) {
-		if (p.left != null)
-		    p = p.left;
-		else
-		    return p;
+		if (p.left != null) {
+			p = p.left;
+		} else {
+			return p;
+		}
 	    } else {
 		if (p.right != null) {
 		    p = p.right;
@@ -373,18 +384,20 @@ public class TreeMap extends AbstractMap
      * no such entry exists (i.e., the least key in the Tree is greater than
      * the specified key), returns <tt>null</tt>.
      */
-    private Entry getPrecedingEntry(Object key) {
-	Entry p = root;
-	if (p==null)
-	    return null;
+    Entry getPrecedingEntry(final Object key) {
+	Entry p = this.root;
+	if (p==null) {
+		return null;
+	}
 
 	while (true) {
-	    int cmp = compare(key, p.key);
+	    final int cmp = this.compare(key, p.key);
             if (cmp > 0) {
-		if (p.right != null)
-		    p = p.right;
-		else
-		    return p;
+		if (p.right != null) {
+			p = p.right;
+		} else {
+			return p;
+		}
 	    } else {
 		if (p.left != null) {
 		    p = p.left;
@@ -402,12 +415,13 @@ public class TreeMap extends AbstractMap
     }
 
     /**
-     * Returns the key corresonding to the specified Entry.  Throw 
+     * Returns the key corresonding to the specified Entry.  Throw
      * NoSuchElementException if the Entry is <tt>null</tt>.
      */
-    private static Object key(Entry e) {
-        if (e==null)
-            throw new NoSuchElementException();
+    static Object key(final Entry e) {
+        if (e==null) {
+		throw new NoSuchElementException();
+	}
         return e.key;
     }
 
@@ -418,7 +432,7 @@ public class TreeMap extends AbstractMap
      *
      * @param key key with which the specified value is to be associated.
      * @param value value to be associated with the specified key.
-     * 
+     *
      * @return previous value associated with specified key, or <tt>null</tt>
      *	       if there was no mapping for key.  A <tt>null</tt> return can
      *	       also indicate that the map previously associated <tt>null</tt>
@@ -429,35 +443,35 @@ public class TreeMap extends AbstractMap
      *		  natural order, or its comparator does not tolerate
      *		  <tt>null</tt> keys.
      */
-    public Object put(Object key, Object value) {
-	Entry t = root;
+    public Object put(final Object key, final Object value) {
+	Entry t = this.root;
 
 	if (t == null) {
-	    incrementSize();
-	    root = new Entry(key, value, null);
+	    this.incrementSize();
+	    this.root = new Entry(key, value, null);
 	    return null;
 	}
 
 	while (true) {
-	    int cmp = compare(key, t.key);
+	    final int cmp = this.compare(key, t.key);
 	    if (cmp == 0) {
 		return t.setValue(value);
 	    } else if (cmp < 0) {
 		if (t.left != null) {
 		    t = t.left;
 		} else {
-		    incrementSize();
+		    this.incrementSize();
 		    t.left = new Entry(key, value, t);
-		    fixAfterInsertion(t.left);
+		    this.fixAfterInsertion(t.left);
 		    return null;
 		}
 	    } else { // cmp > 0
 		if (t.right != null) {
 		    t = t.right;
 		} else {
-		    incrementSize();
+		    this.incrementSize();
 		    t.right = new Entry(key, value, t);
-		    fixAfterInsertion(t.right);
+		    this.fixAfterInsertion(t.right);
 		    return null;
 		}
 	    }
@@ -471,20 +485,21 @@ public class TreeMap extends AbstractMap
      *	       if there was no mapping for key.  A <tt>null</tt> return can
      *	       also indicate that the map previously associated
      *	       <tt>null</tt> with the specified key.
-     * 
+     *
      * @throws    ClassCastException key cannot be compared with the keys
      *		  currently in the map.
      * @throws NullPointerException key is <tt>null</tt> and this map uses
      *		  natural order, or its comparator does not tolerate
      *		  <tt>null</tt> keys.
      */
-    public Object remove(Object key) {
-	Entry p = getEntry(key);
-	if (p == null)
-	    return null;
+    public Object remove(final Object key) {
+	final Entry p = this.getEntry(key);
+	if (p == null) {
+		return null;
+	}
 
-	Object oldValue = p.value;
-	deleteEntry(p);
+	final Object oldValue = p.value;
+	this.deleteEntry(p);
 	return oldValue;
     }
 
@@ -492,9 +507,9 @@ public class TreeMap extends AbstractMap
      * Removes all mappings from this TreeMap.
      */
     public void clear() {
-	modCount++;
-	size = 0;
-	root = null;
+	this.modCount++;
+	this.size = 0;
+	this.root = null;
     }
 
     /**
@@ -532,8 +547,8 @@ public class TreeMap extends AbstractMap
      * @return a set view of the keys contained in this TreeMap.
      */
     public Set keySet() {
-	if (keySet == null) {
-	    keySet = new AbstractSet() {
+	if (this.keySet == null) {
+	    this.keySet = new AbstractSet() {
 		public com.example.backport.java.util.Iterator iterator() {
 		    return new Iterator(KEYS);
 		}
@@ -542,11 +557,11 @@ public class TreeMap extends AbstractMap
 		    return TreeMap.this.size();
 		}
 
-                public boolean contains(Object o) {
-                    return containsKey(o);
+                public boolean contains(final Object o) {
+                    return TreeMap.this.containsKey(o);
                 }
 
-		public boolean remove(Object o) {
+		public boolean remove(final Object o) {
 		    return TreeMap.this.remove(o) != null;
 		}
 
@@ -555,7 +570,7 @@ public class TreeMap extends AbstractMap
 		}
 	    };
 	}
-	return keySet;
+	return this.keySet;
     }
 
     /**
@@ -572,8 +587,8 @@ public class TreeMap extends AbstractMap
      * @return a collection view of the values contained in this map.
      */
     public Collection values() {
-	if (values == null) {
-            values = new AbstractCollection() {
+	if (this.values == null) {
+            this.values = new AbstractCollection() {
                 public com.example.backport.java.util.Iterator iterator() {
                     return new Iterator(VALUES);
                 }
@@ -582,17 +597,19 @@ public class TreeMap extends AbstractMap
                     return TreeMap.this.size();
                 }
 
-                public boolean contains(Object o) {
-                    for (Entry e = firstEntry(); e != null; e = successor(e))
-                        if (valEquals(e.getValue(), o))
-                            return true;
+                public boolean contains(final Object o) {
+                    for (Entry e = TreeMap.this.firstEntry(); e != null; e = TreeMap.successor(e)) {
+			if (valEquals(e.getValue(), o)) {
+				return true;
+			}
+		}
                     return false;
                 }
 
-		public boolean remove(Object o) {
-                    for (Entry e = firstEntry(); e != null; e = successor(e)) {
+		public boolean remove(final Object o) {
+                    for (Entry e = TreeMap.this.firstEntry(); e != null; e = TreeMap.successor(e)) {
                         if (valEquals(e.getValue(), o)) {
-                            deleteEntry(e);
+                            TreeMap.this.deleteEntry(e);
                             return true;
                         }
                     }
@@ -604,7 +621,7 @@ public class TreeMap extends AbstractMap
                 }
             };
         }
-        return values;
+        return this.values;
     }
 
     /**
@@ -622,29 +639,31 @@ public class TreeMap extends AbstractMap
      * @see Map.Entry
      */
     public Set entrySet() {
-	if (entrySet == null) {
-	    entrySet = new AbstractSet() {
+	if (this.entrySet == null) {
+	    this.entrySet = new AbstractSet() {
                 public com.example.backport.java.util.Iterator iterator() {
                     return new Iterator(ENTRIES);
                 }
 
-                public boolean contains(Object o) {
-                    if (!(o instanceof Map.Entry))
-                        return false;
-                    Map.Entry entry = (Map.Entry)o;
-                    Object value = entry.getValue();
-                    Entry p = getEntry(entry.getKey());
+                public boolean contains(final Object o) {
+                    if (!(o instanceof Map.Entry)) {
+			return false;
+		}
+                    final Map.Entry entry = (Map.Entry)o;
+                    final Object value = entry.getValue();
+                    final Entry p = TreeMap.this.getEntry(entry.getKey());
                     return p != null && valEquals(p.getValue(), value);
                 }
 
-		public boolean remove(Object o) {
-                    if (!(o instanceof Map.Entry))
-                        return false;
-                    Map.Entry entry = (Map.Entry)o;
-                    Object value = entry.getValue();
-                    Entry p = getEntry(entry.getKey());
+		public boolean remove(final Object o) {
+                    if (!(o instanceof Map.Entry)) {
+			return false;
+		}
+                    final Map.Entry entry = (Map.Entry)o;
+                    final Object value = entry.getValue();
+                    final Entry p = TreeMap.this.getEntry(entry.getKey());
                     if (p != null && valEquals(p.getValue(), value)) {
-                        deleteEntry(p);
+                        TreeMap.this.deleteEntry(p);
                         return true;
                     }
                     return false;
@@ -659,7 +678,7 @@ public class TreeMap extends AbstractMap
                 }
             };
         }
-	return entrySet;
+	return this.entrySet;
     }
 
     /**
@@ -693,18 +712,18 @@ public class TreeMap extends AbstractMap
      *
      * @param fromKey low endpoint (inclusive) of the subMap.
      * @param toKey high endpoint (exclusive) of the subMap.
-     * 
+     *
      * @return a view of the portion of this map whose keys range from
      * 	       <tt>fromKey</tt>, inclusive, to <tt>toKey</tt>, exclusive.
-     * 
+     *
      * @throws NullPointerException if <tt>fromKey</tt> or <tt>toKey</tt> is
      *		  <tt>null</tt> and this map uses natural order, or its
      *		  comparator does not tolerate <tt>null</tt> keys.
-     * 
+     *
      * @throws IllegalArgumentException if <tt>fromKey</tt> is greater than
      *            <tt>toKey</tt>.
      */
-    public SortedMap subMap(Object fromKey, Object toKey) {
+    public SortedMap subMap(final Object fromKey, final Object toKey) {
 	return new SubMap(fromKey, toKey);
     }
 
@@ -738,7 +757,7 @@ public class TreeMap extends AbstractMap
      *		  this map uses natural order, or its comparator does * not
      *		  tolerate <tt>null</tt> keys.
      */
-    public SortedMap headMap(Object toKey) {
+    public SortedMap headMap(final Object toKey) {
 	return new SubMap(toKey, true);
     }
 
@@ -771,7 +790,7 @@ public class TreeMap extends AbstractMap
      *		  map uses natural ordering, or its comparator does
      *            not tolerate <tt>null</tt> keys.
      */
-    public SortedMap tailMap(Object fromKey) {
+    public SortedMap tailMap(final Object fromKey) {
 	return new SubMap(fromKey, false);
     }
 
@@ -783,27 +802,32 @@ public class TreeMap extends AbstractMap
          * fromKey is significant only if fromStart is false.  Similarly,
          * toKey is significant only if toStart is false.
          */
-        private boolean fromStart = false, toEnd = false;
-	private Object  fromKey,           toKey;
+        boolean fromStart = false;
 
-	SubMap(Object fromKey, Object toKey) {
-	    if (compare(fromKey, toKey) > 0)
+	boolean toEnd = false;
+	Object  fromKey;
+
+	Object toKey;
+
+	SubMap(final Object fromKey, final Object toKey) {
+	    if (TreeMap.this.compare(fromKey, toKey) > 0) {
 		throw new IllegalArgumentException("fromKey > toKey");
+	}
 	    this.fromKey = fromKey;
 	    this.toKey = toKey;
 	}
 
-	SubMap(Object key, boolean headMap) {
+	SubMap(final Object key, final boolean headMap) {
             if (headMap) {
-                fromStart = true;
-                toKey = key;
+                this.fromStart = true;
+                this.toKey = key;
             } else {
-                toEnd = true;
-                fromKey = key;
+                this.toEnd = true;
+                this.fromKey = key;
             }
 	}
 
-	SubMap(boolean fromStart, Object fromKey, boolean toEnd, Object toKey){
+	SubMap(final boolean fromStart, final Object fromKey, final boolean toEnd, final Object toKey){
             this.fromStart = fromStart;
             this.fromKey= fromKey;
             this.toEnd = toEnd;
@@ -811,84 +835,94 @@ public class TreeMap extends AbstractMap
 	}
 
 	public boolean isEmpty() {
-	    return entrySet.isEmpty();
+	    return this.entrySet.isEmpty();
 	}
 
-	public boolean containsKey(Object key) {
-	    return inRange(key) && TreeMap.this.containsKey(key);
+	public boolean containsKey(final Object key) {
+	    return this.inRange(key) && TreeMap.this.containsKey(key);
 	}
 
-	public Object get(Object key) {
-	    if (!inRange(key))
-                return null;
+	public Object get(final Object key) {
+	    if (!this.inRange(key)) {
+		return null;
+	}
 	    return TreeMap.this.get(key);
 	}
 
-	public Object put(Object key, Object value) {
-	    if (!inRange(key))
+	public Object put(final Object key, final Object value) {
+	    if (!this.inRange(key)) {
 		throw new IllegalArgumentException("key out of range");
+	}
 	    return TreeMap.this.put(key, value);
 	}
 
         public Comparator comparator() {
-            return comparator;
+            return TreeMap.this.comparator;
         }
 
         public Object firstKey() {
-            return key(fromStart ? firstEntry() : getCeilEntry(fromKey));
+            return key(this.fromStart ? TreeMap.this.firstEntry() : TreeMap.this.getCeilEntry(this.fromKey));
         }
 
         public Object lastKey() {
-            return key(toEnd ? lastEntry() : getPrecedingEntry(toKey));
+            return key(this.toEnd ? TreeMap.this.lastEntry() : TreeMap.this.getPrecedingEntry(this.toKey));
         }
 
 	private transient Set entrySet = new EntrySetView();
 
 	public Set entrySet() {
-	    return entrySet;
+	    return this.entrySet;
 	}
 
 	private class EntrySetView extends AbstractSet {
 	    private transient int size = -1, sizeModCount;
 
-	    public int size() {
-		if (size == -1 || sizeModCount != TreeMap.this.modCount) {
-		    size = 0;  sizeModCount = TreeMap.this.modCount;
-		    com.example.backport.java.util.Iterator i = iterator();
+	EntrySetView() {
+		// empty
+	}
+
+	public int size() {
+		if (this.size == -1 || this.sizeModCount != TreeMap.this.modCount) {
+		    this.size = 0;  this.sizeModCount = TreeMap.this.modCount;
+		    final com.example.backport.java.util.Iterator i = this.iterator();
 		    while (i.hasNext()) {
-			size++;
+			this.size++;
 			i.next();
 		    }
 		}
-		return size;
+		return this.size;
 	    }
 
 	    public boolean isEmpty() {
-		return !iterator().hasNext();
+		return !this.iterator().hasNext();
 	    }
 
-	    public boolean contains(Object o) {
-		if (!(o instanceof Map.Entry))
-		    return false;
-		Map.Entry entry = (Map.Entry)o;
-		Object key = entry.getKey();
-                if (!inRange(key))
-                    return false;
-                TreeMap.Entry node = getEntry(key);
+	    public boolean contains(final Object o) {
+		if (!(o instanceof Map.Entry)) {
+			return false;
+		}
+		final Map.Entry entry = (Map.Entry)o;
+		final Object key = entry.getKey();
+                if (!SubMap.this.inRange(key)) {
+			return false;
+		}
+                final TreeMap.Entry node = TreeMap.this.getEntry(key);
                 return node != null &&
                        valEquals(node.getValue(), entry.getValue());
 	    }
 
-	    public boolean remove(Object o) {
-		if (!(o instanceof Map.Entry))
-		    return false;
-		Map.Entry entry = (Map.Entry)o;
-		Object key = entry.getKey();
-                if (!inRange(key))
-                    return false;
-                TreeMap.Entry node = getEntry(key);
+	    public boolean remove(final Object o) {
+		if (!(o instanceof Map.Entry)) {
+			return false;
+		}
+		final Map.Entry entry = (Map.Entry)o;
+		final Object key = entry.getKey();
+                if (!SubMap.this.inRange(key)) {
+			return false;
+		}
+                final TreeMap.Entry node = TreeMap.this.getEntry(key);
                 if (node!=null && valEquals(node.getValue(),entry.getValue())){
-		    deleteEntry(node);
+		    TreeMap.this.deleteEntry(node);
 		    return true;
                 }
                 return false;
@@ -896,40 +930,44 @@ public class TreeMap extends AbstractMap
 
 	    public com.example.backport.java.util.Iterator iterator() {
 		return new Iterator(
-                    (fromStart ? firstEntry() : getCeilEntry(fromKey)),
-                    (toEnd     ? null	      : getCeilEntry(toKey)));
+                    SubMap.this.fromStart ? TreeMap.this.firstEntry() : TreeMap.this.getCeilEntry(SubMap.this.fromKey),
+                    SubMap.this.toEnd     ? null	      : TreeMap.this.getCeilEntry(SubMap.this.toKey));
 	    }
 	}
 
-        public SortedMap subMap(Object fromKey, Object toKey) {
-            if (!inRange(fromKey))
+        public SortedMap subMap(final Object fromKey, final Object toKey) {
+            if (!this.inRange(fromKey)) {
 		throw new IllegalArgumentException("fromKey out of range");
-            if (!inRange2(toKey))
-                throw new IllegalArgumentException("toKey out of range");
+	}
+            if (!this.inRange2(toKey)) {
+		throw new IllegalArgumentException("toKey out of range");
+	}
             return new SubMap(fromKey, toKey);
         }
 
-        public SortedMap headMap(Object toKey) {
-            if (!inRange2(toKey))
-                throw new IllegalArgumentException("toKey out of range");
-            return new SubMap(fromStart, fromKey, false, toKey);
+        public SortedMap headMap(final Object toKey) {
+            if (!this.inRange2(toKey)) {
+		throw new IllegalArgumentException("toKey out of range");
+	}
+            return new SubMap(this.fromStart, this.fromKey, false, toKey);
         }
 
-        public SortedMap tailMap(Object fromKey) {
-            if (!inRange(fromKey))
-                throw new IllegalArgumentException("fromKey out of range");
-            return new SubMap(false, fromKey, toEnd, toKey);
+        public SortedMap tailMap(final Object fromKey) {
+            if (!this.inRange(fromKey)) {
+		throw new IllegalArgumentException("fromKey out of range");
+	}
+            return new SubMap(false, fromKey, this.toEnd, this.toKey);
         }
 
-	private boolean inRange(Object key) {
-	    return (fromStart || compare(key, fromKey) >= 0) &&
-                   (toEnd     || compare(key, toKey)   <  0);
+	boolean inRange(final Object key) {
+	    return (this.fromStart || TreeMap.this.compare(key, this.fromKey) >= 0) &&
+                   (this.toEnd     || TreeMap.this.compare(key, this.toKey)   <  0);
 	}
 
         // This form allows the high endpoint (as well as all legit keys)
-	private boolean inRange2(Object key) {
-	    return (fromStart || compare(key, fromKey) >= 0) &&
-                   (toEnd     || compare(key, toKey)   <= 0);
+	private boolean inRange2(final Object key) {
+	    return (this.fromStart || TreeMap.this.compare(key, this.fromKey) >= 0) &&
+                   (this.toEnd     || TreeMap.this.compare(key, this.toKey)   <= 0);
         }
     }
 
@@ -942,65 +980,69 @@ public class TreeMap extends AbstractMap
      * TreeMap Iterator.
      */
     private class Iterator implements com.example.backport.java.util.Iterator {
-	private int type;
+	private final int type;
 	private int expectedModCount = TreeMap.this.modCount;
 	private Entry lastReturned = null;
 	private Entry next;
 	private Entry firstExcluded = null;
 
-	Iterator(int type) {
+	Iterator(final int type) {
 	    this.type = type;
-	    next = firstEntry();
+	    this.next = TreeMap.this.firstEntry();
 	}
 
-	Iterator(Entry first, Entry firstExcluded) {
-	    type = ENTRIES;
-	    next = first;
+	Iterator(final Entry first, final Entry firstExcluded) {
+	    this.type = ENTRIES;
+	    this.next = first;
 	    this.firstExcluded = firstExcluded;
 	}
 
 	public boolean hasNext() {
-	    return next != firstExcluded;
+	    return this.next != this.firstExcluded;
 	}
 
 	public Object next() {
-	    if (next == firstExcluded)
+	    if (this.next == this.firstExcluded) {
 		throw new NoSuchElementException();
-	    if (modCount != expectedModCount)
+	}
+	    if (TreeMap.this.modCount != this.expectedModCount) {
 		throw new ConcurrentModificationException();
+	}
 
-	    lastReturned = next;
-	    next = successor(next);
-	    return (type == KEYS ? lastReturned.key :
-		    (type == VALUES ? lastReturned.value : lastReturned));
+	    this.lastReturned = this.next;
+	    this.next = TreeMap.successor(this.next);
+	    return this.type == KEYS ? this.lastReturned.key :
+		    this.type == VALUES ? this.lastReturned.value : this.lastReturned;
 	}
 
 	public void remove() {
-	    if (lastReturned == null)
+	    if (this.lastReturned == null) {
 		throw new IllegalStateException();
-	    if (modCount != expectedModCount)
+	}
+	    if (TreeMap.this.modCount != this.expectedModCount) {
 		throw new ConcurrentModificationException();
+	}
 
-	    deleteEntry(lastReturned);
-	    expectedModCount++;
-	    lastReturned = null;
+	    TreeMap.this.deleteEntry(this.lastReturned);
+	    this.expectedModCount++;
+	    this.lastReturned = null;
 	}
     }
 
     /**
      * Compares two keys using the correct comparison method for this TreeMap.
      */
-    private int compare(Object k1, Object k2) {
-	return (comparator==null ? ((Comparable)k1).compareTo(k2)
-				 : comparator.compare(k1, k2));
+    int compare(final Object k1, final Object k2) {
+	return this.comparator==null ? ((Comparable)k1).compareTo(k2)
+				 : this.comparator.compare(k1, k2);
     }
 
     /**
      * Test two values  for equality.  Differs from o1.equals(o2) only in
      * that it copes with with <tt>null</tt> o1 properly.
      */
-    private static boolean valEquals(Object o1, Object o2) {
-        return (o1==null ? o2==null : o1.equals(o2));
+    static boolean valEquals(final Object o1, final Object o2) {
+        return o1==null ? o2==null : o1.equals(o2);
     }
 
     private static final boolean RED   = false;
@@ -1021,9 +1063,9 @@ public class TreeMap extends AbstractMap
 
 	/**
 	 * Make a new cell with given key, value, and parent, and with <tt>null</tt>
-	 * child links, and BLACK color. 
+	 * child links, and BLACK color.
 	 */
-	Entry(Object key, Object value, Entry parent) { 
+	Entry(final Object key, final Object value, final Entry parent) {
 	    this.key = key;
 	    this.value = value;
 	    this.parent = parent;
@@ -1034,8 +1076,8 @@ public class TreeMap extends AbstractMap
          *
 	 * @return the key.
 	 */
-	public Object getKey() { 
-	    return key; 
+	public Object getKey() {
+	    return this.key;
 	}
 
 	/**
@@ -1044,7 +1086,7 @@ public class TreeMap extends AbstractMap
 	 * @return the value associated with the key.
 	 */
 	public Object getValue() {
-	    return value;
+	    return this.value;
 	}
 
 	/**
@@ -1054,28 +1096,29 @@ public class TreeMap extends AbstractMap
          * @return the value associated with the key before this method was
          *	   called.
 	 */
-	public Object setValue(Object value) {
-	    Object oldValue = this.value;
+	public Object setValue(final Object value) {
+	    final Object oldValue = this.value;
 	    this.value = value;
 	    return oldValue;
 	}
 
-	public boolean equals(Object o) {
-	    if (!(o instanceof Map.Entry))
+	public boolean equals(final Object o) {
+	    if (!(o instanceof Map.Entry)) {
 		return false;
-	    Map.Entry e = (Map.Entry)o;
+	}
+	    final Map.Entry e = (Map.Entry)o;
 
-	    return valEquals(key,e.getKey()) && valEquals(value,e.getValue());
+	    return valEquals(this.key,e.getKey()) && valEquals(this.value,e.getValue());
 	}
 
 	public int hashCode() {
-	    int keyHash = (key==null ? 0 : key.hashCode());
-	    int valueHash = (value==null ? 0 : value.hashCode());
+	    final int keyHash = this.key==null ? 0 : this.key.hashCode();
+	    final int valueHash = this.value==null ? 0 : this.value.hashCode();
 	    return keyHash ^ valueHash;
 	}
 
 	public String toString() {
-	    return key + "=" + value;
+	    return this.key + "=" + this.value;
 	}
     }
 
@@ -1083,11 +1126,13 @@ public class TreeMap extends AbstractMap
      * Returns the first Entry in the TreeMap (according to the TreeMap's
      * key-sort function).  Returns null if the TreeMap is empty.
      */
-    private Entry firstEntry() {
-	Entry p = root;
-	if (p != null)
-	    while (p.left != null)
-		p = p.left;
+    Entry firstEntry() {
+	Entry p = this.root;
+	if (p != null) {
+		while (p.left != null) {
+			p = p.left;
+		}
+	}
 	return p;
     }
 
@@ -1095,24 +1140,27 @@ public class TreeMap extends AbstractMap
      * Returns the last Entry in the TreeMap (according to the TreeMap's
      * key-sort function).  Returns null if the TreeMap is empty.
      */
-    private Entry lastEntry() {
-	Entry p = root;
-	if (p != null)
-	    while (p.right != null)
-		p = p.right;
+    Entry lastEntry() {
+	Entry p = this.root;
+	if (p != null) {
+		while (p.right != null) {
+			p = p.right;
+		}
+	}
 	return p;
     }
 
     /**
      * Returns the successor of the specified Entry, or null if no such.
      */
-    private Entry successor(Entry t) {
-	if (t == null)
-	    return null;
-	else if (t.right != null) {
+    static Entry successor(final Entry t) {
+	if (t == null) {
+		return null;
+	} else if (t.right != null) {
 	    Entry p = t.right;
-	    while (p.left != null)
+	    while (p.left != null) {
 		p = p.left;
+	}
 	    return p;
 	} else {
 	    Entry p = t.parent;
@@ -1135,54 +1183,62 @@ public class TreeMap extends AbstractMap
      * algorithms.
      */
 
-    private static boolean colorOf(Entry p) {
-	return (p == null ? BLACK : p.color);
+    private static boolean colorOf(final Entry p) {
+	return p == null ? BLACK : p.color;
     }
 
-    private static Entry  parentOf(Entry p) { 
-	return (p == null ? null: p.parent);
+    private static Entry  parentOf(final Entry p) {
+	return p == null ? null: p.parent;
     }
 
-    private static void setColor(Entry p, boolean c) { 
-	if (p != null)  p.color = c; 
+    private static void setColor(final Entry p, final boolean c) {
+	if (p != null) {
+		p.color = c;
+	}
     }
 
-    private static Entry  leftOf(Entry p) { 
-	return (p == null)? null: p.left; 
+    private static Entry  leftOf(final Entry p) {
+	return p == null? null: p.left;
     }
 
-    private static Entry  rightOf(Entry p) { 
-	return (p == null)? null: p.right; 
+    private static Entry  rightOf(final Entry p) {
+	return p == null? null: p.right;
     }
 
     /** From CLR **/
-    private void rotateLeft(Entry p) {
-	Entry r = p.right;
+    private void rotateLeft(final Entry p) {
+	final Entry r = p.right;
 	p.right = r.left;
-	if (r.left != null)
-	    r.left.parent = p;
+	if (r.left != null) {
+		r.left.parent = p;
+	}
 	r.parent = p.parent;
-	if (p.parent == null)
-	    root = r;
-	else if (p.parent.left == p)
-	    p.parent.left = r;
-	else
-	    p.parent.right = r;
+	if (p.parent == null) {
+		this.root = r;
+	} else if (p.parent.left == p) {
+		p.parent.left = r;
+	} else {
+		p.parent.right = r;
+	}
 	r.left = p;
 	p.parent = r;
     }
 
     /** From CLR **/
-    private void rotateRight(Entry p) {
-	Entry l = p.left;
+    private void rotateRight(final Entry p) {
+	final Entry l = p.left;
 	p.left = l.right;
-	if (l.right != null) l.right.parent = p;
+	if (l.right != null) {
+		l.right.parent = p;
+	}
 	l.parent = p.parent;
-	if (p.parent == null)
-	    root = l;
-	else if (p.parent.right == p)
-	    p.parent.right = l;
-	else p.parent.left = l;
+	if (p.parent == null) {
+		this.root = l;
+	} else if (p.parent.right == p) {
+		p.parent.right = l;
+	} else {
+		p.parent.left = l;
+	}
 	l.right = p;
 	p.parent = l;
     }
@@ -1192,9 +1248,9 @@ public class TreeMap extends AbstractMap
     private void fixAfterInsertion(Entry x) {
 	x.color = RED;
 
-	while (x != null && x != root && x.parent.color == RED) {
+	while (x != null && x != this.root && x.parent.color == RED) {
 	    if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
-		Entry y = rightOf(parentOf(parentOf(x)));
+		final Entry y = rightOf(parentOf(parentOf(x)));
 		if (colorOf(y) == RED) {
 		    setColor(parentOf(x), BLACK);
 		    setColor(y, BLACK);
@@ -1203,15 +1259,16 @@ public class TreeMap extends AbstractMap
 		} else {
 		    if (x == rightOf(parentOf(x))) {
 			x = parentOf(x);
-			rotateLeft(x);
+			this.rotateLeft(x);
 		    }
 		    setColor(parentOf(x), BLACK);
 		    setColor(parentOf(parentOf(x)), RED);
-		    if (parentOf(parentOf(x)) != null) 
-			rotateRight(parentOf(parentOf(x)));
+		    if (parentOf(parentOf(x)) != null) {
+			this.rotateRight(parentOf(parentOf(x)));
+		}
 		}
 	    } else {
-		Entry y = leftOf(parentOf(parentOf(x)));
+		final Entry y = leftOf(parentOf(parentOf(x)));
 		if (colorOf(y) == RED) {
 		    setColor(parentOf(x), BLACK);
 		    setColor(y, BLACK);
@@ -1220,60 +1277,65 @@ public class TreeMap extends AbstractMap
 		} else {
 		    if (x == leftOf(parentOf(x))) {
 			x = parentOf(x);
-			rotateRight(x);
+			this.rotateRight(x);
 		    }
 		    setColor(parentOf(x),  BLACK);
 		    setColor(parentOf(parentOf(x)), RED);
-		    if (parentOf(parentOf(x)) != null) 
-			rotateLeft(parentOf(parentOf(x)));
+		    if (parentOf(parentOf(x)) != null) {
+			this.rotateLeft(parentOf(parentOf(x)));
+		}
 		}
 	    }
 	}
-	root.color = BLACK;
+	this.root.color = BLACK;
     }
 
     /**
      * Delete node p, and then rebalance the tree.
      */
-    private void deleteEntry(Entry p) {
-        decrementSize();
+    void deleteEntry(final Entry p) {
+        this.decrementSize();
 
 	// If strictly internal, first swap position with successor.
 	if (p.left != null && p.right != null) {
-	    Entry s = successor(p);
-	    swapPosition(s, p);
-	} 
+	    final Entry s = TreeMap.successor(p);
+	    this.swapPosition(s, p);
+	}
 
 	// Start fixup at replacement node, if it exists.
-	Entry replacement = (p.left != null ? p.left : p.right);
+	final Entry replacement = p.left != null ? p.left : p.right;
 
 	if (replacement != null) {
-	    // Link replacement to parent 
+	    // Link replacement to parent
 	    replacement.parent = p.parent;
-	    if (p.parent == null)       
-		root = replacement; 
-	    else if (p == p.parent.left)  
+	    if (p.parent == null) {
+		this.root = replacement;
+	} else if (p == p.parent.left) {
 		p.parent.left  = replacement;
-	    else
+	} else {
 		p.parent.right = replacement;
+	}
 
 	    // Null out links so they are OK to use by fixAfterDeletion.
 	    p.left = p.right = p.parent = null;
-      
+
 	    // Fix replacement
-	    if (p.color == BLACK) 
-		fixAfterDeletion(replacement);
+	    if (p.color == BLACK) {
+		this.fixAfterDeletion(replacement);
+	}
 	} else if (p.parent == null) { // return if we are the only node.
-	    root = null;
+	    this.root = null;
 	} else { //  No children. Use self as phantom replacement and unlink.
-	    if (p.color == BLACK) 
-		fixAfterDeletion(p);
+	    if (p.color == BLACK) {
+		this.fixAfterDeletion(p);
+	}
 
 	    if (p.parent != null) {
-		if (p == p.parent.left) 
-		    p.parent.left = null;
-		else if (p == p.parent.right) 
-		    p.parent.right = null;
+		if (p == p.parent.left) {
+			p.parent.left = null;
+		} else if (p == p.parent.right) {
+			p.parent.right = null;
+		}
 		p.parent = null;
 	    }
 	}
@@ -1281,18 +1343,18 @@ public class TreeMap extends AbstractMap
 
     /** From CLR **/
     private void fixAfterDeletion(Entry x) {
-	while (x != root && colorOf(x) == BLACK) {
+	while (x != this.root && colorOf(x) == BLACK) {
 	    if (x == leftOf(parentOf(x))) {
 		Entry sib = rightOf(parentOf(x));
 
 		if (colorOf(sib) == RED) {
 		    setColor(sib, BLACK);
 		    setColor(parentOf(x), RED);
-		    rotateLeft(parentOf(x));
+		    this.rotateLeft(parentOf(x));
 		    sib = rightOf(parentOf(x));
 		}
 
-		if (colorOf(leftOf(sib))  == BLACK && 
+		if (colorOf(leftOf(sib))  == BLACK &&
 		    colorOf(rightOf(sib)) == BLACK) {
 		    setColor(sib,  RED);
 		    x = parentOf(x);
@@ -1300,14 +1362,14 @@ public class TreeMap extends AbstractMap
 		    if (colorOf(rightOf(sib)) == BLACK) {
 			setColor(leftOf(sib), BLACK);
 			setColor(sib, RED);
-			rotateRight(sib);
+			this.rotateRight(sib);
 			sib = rightOf(parentOf(x));
 		    }
 		    setColor(sib, colorOf(parentOf(x)));
 		    setColor(parentOf(x), BLACK);
 		    setColor(rightOf(sib), BLACK);
-		    rotateLeft(parentOf(x));
-		    x = root;
+		    this.rotateLeft(parentOf(x));
+		    x = this.root;
 		}
 	    } else { // symmetric
 		Entry sib = leftOf(parentOf(x));
@@ -1315,11 +1377,11 @@ public class TreeMap extends AbstractMap
 		if (colorOf(sib) == RED) {
 		    setColor(sib, BLACK);
 		    setColor(parentOf(x), RED);
-		    rotateRight(parentOf(x));
+		    this.rotateRight(parentOf(x));
 		    sib = leftOf(parentOf(x));
 		}
 
-		if (colorOf(rightOf(sib)) == BLACK && 
+		if (colorOf(rightOf(sib)) == BLACK &&
 		    colorOf(leftOf(sib)) == BLACK) {
 		    setColor(sib,  RED);
 		    x = parentOf(x);
@@ -1327,94 +1389,101 @@ public class TreeMap extends AbstractMap
 		    if (colorOf(leftOf(sib)) == BLACK) {
 			setColor(rightOf(sib), BLACK);
 			setColor(sib, RED);
-			rotateLeft(sib);
+			this.rotateLeft(sib);
 			sib = leftOf(parentOf(x));
 		    }
 		    setColor(sib, colorOf(parentOf(x)));
 		    setColor(parentOf(x), BLACK);
 		    setColor(leftOf(sib), BLACK);
-		    rotateRight(parentOf(x));
-		    x = root;
+		    this.rotateRight(parentOf(x));
+		    x = this.root;
 		}
 	    }
 	}
 
-	setColor(x, BLACK); 
+	setColor(x, BLACK);
     }
 
     /**
      * Swap the linkages of two nodes in a tree.
      */
-    private void swapPosition(Entry x, Entry y) {
+    private void swapPosition(final Entry x, final Entry y) {
 	// Save initial values.
-	Entry px = x.parent, lx = x.left, rx = x.right;
-	Entry py = y.parent, ly = y.left, ry = y.right;
-	boolean xWasLeftChild = px != null && x == px.left;
-	boolean yWasLeftChild = py != null && y == py.left;
+	final Entry px = x.parent, lx = x.left, rx = x.right;
+	final Entry py = y.parent, ly = y.left, ry = y.right;
+	final boolean xWasLeftChild = px != null && x == px.left;
+	final boolean yWasLeftChild = py != null && y == py.left;
 
 	// Swap, handling special cases of one being the other's parent.
 	if (x == py) {  // x was y's parent
 	    x.parent = y;
-	    if (yWasLeftChild) { 
-		y.left = x; 
-		y.right = rx; 
+	    if (yWasLeftChild) {
+		y.left = x;
+		y.right = rx;
 	    } else {
 		y.right = x;
-		y.left = lx;  
+		y.left = lx;
 	    }
 	} else {
-	    x.parent = py; 
+	    x.parent = py;
 	    if (py != null) {
-		if (yWasLeftChild)
-		    py.left = x;
-		else
-		    py.right = x;
+		if (yWasLeftChild) {
+			py.left = x;
+		} else {
+			py.right = x;
+		}
 	    }
-	    y.left = lx;   
+	    y.left = lx;
 	    y.right = rx;
 	}
 
 	if (y == px) { // y was x's parent
 	    y.parent = x;
-	    if (xWasLeftChild) { 
-		x.left = y; 
-		x.right = ry; 
+	    if (xWasLeftChild) {
+		x.left = y;
+		x.right = ry;
 	    } else {
 		x.right = y;
-		x.left = ly;  
+		x.left = ly;
 	    }
 	} else {
-	    y.parent = px; 
+	    y.parent = px;
 	    if (px != null) {
-		if (xWasLeftChild)
-		    px.left = y;
-		else
-		    px.right = y;
+		if (xWasLeftChild) {
+			px.left = y;
+		} else {
+			px.right = y;
+		}
 	    }
-	    x.left = ly;   
-	    x.right = ry;  
+	    x.left = ly;
+	    x.right = ry;
 	}
 
 	// Fix children's parent pointers
-	if (x.left != null)
-	    x.left.parent = x;
-	if (x.right != null)
-	    x.right.parent = x;
-	if (y.left != null)
-	    y.left.parent = y;
-	if (y.right != null)
-	    y.right.parent = y;
+	if (x.left != null) {
+		x.left.parent = x;
+	}
+	if (x.right != null) {
+		x.right.parent = x;
+	}
+	if (y.left != null) {
+		y.left.parent = y;
+	}
+	if (y.right != null) {
+		y.right.parent = y;
+	}
 
 	// Swap colors
-	boolean c = x.color;
+	final boolean c = x.color;
 	x.color = y.color;
 	y.color = c;
 
 	// Check if root changed
-	if (root == x)
-	    root = y;
-	else if (root == y)
-	    root = x;
+	if (this.root == x) {
+		this.root = y;
+	} else if (this.root == y) {
+		this.root = x;
+	}
     }
 
 
@@ -1432,17 +1501,17 @@ public class TreeMap extends AbstractMap
      *		   or by the keys' natural ordering if the TreeMap has no
      *             Comparator).
      */
-    private void writeObject(java.io.ObjectOutputStream s)
+    private void writeObject(final java.io.ObjectOutputStream s)
         throws java.io.IOException {
 	// Write out the Comparator and any hidden stuff
 	s.defaultWriteObject();
 
 	// Write out size (number of Mappings)
-	s.writeInt(size);
+	s.writeInt(this.size);
 
         // Write out keys and values (alternating)
-	for (com.example.backport.java.util.Iterator i = entrySet().iterator(); i.hasNext(); ) {
-            Entry e = (Entry)i.next();
+	for (final com.example.backport.java.util.Iterator i = this.entrySet().iterator(); i.hasNext(); ) {
+            final Entry e = (Entry)i.next();
             s.writeObject(e.key);
             s.writeObject(e.value);
 	}
@@ -1460,23 +1529,25 @@ public class TreeMap extends AbstractMap
 	s.defaultReadObject();
 
         // Read in size
-        int size = s.readInt();
+        final int size = s.readInt();
 
-        buildFromSorted(size, null, s, null);
+        this.buildFromSorted(size, null, s, null);
     }
 
     /** Intended to be called only from TreeSet.readObject **/
-    void readTreeSet(int size, java.io.ObjectInputStream s, Object defaultVal)
+    void readTreeSet(final int size, final java.io.ObjectInputStream s, final Object defaultVal)
         throws java.io.IOException, ClassNotFoundException {
-        buildFromSorted(size, null, s, defaultVal);
+        this.buildFromSorted(size, null, s, defaultVal);
     }
 
     /** Intended to be called only from TreeSet.addAll **/
-    void addAllForTreeSet(SortedSet set, Object defaultVal) {
+    void addAllForTreeSet(final SortedSet set, final Object defaultVal) {
       try {
-          buildFromSorted(set.size(), set.iterator(), null, defaultVal);
-      } catch (java.io.IOException cannotHappen) {
-      } catch (ClassNotFoundException cannotHappen) {
+          this.buildFromSorted(set.size(), set.iterator(), null, defaultVal);
+      } catch (final IOException cannotHappen) {
+	      // empty
+      } catch (final ClassNotFoundException cannotHappen) {
+	      // empty
       }
     }
 
@@ -1508,15 +1579,15 @@ public class TreeMap extends AbstractMap
      *        iterator or stream, as described above.
      * @throws IOException propagated from stream reads. This cannot
      *         occur if str is null.
-     * @throws ClassNotFoundException propagated from readObject. 
+     * @throws ClassNotFoundException propagated from readObject.
      *         This cannot occur if str is null.
      */
-    private void buildFromSorted(int size, com.example.backport.java.util.Iterator it,
-                                  java.io.ObjectInputStream str,
-                                  Object defaultVal)
+    private void buildFromSorted(final int size, final com.example.backport.java.util.Iterator it,
+                                  final java.io.ObjectInputStream str,
+                                  final Object defaultVal)
         throws  java.io.IOException, ClassNotFoundException {
         this.size = size;
-	root = buildFromSorted(0, 0, size-1, computeRedLevel(size),
+	this.root = buildFromSorted(0, 0, size-1, computeRedLevel(size),
                                it, str, defaultVal);
     }
 
@@ -1531,20 +1602,20 @@ public class TreeMap extends AbstractMap
      * @param lo the first element index of this subtree. Initial should be 0.
      * @param hi the last element index of this subtree.  Initial should be
      *	      size-1.
-     * @param redLevel the level at which nodes should be red. 
+     * @param redLevel the level at which nodes should be red.
      *        Must be equal to computeRedLevel for tree of this size.
      */
-    private static Entry buildFromSorted(int level, int lo, int hi,
-                                         int redLevel,
-                                         com.example.backport.java.util.Iterator it, 
-                                         java.io.ObjectInputStream str,
-                                         Object defaultVal) 
+    private static Entry buildFromSorted(final int level, final int lo, final int hi,
+                                         final int redLevel,
+                                         final com.example.backport.java.util.Iterator it,
+                                         final java.io.ObjectInputStream str,
+                                         final Object defaultVal)
         throws  java.io.IOException, ClassNotFoundException {
         /*
          * Strategy: The root is the middlemost element. To get to it, we
          * have to first recursively construct the entire left subtree,
          * so as to grab all of its elements. We can then proceed with right
-         * subtree. 
+         * subtree.
          *
          * The lo and hi arguments are the minimum and maximum
          * indices to pull out of the iterator or stream for current subtree.
@@ -1552,21 +1623,24 @@ public class TreeMap extends AbstractMap
          * ensuring that items are extracted in corresponding order.
          */
 
-        if (hi < lo) return null;
+        if (hi < lo) {
+		return null;
+	}
 
-        int mid = (lo + hi) / 2;
-        
+        final int mid = (lo + hi) / 2;
+
         Entry left  = null;
-        if (lo < mid) 
-            left = buildFromSorted(level+1, lo, mid - 1, redLevel,
-                                   it, str, defaultVal);
-        
+        if (lo < mid) {
+		left = buildFromSorted(level+1, lo, mid - 1, redLevel,
+		                           it, str, defaultVal);
+	}
+
         // extract key and/or value from iterator or stream
         Object key;
         Object value;
         if (it != null) { // use iterator
             if (defaultVal==null) {
-                Map.Entry entry = (Map.Entry) it.next();
+                final Map.Entry entry = (Map.Entry) it.next();
                 key = entry.getKey();
                 value = entry.getValue();
             } else {
@@ -1575,27 +1649,28 @@ public class TreeMap extends AbstractMap
             }
         } else { // use stream
             key = str.readObject();
-            value = (defaultVal != null ? defaultVal : str.readObject());
+            value = defaultVal != null ? defaultVal : str.readObject();
         }
 
-        Entry middle =  new Entry(key, value, null);
-        
+        final Entry middle =  new Entry(key, value, null);
+
         // color nodes in non-full bottommost level red
-        if (level == redLevel)
-            middle.color = RED;
-        
-        if (left != null) { 
-            middle.left = left; 
-            left.parent = middle; 
+        if (level == redLevel) {
+		middle.color = RED;
+	}
+
+        if (left != null) {
+            middle.left = left;
+            left.parent = middle;
         }
-        
+
         if (mid < hi) {
-            Entry right = buildFromSorted(level+1, mid+1, hi, redLevel,
+            final Entry right = buildFromSorted(level+1, mid+1, hi, redLevel,
                                           it, str, defaultVal);
             middle.right = right;
             right.parent = middle;
         }
-        
+
         return middle;
     }
 
@@ -1608,10 +1683,11 @@ public class TreeMap extends AbstractMap
      * node.  (The answer is ~lg(N), but in any case must be computed by same
      * quick O(lg(N)) loop.)
      */
-    private static int computeRedLevel(int sz) {
+    private static int computeRedLevel(final int sz) {
         int level = 0;
-        for (int m = sz - 1; m >= 0; m = m / 2 - 1) 
-            level++;
+        for (int m = sz - 1; m >= 0; m = m / 2 - 1) {
+		level++;
+	}
         return level;
     }
 }

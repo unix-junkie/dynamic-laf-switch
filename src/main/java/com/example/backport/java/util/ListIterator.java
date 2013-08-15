@@ -7,6 +7,11 @@
 
 package com.example.backport.java.util;
 
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
+
+import com.example.backport.java.lang.UnsupportedOperationException;
+
 /**
  * An iterator for lists that allows the programmer to traverse the
  * list in either direction and modify the list during iteration.
@@ -64,7 +69,7 @@ public interface ListIterator extends Iterator {
      * element repeatedly.)
      *
      * @return the previous element in the list.
-     * 
+     *
      * @exception NoSuchElementException if the iteration has no previous
      *            element.
      */
@@ -77,7 +82,7 @@ public interface ListIterator extends Iterator {
      *
      * @return the index of the element that would be returned by a subsequent
      * 	       call to <tt>next</tt>, or list size if list iterator is at end
-     *	       of list. 
+     *	       of list.
      */
     int nextIndex();
 
@@ -89,12 +94,12 @@ public interface ListIterator extends Iterator {
      * @return the index of the element that would be returned by a subsequent
      * 	       call to <tt>previous</tt>, or -1 if list iterator is at
      *	       beginning of list.
-     */ 
+     */
     int previousIndex();
 
 
     // Modification Operations
-    
+
     /**
      * Removes from the list the last element that was returned by
      * <tt>next</tt> or <tt>previous</tt> (optional operation).  This call can
@@ -145,10 +150,10 @@ public interface ListIterator extends Iterator {
      *
      * @exception UnsupportedOperationException if the <tt>add</tt> method is
      * 		  not supported by this list iterator.
-     * 
+     *
      * @exception ClassCastException if the class of the specified element
      * 		  prevents it from being added to this Set.
-     * 
+     *
      * @exception IllegalArgumentException if some aspect of this element
      *            prevents it from being added to this Collection.
      */

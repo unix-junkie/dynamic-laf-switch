@@ -72,7 +72,7 @@ public abstract class AbstractCollection implements Collection {
      * @return <tt>true</tt> if this collection contains no elements.
      */
     public boolean isEmpty() {
-	return size() == 0;
+	return this.size() == 0;
     }
 
     /**
@@ -87,16 +87,20 @@ public abstract class AbstractCollection implements Collection {
      * @param o object to be checked for containment in this collection.
      * @return <tt>true</tt> if this collection contains the specified element.
      */
-    public boolean contains(Object o) {
-	Iterator e = iterator();
+    public boolean contains(final Object o) {
+	final Iterator e = this.iterator();
 	if (o==null) {
-	    while (e.hasNext())
-		if (e.next()==null)
-		    return true;
+	    while (e.hasNext()) {
+		if (e.next()==null) {
+			return true;
+		}
+	}
 	} else {
-	    while (e.hasNext())
-		if (o.equals(e.next()))
-		    return true;
+	    while (e.hasNext()) {
+		if (o.equals(e.next())) {
+			return true;
+		}
+	}
 	}
 	return false;
     }
@@ -117,10 +121,11 @@ public abstract class AbstractCollection implements Collection {
      * @return an array containing all of the elements in this collection.
      */
     public Object[] toArray() {
-	Object[] result = new Object[size()];
-	Iterator e = iterator();
-	for (int i=0; e.hasNext(); i++)
-	    result[i] = e.next();
+	final Object[] result = new Object[this.size()];
+	final Iterator e = this.iterator();
+	for (int i=0; e.hasNext(); i++) {
+		result[i] = e.next();
+	}
 	return result;
     }
 
@@ -154,25 +159,28 @@ public abstract class AbstractCollection implements Collection {
      * 	       be stored, if it is big enough; otherwise, a new array of the
      * 	       same runtime type is allocated for this purpose.
      * @return an array containing the elements of the collection.
-     * 
+     *
      * @throws NullPointerException if the specified array is <tt>null</tt>.
-     * 
+     *
      * @throws ArrayStoreException if the runtime type of the specified array
      *         is not a supertype of the runtime type of every element in this
      *         collection.
      */
     public Object[] toArray(Object a[]) {
-        int size = size();
-        if (a.length < size)
-            a = (Object[])java.lang.reflect.Array.newInstance(
-                                  a.getClass().getComponentType(), size);
+        final int size = this.size();
+        if (a.length < size) {
+		a = (Object[])java.lang.reflect.Array.newInstance(
+		                          a.getClass().getComponentType(), size);
+	}
 
-        Iterator it=iterator();
-        for (int i=0; i<size; i++)
-            a[i] = it.next();
+        final Iterator it=this.iterator();
+        for (int i=0; i<size; i++) {
+		a[i] = it.next();
+	}
 
-        if (a.length > size)
-            a[size] = null;
+        if (a.length > size) {
+		a[size] = null;
+	}
 
         return a;
     }
@@ -196,21 +204,21 @@ public abstract class AbstractCollection implements Collection {
      *
      * @param o element whose presence in this collection is to be ensured.
      * @return <tt>true</tt> if the collection changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>add</tt> method is not
      *		  supported by this collection.
-     * 
+     *
      * @throws NullPointerException if this collection does not permit
      * 		  <tt>null</tt> elements, and the specified element is
      * 		  <tt>null</tt>.
-     * 
+     *
      * @throws ClassCastException if the class of the specified element
      * 		  prevents it from being added to this collection.
-     * 
+     *
      * @throws IllegalArgumentException if some aspect of this element
      *            prevents it from being added to this collection.
      */
-    public boolean add(Object o) {
+    public boolean add(final Object o) {
 	throw new UnsupportedOperationException();
     }
 
@@ -235,12 +243,12 @@ public abstract class AbstractCollection implements Collection {
      * @param o element to be removed from this collection, if present.
      * @return <tt>true</tt> if the collection contained the specified
      *         element.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>remove</tt> method is
      * 		  not supported by this collection.
      */
-    public boolean remove(Object o) {
-	Iterator e = iterator();
+    public boolean remove(final Object o) {
+	final Iterator e = this.iterator();
 	if (o==null) {
 	    while (e.hasNext()) {
 		if (e.next()==null) {
@@ -274,14 +282,16 @@ public abstract class AbstractCollection implements Collection {
      * @param c collection to be checked for containment in this collection.
      * @return <tt>true</tt> if this collection contains all of the elements
      * 	       in the specified collection.
-     * 
+     *
      * @see #contains(Object)
      */
-    public boolean containsAll(Collection c) {
-	Iterator e = c.iterator();
-	while (e.hasNext())
-	    if(!contains(e.next()))
-		return false;
+    public boolean containsAll(final Collection c) {
+	final Iterator e = c.iterator();
+	while (e.hasNext()) {
+		if(!this.contains(e.next())) {
+			return false;
+		}
+	}
 
 	return true;
     }
@@ -306,15 +316,16 @@ public abstract class AbstractCollection implements Collection {
      * call.
      * @throws UnsupportedOperationException if the <tt>addAll</tt> method is
      * 		  not supported by this collection.
-     * 
+     *
      * @see #add(Object)
      */
-    public boolean addAll(Collection c) {
+    public boolean addAll(final Collection c) {
 	boolean modified = false;
-	Iterator e = c.iterator();
+	final Iterator e = c.iterator();
 	while (e.hasNext()) {
-	    if(add(e.next()))
+	    if(this.add(e.next())) {
 		modified = true;
+	}
 	}
 	return modified;
     }
@@ -335,16 +346,16 @@ public abstract class AbstractCollection implements Collection {
      * @param c elements to be removed from this collection.
      * @return <tt>true</tt> if this collection changed as a result of the
      * call.
-     * 
+     *
      * @throws    UnsupportedOperationException removeAll is not supported
      * 		  by this collection.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
-    public boolean removeAll(Collection c) {
+    public boolean removeAll(final Collection c) {
 	boolean modified = false;
-	Iterator e = iterator();
+	final Iterator e = this.iterator();
 	while (e.hasNext()) {
 	    if(c.contains(e.next())) {
 		e.remove();
@@ -371,16 +382,16 @@ public abstract class AbstractCollection implements Collection {
      *
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>retainAll</tt> method
      * 		  is not supported by this collection.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
-    public boolean retainAll(Collection c) {
+    public boolean retainAll(final Collection c) {
 	boolean modified = false;
-	Iterator e = iterator();
+	final Iterator e = this.iterator();
 	while (e.hasNext()) {
 	    if(!c.contains(e.next())) {
 		e.remove();
@@ -409,7 +420,7 @@ public abstract class AbstractCollection implements Collection {
      * 		  not supported by this collection.
      */
     public void clear() {
-	Iterator e = iterator();
+	final Iterator e = this.iterator();
 	while (e.hasNext()) {
 	    e.next();
 	    e.remove();
@@ -433,18 +444,19 @@ public abstract class AbstractCollection implements Collection {
      * except the last, the string <tt>", "</tt> is appended.  Finally a right
      * bracket is appended.  A string is obtained from the string buffer, and
      * returned.
-     * 
+     *
      * @return a string representation of this collection.
      */
     public String toString() {
-	StringBuffer buf = new StringBuffer();
-	Iterator e = iterator();
+	final StringBuffer buf = new StringBuffer();
+	final Iterator e = this.iterator();
 	buf.append("[");
-	int maxIndex = size() - 1;
+	final int maxIndex = this.size() - 1;
 	for (int i = 0; i <= maxIndex; i++) {
 	    buf.append(String.valueOf(e.next()));
-	    if (i < maxIndex)
+	    if (i < maxIndex) {
 		buf.append(", ");
+	}
 	}
 	buf.append("]");
 	return buf.toString();

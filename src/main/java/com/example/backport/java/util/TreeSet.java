@@ -7,6 +7,10 @@
 
 package com.example.backport.java.util;
 
+import java.util.NoSuchElementException;
+
+import com.example.backport.java.lang.Comparable;
+
 /**
  * This class implements the <tt>Set</tt> interface, backed by a
  * <tt>TreeMap</tt> instance.  This class guarantees that the sorted set will
@@ -62,6 +66,7 @@ package com.example.backport.java.util;
 public class TreeSet extends AbstractSet
 		     implements SortedSet, Cloneable, java.io.Serializable
 {
+	private static final long serialVersionUID = 3765904234577041592L;
     private transient SortedMap m;	 // The backing Map
     private transient Set      	keySet;  // The keySet view of the backing Map
 
@@ -71,9 +76,9 @@ public class TreeSet extends AbstractSet
     /**
      * Constructs a set backed by the given sorted map.
      */
-    private TreeSet(SortedMap m) {
+    private TreeSet(final SortedMap m) {
         this.m = m;
-        keySet = m.keySet();
+        this.keySet = m.keySet();
     }
 
     /**
@@ -86,7 +91,7 @@ public class TreeSet extends AbstractSet
      * set that violates this constraint (for example, the user attempts to
      * add a string element to a set whose elements are integers), the
      * <tt>add(Object)</tt> call will throw a <tt>ClassCastException</tt>.
-     * 
+     *
      * @see Comparable
      */
     public TreeSet() {
@@ -102,7 +107,7 @@ public class TreeSet extends AbstractSet
      * set that violates this constraint, the <tt>add(Object)</tt> call will
      * throw a <tt>ClassCastException</tt>.
      */
-    public TreeSet(Comparator c) {
+    public TreeSet(final Comparator c) {
 	this(new TreeMap(c));
     }
 
@@ -120,9 +125,9 @@ public class TreeSet extends AbstractSet
      * @throws ClassCastException if the keys in the given collection are not
      * comparable, or are not mutually comparable.
      */
-    public TreeSet(Collection c) {
+    public TreeSet(final Collection c) {
         this();
-        addAll(c);        
+        this.addAll(c);
     }
 
     /**
@@ -131,9 +136,9 @@ public class TreeSet extends AbstractSet
      *
      * @param s sorted set whose elements will comprise the new set.
      */
-    public TreeSet(SortedSet s) {
+    public TreeSet(final SortedSet s) {
         this(s.comparator());
-	addAll(s);
+	this.addAll(s);
     }
 
     /**
@@ -143,7 +148,7 @@ public class TreeSet extends AbstractSet
      * @return an iterator over the elements in this set.
      */
     public Iterator iterator() {
-	return keySet.iterator();
+	return this.keySet.iterator();
     }
 
     /**
@@ -152,7 +157,7 @@ public class TreeSet extends AbstractSet
      * @return the number of elements in this set (its cardinality).
      */
     public int size() {
-	return m.size();
+	return this.m.size();
     }
 
     /**
@@ -161,7 +166,7 @@ public class TreeSet extends AbstractSet
      * @return <tt>true</tt> if this set contains no elements.
      */
     public boolean isEmpty() {
-	return m.isEmpty();
+	return this.m.isEmpty();
     }
 
     /**
@@ -169,12 +174,12 @@ public class TreeSet extends AbstractSet
      *
      * @param o the object to be checked for containment in this set.
      * @return <tt>true</tt> if this set contains the specified element.
-     * 
+     *
      * @throws ClassCastException if the specified object cannot be compared
      * 		  with the elements currently in the set.
      */
-    public boolean contains(Object o) {
-	return m.containsKey(o);
+    public boolean contains(final Object o) {
+	return this.m.containsKey(o);
     }
 
     /**
@@ -183,12 +188,12 @@ public class TreeSet extends AbstractSet
      * @param o element to be added to this set.
      * @return <tt>true</tt> if the set did not already contain the specified
      *         element.
-     * 
+     *
      * @throws ClassCastException if the specified object cannot be compared
      * 		  with the elements currently in the set.
      */
-    public boolean add(Object o) {
-	return m.put(o, PRESENT)==null;
+    public boolean add(final Object o) {
+	return this.m.put(o, PRESENT)==null;
     }
 
     /**
@@ -196,19 +201,19 @@ public class TreeSet extends AbstractSet
      *
      * @param o object to be removed from this set, if present.
      * @return <tt>true</tt> if the set contained the specified element.
-     * 
+     *
      * @throws ClassCastException if the specified object cannot be compared
      * 		  with the elements currently in the set.
      */
-    public boolean remove(Object o) {
-	return m.remove(o)==PRESENT;
+    public boolean remove(final Object o) {
+	return this.m.remove(o)==PRESENT;
     }
 
     /**
      * Removes all of the elements from this set.
      */
     public void clear() {
-	m.clear();
+	this.m.clear();
     }
 
     /**
@@ -220,15 +225,15 @@ public class TreeSet extends AbstractSet
      * @throws ClassCastException if the elements provided cannot be compared
      *		  with the elements currently in the set.
      */
-    public boolean addAll(Collection c) {
+    public boolean addAll(final Collection c) {
         // Use linear-time version if applicable
-        if (m.size()==0 && c.size() > 0 && c instanceof SortedSet && 
-            m instanceof TreeMap) {
-            SortedSet set = (SortedSet)c;
-            TreeMap map = (TreeMap)m;
-            Comparator cc = set.comparator();
-            Comparator mc = map.comparator();
-            if (cc==mc || (cc != null && cc.equals(mc))) {
+        if (this.m.size()==0 && c.size() > 0 && c instanceof SortedSet &&
+            this.m instanceof TreeMap) {
+            final SortedSet set = (SortedSet)c;
+            final TreeMap map = (TreeMap)this.m;
+            final Comparator cc = set.comparator();
+            final Comparator mc = map.comparator();
+            if (cc==mc || cc != null && cc.equals(mc)) {
                 map.addAllForTreeSet(set, PRESENT);
                 return true;
             }
@@ -260,7 +265,7 @@ public class TreeSet extends AbstractSet
      * <tt>high</tt>, inclusive: <pre>
      *     SortedSet sub = s.subSet(low, high+"\0");
      * </pre>
-     * 
+     *
      * A similar technique can be used to generate an <i>open range</i> (which
      * contains neither endpoint).  The following idiom obtains a view
      * containing all of the strings in <tt>s</tt> from <tt>low</tt> to
@@ -280,8 +285,8 @@ public class TreeSet extends AbstractSet
      * @throws IllegalArgumentException if <tt>fromElement</tt> is greater
      * than <tt>toElement</tt>.
      */
-    public SortedSet subSet(Object fromElement, Object toElement) {
-	return new TreeSet(m.subMap(fromElement, toElement));
+    public SortedSet subSet(final Object fromElement, final Object toElement) {
+	return new TreeSet(this.m.subMap(fromElement, toElement));
     }
 
     /**
@@ -311,8 +316,8 @@ public class TreeSet extends AbstractSet
      *		  set uses natural ordering, or its comparator does
      *            not tolerate <tt>null</tt> elements.
      */
-    public SortedSet headSet(Object toElement) {
-	return new TreeSet(m.headMap(toElement));
+    public SortedSet headSet(final Object toElement) {
+	return new TreeSet(this.m.headMap(toElement));
     }
 
     /**
@@ -339,13 +344,13 @@ public class TreeSet extends AbstractSet
      * @param fromElement low endpoint (inclusive) of the tailSet.
      * @return a view of the portion of this set whose elements are
      * 	       greater than or equal to <tt>fromElement</tt>.
-     * 
+     *
      * @throws NullPointerException if <tt>fromElement</tt> is <tt>null</tt>
      * 		  and this set uses natural ordering, or its comparator
      * 		  does not tolerate <tt>null</tt> elements.
      */
-    public SortedSet tailSet(Object fromElement) {
-	return new TreeSet(m.tailMap(fromElement));
+    public SortedSet tailSet(final Object fromElement) {
+	return new TreeSet(this.m.tailMap(fromElement));
     }
 
     /**
@@ -356,7 +361,7 @@ public class TreeSet extends AbstractSet
      * if this tree map uses its keys natural ordering.
      */
     public Comparator comparator() {
-        return m.comparator();
+        return this.m.comparator();
     }
 
     /**
@@ -366,7 +371,7 @@ public class TreeSet extends AbstractSet
      * @throws    NoSuchElementException sorted set is empty.
      */
     public Object first() {
-        return m.firstKey();
+        return this.m.firstKey();
     }
 
     /**
@@ -376,7 +381,7 @@ public class TreeSet extends AbstractSet
      * @throws    NoSuchElementException sorted set is empty.
      */
     public Object last() {
-        return m.lastKey();
+        return this.m.lastKey();
     }
 
     /**
@@ -401,41 +406,42 @@ public class TreeSet extends AbstractSet
      *		   set's Comparator, or by the elements' natural ordering if
      *             the set has no Comparator).
      */
-    private synchronized void writeObject(java.io.ObjectOutputStream s)
+    private synchronized void writeObject(final java.io.ObjectOutputStream s)
         throws java.io.IOException {
 	// Write out any hidden stuff
 	s.defaultWriteObject();
 
         // Write out Comparator
-        s.writeObject(m.comparator());
+        s.writeObject(this.m.comparator());
 
         // Write out size
-        s.writeInt(m.size());
+        s.writeInt(this.m.size());
 
 	// Write out all elements in the proper order.
-	for (Iterator i=m.keySet().iterator(); i.hasNext(); )
-            s.writeObject(i.next());
+	for (final Iterator i=this.m.keySet().iterator(); i.hasNext(); ) {
+		s.writeObject(i.next());
+	}
     }
 
     /**
      * Reconstitute the <tt>TreeSet</tt> instance from a stream (that is,
      * deserialize it).
      */
-    private synchronized void readObject(java.io.ObjectInputStream s)
+    private synchronized void readObject(final java.io.ObjectInputStream s)
         throws java.io.IOException, ClassNotFoundException {
 	// Read in any hidden stuff
 	s.defaultReadObject();
 
         // Read in Comparator
-        Comparator c = (Comparator)s.readObject();
+        final Comparator c = (Comparator)s.readObject();
 
         // Create backing TreeMap and keySet view
-        m = (c==null ? new TreeMap() : new TreeMap(c));
-        keySet = m.keySet();
+        this.m = c==null ? new TreeMap() : new TreeMap(c);
+        this.keySet = this.m.keySet();
 
         // Read in size
-        int size = s.readInt();
+        final int size = s.readInt();
 
-        ((TreeMap)m).readTreeSet(size, s, PRESENT);
+        ((TreeMap)this.m).readTreeSet(size, s, PRESENT);
     }
 }

@@ -7,6 +7,10 @@
 
 package com.example.backport.java.util;
 
+import java.util.NoSuchElementException;
+
+import com.example.backport.java.lang.Comparable;
+
 /**
  * A set that further guarantees that its iterator will traverse the set in
  * ascending element order, sorted according to the <i>natural ordering</i> of
@@ -85,7 +89,7 @@ public interface SortedSet extends Set {
      * The sorted set returned by this method will throw an
      * <tt>IllegalArgumentException</tt> if the user attempts to insert a
      * element outside the specified range.<p>
-     * 
+     *
      * Note: this method always returns a <i>half-open range</i> (which
      * includes its low endpoint but not its high endpoint).  If you need a
      * <i>closed range</i> (which includes both endpoints), and the element
@@ -97,7 +101,7 @@ public interface SortedSet extends Set {
      * <tt>high</tt>, inclusive: <pre>
      * SortedSet sub = s.subSet(low, high+"\0");
      * </pre>
-     * 
+     *
      * A similar technique can be used to generate an <i>open range</i> (which
      * contains neither endpoint).  The following idiom obtains a view
      * containing all of the Strings in <tt>s</tt> from <tt>low</tt> to
@@ -108,7 +112,7 @@ public interface SortedSet extends Set {
      * @param fromElement low endpoint (inclusive) of the subSet.
      * @param toElement high endpoint (exclusive) of the subSet.
      * @return a view of the specified range within this sorted set.
-     * 
+     *
      * @throws ClassCastException if <tt>fromElement</tt> or <tt>toElement</tt>
      *		  cannot be compared with the elements currently in the sorted
      *		  set.  (Implementations may, but are not required to, throw
@@ -144,7 +148,7 @@ public interface SortedSet extends Set {
      *
      * @param toElement high endpoint (exclusive) of the headSet.
      * @return a view of the specified initial range of this sorted set.
-     * 
+     *
      * @throws ClassCastException if <tt>toElement</tt> cannot be compared
      *		  with the elements currently in the sorted set.
      *		  (Implementations may, but are not required to, throw this
@@ -172,17 +176,17 @@ public interface SortedSet extends Set {
      * For example, suppose that <tt>s</tt> is a sorted set of strings.  The
      * following idiom obtains a view containing all of the strings in
      * <tt>s</tt> that are strictly greater than <tt>low</tt>:
-     * 
+     *
      * 	    <pre>    SortedSet tail = s.tailSet(low+"\0");</pre>
      *
      * @param fromElement low endpoint (inclusive) of the tailSet.
      * @return a view of the specified final range of this sorted set.
-     * 
+     *
      * @throws ClassCastException if <tt>fromElement</tt> cannot be compared
      *		  with the elements currently in the sorted set.
      *		  (Implementations may, but are not required to, throw this
      *		  exception under these circumstances.)
-     * 
+     *
      * @throws NullPointerException if <tt>fromElement</tt> is <tt>null</tt>
      *            and this sorted set does not tolerate <tt>null</tt>
      *            elements.

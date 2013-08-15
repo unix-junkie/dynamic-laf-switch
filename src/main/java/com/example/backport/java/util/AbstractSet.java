@@ -58,16 +58,19 @@ public abstract class AbstractSet extends AbstractCollection implements Set {
      * @param o Object to be compared for equality with this set.
      * @return <tt>true</tt> if the specified object is equal to this set.
      */
-    public boolean equals(Object o) {
-	if (o == this)
-	    return true;
+    public boolean equals(final Object o) {
+	if (o == this) {
+		return true;
+	}
 
-	if (!(o instanceof Set))
-	    return false;
-	Collection c = (Collection) o;
-	if (c.size() != size())
-	    return false;
-	return containsAll(c);
+	if (!(o instanceof Set)) {
+		return false;
+	}
+	final Collection c = (Collection) o;
+	if (c.size() != this.size()) {
+		return false;
+	}
+	return this.containsAll(c);
     }
 
     /**
@@ -86,11 +89,12 @@ public abstract class AbstractSet extends AbstractCollection implements Set {
      */
     public int hashCode() {
 	int h = 0;
-	Iterator i = iterator();
+	final Iterator i = this.iterator();
 	while (i.hasNext()) {
-	    Object obj = i.next();
-            if (obj != null)
-                h += obj.hashCode();
+	    final Object obj = i.next();
+            if (obj != null) {
+		h += obj.hashCode();
+	}
         }
 	return h;
     }

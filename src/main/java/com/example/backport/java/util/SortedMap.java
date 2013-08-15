@@ -7,6 +7,10 @@
 
 package com.example.backport.java.util;
 
+import java.util.NoSuchElementException;
+
+import com.example.backport.java.lang.Comparable;
+
 /**
  * A map that further guarantees that it will be in ascending key order,
  * sorted according to the <i>natural ordering</i> of its keys (see the
@@ -97,20 +101,20 @@ public interface SortedMap extends Map {
      * The following idiom obtains a view containing all of the key-value
      * mappings in <tt>m</tt> whose keys are between <tt>low</tt> and
      * <tt>high</tt>, inclusive:
-     * 
+     *
      * 	    <pre>    Map sub = m.subMap(low, high+"\0");</pre>
-     * 
+     *
      * A similarly technique can be used to generate an <i>open range</i>
      * (which contains neither endpoint).  The following idiom obtains a
      * view containing  all of the key-value mappings in <tt>m</tt> whose keys
      * are between <tt>low</tt> and <tt>high</tt>, exclusive:
-     * 
+     *
      * 	    <pre>    Map sub = m.subMap(low+"\0", high);</pre>
      *
      * @param fromKey low endpoint (inclusive) of the subMap.
      * @param toKey high endpoint (exclusive) of the subMap.
      * @return a view of the specified range within this sorted map.
-     * 
+     *
      * @throws ClassCastException if <tt>fromKey</tt> or <tt>toKey</tt> cannot
      *		  be compared with the keys currently in the sorted map.
      *		  (Implementations may, but are not required to, throw this
@@ -141,12 +145,12 @@ public interface SortedMap extends Map {
      * are strings.  The following idiom obtains a view containing all of the
      * key-value mappings in <tt>m</tt> whose keys are less than or equal to
      * <tt>high</tt>:
-     * 
+     *
      * 	    <pre>    Map head = m.headMap(high+"\0");</pre>
      *
      * @param toKey high endpoint (exclusive) of the subMap.
      * @return a view of the specified initial range of this sorted map.
-     * 
+     *
      * @throws ClassCastException if <tt>toKey</tt> cannot be compared with
      *		  the keys currently in the sorted map.  (Implementations may,
      *		  but are not required to, throw this exception under these
@@ -175,17 +179,17 @@ public interface SortedMap extends Map {
      * are strings.  The following idiom obtains a view containing all of the
      * key-value mappings in <tt>m</tt> whose keys are strictly greater than
      * <tt>low</tt>:
-     * 
+     *
      * 	    <pre>    Map tail = m.tailMap(low+"\0");</pre>
      *
      * @param fromKey low endpoint (inclusive) of the tailMap.
      * @return a view of the specified final range of this sorted map.
-     * 
+     *
      * @throws ClassCastException if <tt>fromKey</tt> cannot be compared with
      *		  the keys currently in the sorted map.  (Implementations may,
      *		  but are not required to, throw this exception under these
      *		  circumstances.)
-     * 
+     *
      * @throws NullPointerException if <tt>fromKey</tt> is <tt>null</tt> and
      *         this sorted map does not tolerate <tt>null</tt> keys.
      */

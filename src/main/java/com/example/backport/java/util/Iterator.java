@@ -7,6 +7,11 @@
 
 package com.example.backport.java.util;
 
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
+
+import com.example.backport.java.lang.UnsupportedOperationException;
+
 /**
  * An iterator over a collection.  Iterator takes the place of Enumeration in
  * the Java collections framework.  Iterators differ from enumerations in two
@@ -43,7 +48,7 @@ public interface Iterator {
     Object next();
 
     /**
-     * 
+     *
      * Removes from the underlying collection the last element returned by the
      * iterator (optional operation).  This method can be called only once per
      * call to <tt>next</tt>.  The behavior of an iterator is unspecified if
@@ -52,7 +57,7 @@ public interface Iterator {
      *
      * @exception UnsupportedOperationException if the <tt>remove</tt>
      *		  operation is not supported by this Iterator.
-     
+
      * @exception IllegalStateException if the <tt>next</tt> method has not
      *		  yet been called, or the <tt>remove</tt> method has already
      *		  been called after the last call to the <tt>next</tt>

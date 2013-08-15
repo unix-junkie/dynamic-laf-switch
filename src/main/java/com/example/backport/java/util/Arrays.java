@@ -46,7 +46,7 @@ public class Arrays {
      *
      * @param a the array to be sorted.
      */
-    public static void sort(long[] a) {
+    public static void sort(final long[] a) {
 	sort1(a, 0, a.length);
     }
 
@@ -67,7 +67,7 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void sort(long[] a, int fromIndex, int toIndex) {
+    public static void sort(final long[] a, final int fromIndex, final int toIndex) {
         rangeCheck(a.length, fromIndex, toIndex);
 	sort1(a, fromIndex, toIndex-fromIndex);
     }
@@ -82,7 +82,7 @@ public class Arrays {
      *
      * @param a the array to be sorted.
      */
-    public static void sort(int[] a) {
+    public static void sort(final int[] a) {
 	sort1(a, 0, a.length);
     }
 
@@ -103,7 +103,7 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void sort(int[] a, int fromIndex, int toIndex) {
+    public static void sort(final int[] a, final int fromIndex, final int toIndex) {
         rangeCheck(a.length, fromIndex, toIndex);
 	sort1(a, fromIndex, toIndex-fromIndex);
     }
@@ -118,7 +118,7 @@ public class Arrays {
      *
      * @param a the array to be sorted.
      */
-    public static void sort(short[] a) {
+    public static void sort(final short[] a) {
 	sort1(a, 0, a.length);
     }
 
@@ -139,7 +139,7 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void sort(short[] a, int fromIndex, int toIndex) {
+    public static void sort(final short[] a, final int fromIndex, final int toIndex) {
         rangeCheck(a.length, fromIndex, toIndex);
 	sort1(a, fromIndex, toIndex-fromIndex);
     }
@@ -154,7 +154,7 @@ public class Arrays {
      *
      * @param a the array to be sorted.
      */
-    public static void sort(char[] a) {
+    public static void sort(final char[] a) {
 	sort1(a, 0, a.length);
     }
 
@@ -175,7 +175,7 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void sort(char[] a, int fromIndex, int toIndex) {
+    public static void sort(final char[] a, final int fromIndex, final int toIndex) {
         rangeCheck(a.length, fromIndex, toIndex);
 	sort1(a, fromIndex, toIndex-fromIndex);
     }
@@ -190,7 +190,7 @@ public class Arrays {
      *
      * @param a the array to be sorted.
      */
-    public static void sort(byte[] a) {
+    public static void sort(final byte[] a) {
 	sort1(a, 0, a.length);
     }
 
@@ -211,7 +211,7 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void sort(byte[] a, int fromIndex, int toIndex) {
+    public static void sort(final byte[] a, final int fromIndex, final int toIndex) {
         rangeCheck(a.length, fromIndex, toIndex);
 	sort1(a, fromIndex, toIndex-fromIndex);
     }
@@ -226,7 +226,7 @@ public class Arrays {
      *
      * @param a the array to be sorted.
      */
-    public static void sort(double[] a) {
+    public static void sort(final double[] a) {
 	sort2(a, 0, a.length);
     }
 
@@ -247,7 +247,7 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void sort(double[] a, int fromIndex, int toIndex) {
+    public static void sort(final double[] a, final int fromIndex, final int toIndex) {
         rangeCheck(a.length, fromIndex, toIndex);
 	sort2(a, fromIndex, toIndex);
     }
@@ -262,7 +262,7 @@ public class Arrays {
      *
      * @param a the array to be sorted.
      */
-    public static void sort(float[] a) {
+    public static void sort(final float[] a) {
 	sort2(a, 0, a.length);
     }
 
@@ -283,12 +283,12 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void sort(float[] a, int fromIndex, int toIndex) {
+    public static void sort(final float[] a, final int fromIndex, final int toIndex) {
         rangeCheck(a.length, fromIndex, toIndex);
 	sort2(a, fromIndex, toIndex);
     }
 
-    private static void sort2(double a[], int fromIndex, int toIndex) {
+    private static void sort2(final double a[], final int fromIndex, final int toIndex) {
         final long NEG_ZERO_BITS = Double.doubleToLongBits(-0.0d);
         /*
          * The sort is done in three phases to avoid the expense of using
@@ -297,7 +297,7 @@ public class Arrays {
 
         /*
          * Preprocessing phase:  Move any NaN's to end of array, count the
-         * number of -0.0's, and turn them into 0.0's. 
+         * number of -0.0's, and turn them into 0.0's.
          */
         int numNegZeros = 0;
         int i = fromIndex, n = toIndex;
@@ -325,13 +325,14 @@ public class Arrays {
             } while (j>=0 && a[j]==0.0d);
 
             // j is now one less than the index of the FIRST zero
-            for (int k=0; k<numNegZeros; k++)
-                a[++j] = -0.0d;
+            for (int k=0; k<numNegZeros; k++) {
+		a[++j] = -0.0d;
+	}
         }
     }
 
 
-    private static void sort2(float a[], int fromIndex, int toIndex) {
+    private static void sort2(final float a[], final int fromIndex, final int toIndex) {
         final int NEG_ZERO_BITS = Float.floatToIntBits(-0.0f);
         /*
          * The sort is done in three phases to avoid the expense of using
@@ -340,7 +341,7 @@ public class Arrays {
 
         /*
          * Preprocessing phase:  Move any NaN's to end of array, count the
-         * number of -0.0's, and turn them into 0.0's. 
+         * number of -0.0's, and turn them into 0.0's.
          */
         int numNegZeros = 0;
         int i = fromIndex, n = toIndex;
@@ -368,8 +369,9 @@ public class Arrays {
             } while (j>=0 && a[j]==0.0f);
 
             // j is now one less than the index of the FIRST zero
-            for (int k=0; k<numNegZeros; k++)
-                a[++j] = -0.0f;
+            for (int k=0; k<numNegZeros; k++) {
+		a[++j] = -0.0f;
+	}
         }
     }
 
@@ -382,12 +384,14 @@ public class Arrays {
     /**
      * Sorts the specified sub-array of longs into ascending order.
      */
-    private static void sort1(long x[], int off, int len) {
+    private static void sort1(final long x[], final int off, final int len) {
 	// Insertion sort on smallest arrays
 	if (len < 7) {
-	    for (int i=off; i<len+off; i++)
-		for (int j=i; j>off && x[j-1]>x[j]; j--)
-		    swap(x, j, j-1);
+	    for (int i=off; i<len+off; i++) {
+		for (int j=i; j>off && x[j-1]>x[j]; j--) {
+			swap(x, j, j-1);
+		}
+	}
 	    return;
 	}
 
@@ -397,50 +401,56 @@ public class Arrays {
 	    int l = off;
 	    int n = off + len - 1;
 	    if (len > 40) {        // Big arrays, pseudomedian of 9
-		int s = len/8;
+		final int s = len/8;
 		l = med3(x, l,     l+s, l+2*s);
 		m = med3(x, m-s,   m,   m+s);
 		n = med3(x, n-2*s, n-s, n);
 	    }
 	    m = med3(x, l, m, n); // Mid-size, med of 3
 	}
-	long v = x[m];
+	final long v = x[m];
 
 	// Establish Invariant: v* (<v)* (>v)* v*
 	int a = off, b = a, c = off + len - 1, d = c;
 	while(true) {
 	    while (b <= c && x[b] <= v) {
-		if (x[b] == v)
-		    swap(x, a++, b);
+		if (x[b] == v) {
+			swap(x, a++, b);
+		}
 		b++;
 	    }
 	    while (c >= b && x[c] >= v) {
-		if (x[c] == v)
-		    swap(x, c, d--);
+		if (x[c] == v) {
+			swap(x, c, d--);
+		}
 		c--;
 	    }
-	    if (b > c)
+	    if (b > c) {
 		break;
+	}
 	    swap(x, b++, c--);
 	}
 
 	// Swap partition elements back to middle
-	int s, n = off + len;
+	int s;
+	final int n = off + len;
 	s = Math.min(a-off, b-a  );  vecswap(x, off, b-s, s);
 	s = Math.min(d-c,   n-d-1);  vecswap(x, b,   n-s, s);
 
 	// Recursively sort non-partition-elements
-	if ((s = b-a) > 1)
-	    sort1(x, off, s);
-	if ((s = d-c) > 1)
-	    sort1(x, n-s, s);
+	if ((s = b-a) > 1) {
+		sort1(x, off, s);
+	}
+	if ((s = d-c) > 1) {
+		sort1(x, n-s, s);
+	}
     }
 
     /**
      * Swaps x[a] with x[b].
      */
-    private static void swap(long x[], int a, int b) {
-	long t = x[a];
+    private static void swap(final long x[], final int a, final int b) {
+	final long t = x[a];
 	x[a] = x[b];
 	x[b] = t;
     }
@@ -448,29 +458,32 @@ public class Arrays {
     /**
      * Swaps x[a .. (a+n-1)] with x[b .. (b+n-1)].
      */
-    private static void vecswap(long x[], int a, int b, int n) {
-	for (int i=0; i<n; i++, a++, b++)
-	    swap(x, a, b);
+    private static void vecswap(final long x[], int a, int b, final int n) {
+	for (int i=0; i<n; i++, a++, b++) {
+		swap(x, a, b);
+	}
     }
 
     /**
      * Returns the index of the median of the three indexed longs.
      */
-    private static int med3(long x[], int a, int b, int c) {
-	return (x[a] < x[b] ?
-		(x[b] < x[c] ? b : x[a] < x[c] ? c : a) :
-		(x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+    private static int med3(final long x[], final int a, final int b, final int c) {
+	return x[a] < x[b] ?
+		x[b] < x[c] ? b : x[a] < x[c] ? c : a :
+		x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
     /**
      * Sorts the specified sub-array of integers into ascending order.
      */
-    private static void sort1(int x[], int off, int len) {
+    private static void sort1(final int x[], final int off, final int len) {
 	// Insertion sort on smallest arrays
 	if (len < 7) {
-	    for (int i=off; i<len+off; i++)
-		for (int j=i; j>off && x[j-1]>x[j]; j--)
-		    swap(x, j, j-1);
+	    for (int i=off; i<len+off; i++) {
+		for (int j=i; j>off && x[j-1]>x[j]; j--) {
+			swap(x, j, j-1);
+		}
+	}
 	    return;
 	}
 
@@ -480,50 +493,56 @@ public class Arrays {
 	    int l = off;
 	    int n = off + len - 1;
 	    if (len > 40) {        // Big arrays, pseudomedian of 9
-		int s = len/8;
+		final int s = len/8;
 		l = med3(x, l,     l+s, l+2*s);
 		m = med3(x, m-s,   m,   m+s);
 		n = med3(x, n-2*s, n-s, n);
 	    }
 	    m = med3(x, l, m, n); // Mid-size, med of 3
 	}
-	int v = x[m];
+	final int v = x[m];
 
 	// Establish Invariant: v* (<v)* (>v)* v*
 	int a = off, b = a, c = off + len - 1, d = c;
 	while(true) {
 	    while (b <= c && x[b] <= v) {
-		if (x[b] == v)
-		    swap(x, a++, b);
+		if (x[b] == v) {
+			swap(x, a++, b);
+		}
 		b++;
 	    }
 	    while (c >= b && x[c] >= v) {
-		if (x[c] == v)
-		    swap(x, c, d--);
+		if (x[c] == v) {
+			swap(x, c, d--);
+		}
 		c--;
 	    }
-	    if (b > c)
+	    if (b > c) {
 		break;
+	}
 	    swap(x, b++, c--);
 	}
 
 	// Swap partition elements back to middle
-	int s, n = off + len;
+	int s;
+	final int n = off + len;
 	s = Math.min(a-off, b-a  );  vecswap(x, off, b-s, s);
 	s = Math.min(d-c,   n-d-1);  vecswap(x, b,   n-s, s);
 
 	// Recursively sort non-partition-elements
-	if ((s = b-a) > 1)
-	    sort1(x, off, s);
-	if ((s = d-c) > 1)
-	    sort1(x, n-s, s);
+	if ((s = b-a) > 1) {
+		sort1(x, off, s);
+	}
+	if ((s = d-c) > 1) {
+		sort1(x, n-s, s);
+	}
     }
 
     /**
      * Swaps x[a] with x[b].
      */
-    private static void swap(int x[], int a, int b) {
-	int t = x[a];
+    private static void swap(final int x[], final int a, final int b) {
+	final int t = x[a];
 	x[a] = x[b];
 	x[b] = t;
     }
@@ -531,29 +550,32 @@ public class Arrays {
     /**
      * Swaps x[a .. (a+n-1)] with x[b .. (b+n-1)].
      */
-    private static void vecswap(int x[], int a, int b, int n) {
-	for (int i=0; i<n; i++, a++, b++)
-	    swap(x, a, b);
+    private static void vecswap(final int x[], int a, int b, final int n) {
+	for (int i=0; i<n; i++, a++, b++) {
+		swap(x, a, b);
+	}
     }
 
     /**
      * Returns the index of the median of the three indexed integers.
      */
-    private static int med3(int x[], int a, int b, int c) {
-	return (x[a] < x[b] ?
-		(x[b] < x[c] ? b : x[a] < x[c] ? c : a) :
-		(x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+    private static int med3(final int x[], final int a, final int b, final int c) {
+	return x[a] < x[b] ?
+		x[b] < x[c] ? b : x[a] < x[c] ? c : a :
+		x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
     /**
      * Sorts the specified sub-array of shorts into ascending order.
      */
-    private static void sort1(short x[], int off, int len) {
+    private static void sort1(final short x[], final int off, final int len) {
 	// Insertion sort on smallest arrays
 	if (len < 7) {
-	    for (int i=off; i<len+off; i++)
-		for (int j=i; j>off && x[j-1]>x[j]; j--)
-		    swap(x, j, j-1);
+	    for (int i=off; i<len+off; i++) {
+		for (int j=i; j>off && x[j-1]>x[j]; j--) {
+			swap(x, j, j-1);
+		}
+	}
 	    return;
 	}
 
@@ -563,50 +585,56 @@ public class Arrays {
 	    int l = off;
 	    int n = off + len - 1;
 	    if (len > 40) {        // Big arrays, pseudomedian of 9
-		int s = len/8;
+		final int s = len/8;
 		l = med3(x, l,     l+s, l+2*s);
 		m = med3(x, m-s,   m,   m+s);
 		n = med3(x, n-2*s, n-s, n);
 	    }
 	    m = med3(x, l, m, n); // Mid-size, med of 3
 	}
-	short v = x[m];
+	final short v = x[m];
 
 	// Establish Invariant: v* (<v)* (>v)* v*
 	int a = off, b = a, c = off + len - 1, d = c;
 	while(true) {
 	    while (b <= c && x[b] <= v) {
-		if (x[b] == v)
-		    swap(x, a++, b);
+		if (x[b] == v) {
+			swap(x, a++, b);
+		}
 		b++;
 	    }
 	    while (c >= b && x[c] >= v) {
-		if (x[c] == v)
-		    swap(x, c, d--);
+		if (x[c] == v) {
+			swap(x, c, d--);
+		}
 		c--;
 	    }
-	    if (b > c)
+	    if (b > c) {
 		break;
+	}
 	    swap(x, b++, c--);
 	}
 
 	// Swap partition elements back to middle
-	int s, n = off + len;
+	int s;
+	final int n = off + len;
 	s = Math.min(a-off, b-a  );  vecswap(x, off, b-s, s);
 	s = Math.min(d-c,   n-d-1);  vecswap(x, b,   n-s, s);
 
 	// Recursively sort non-partition-elements
-	if ((s = b-a) > 1)
-	    sort1(x, off, s);
-	if ((s = d-c) > 1)
-	    sort1(x, n-s, s);
+	if ((s = b-a) > 1) {
+		sort1(x, off, s);
+	}
+	if ((s = d-c) > 1) {
+		sort1(x, n-s, s);
+	}
     }
 
     /**
      * Swaps x[a] with x[b].
      */
-    private static void swap(short x[], int a, int b) {
-	short t = x[a];
+    private static void swap(final short x[], final int a, final int b) {
+	final short t = x[a];
 	x[a] = x[b];
 	x[b] = t;
     }
@@ -614,30 +642,33 @@ public class Arrays {
     /**
      * Swaps x[a .. (a+n-1)] with x[b .. (b+n-1)].
      */
-    private static void vecswap(short x[], int a, int b, int n) {
-	for (int i=0; i<n; i++, a++, b++)
-	    swap(x, a, b);
+    private static void vecswap(final short x[], int a, int b, final int n) {
+	for (int i=0; i<n; i++, a++, b++) {
+		swap(x, a, b);
+	}
     }
 
     /**
      * Returns the index of the median of the three indexed shorts.
      */
-    private static int med3(short x[], int a, int b, int c) {
-	return (x[a] < x[b] ?
-		(x[b] < x[c] ? b : x[a] < x[c] ? c : a) :
-		(x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+    private static int med3(final short x[], final int a, final int b, final int c) {
+	return x[a] < x[b] ?
+		x[b] < x[c] ? b : x[a] < x[c] ? c : a :
+		x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
 
     /**
      * Sorts the specified sub-array of chars into ascending order.
      */
-    private static void sort1(char x[], int off, int len) {
+    private static void sort1(final char x[], final int off, final int len) {
 	// Insertion sort on smallest arrays
 	if (len < 7) {
-	    for (int i=off; i<len+off; i++)
-		for (int j=i; j>off && x[j-1]>x[j]; j--)
-		    swap(x, j, j-1);
+	    for (int i=off; i<len+off; i++) {
+		for (int j=i; j>off && x[j-1]>x[j]; j--) {
+			swap(x, j, j-1);
+		}
+	}
 	    return;
 	}
 
@@ -647,50 +678,56 @@ public class Arrays {
 	    int l = off;
 	    int n = off + len - 1;
 	    if (len > 40) {        // Big arrays, pseudomedian of 9
-		int s = len/8;
+		final int s = len/8;
 		l = med3(x, l,     l+s, l+2*s);
 		m = med3(x, m-s,   m,   m+s);
 		n = med3(x, n-2*s, n-s, n);
 	    }
 	    m = med3(x, l, m, n); // Mid-size, med of 3
 	}
-	char v = x[m];
+	final char v = x[m];
 
 	// Establish Invariant: v* (<v)* (>v)* v*
 	int a = off, b = a, c = off + len - 1, d = c;
 	while(true) {
 	    while (b <= c && x[b] <= v) {
-		if (x[b] == v)
-		    swap(x, a++, b);
+		if (x[b] == v) {
+			swap(x, a++, b);
+		}
 		b++;
 	    }
 	    while (c >= b && x[c] >= v) {
-		if (x[c] == v)
-		    swap(x, c, d--);
+		if (x[c] == v) {
+			swap(x, c, d--);
+		}
 		c--;
 	    }
-	    if (b > c)
+	    if (b > c) {
 		break;
+	}
 	    swap(x, b++, c--);
 	}
 
 	// Swap partition elements back to middle
-	int s, n = off + len;
+	int s;
+	final int n = off + len;
 	s = Math.min(a-off, b-a  );  vecswap(x, off, b-s, s);
 	s = Math.min(d-c,   n-d-1);  vecswap(x, b,   n-s, s);
 
 	// Recursively sort non-partition-elements
-	if ((s = b-a) > 1)
-	    sort1(x, off, s);
-	if ((s = d-c) > 1)
-	    sort1(x, n-s, s);
+	if ((s = b-a) > 1) {
+		sort1(x, off, s);
+	}
+	if ((s = d-c) > 1) {
+		sort1(x, n-s, s);
+	}
     }
 
     /**
      * Swaps x[a] with x[b].
      */
-    private static void swap(char x[], int a, int b) {
-	char t = x[a];
+    private static void swap(final char x[], final int a, final int b) {
+	final char t = x[a];
 	x[a] = x[b];
 	x[b] = t;
     }
@@ -698,30 +735,33 @@ public class Arrays {
     /**
      * Swaps x[a .. (a+n-1)] with x[b .. (b+n-1)].
      */
-    private static void vecswap(char x[], int a, int b, int n) {
-	for (int i=0; i<n; i++, a++, b++)
-	    swap(x, a, b);
+    private static void vecswap(final char x[], int a, int b, final int n) {
+	for (int i=0; i<n; i++, a++, b++) {
+		swap(x, a, b);
+	}
     }
 
     /**
      * Returns the index of the median of the three indexed chars.
      */
-    private static int med3(char x[], int a, int b, int c) {
-	return (x[a] < x[b] ?
-		(x[b] < x[c] ? b : x[a] < x[c] ? c : a) :
-		(x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+    private static int med3(final char x[], final int a, final int b, final int c) {
+	return x[a] < x[b] ?
+		x[b] < x[c] ? b : x[a] < x[c] ? c : a :
+		x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
 
     /**
      * Sorts the specified sub-array of bytes into ascending order.
      */
-    private static void sort1(byte x[], int off, int len) {
+    private static void sort1(final byte x[], final int off, final int len) {
 	// Insertion sort on smallest arrays
 	if (len < 7) {
-	    for (int i=off; i<len+off; i++)
-		for (int j=i; j>off && x[j-1]>x[j]; j--)
-		    swap(x, j, j-1);
+	    for (int i=off; i<len+off; i++) {
+		for (int j=i; j>off && x[j-1]>x[j]; j--) {
+			swap(x, j, j-1);
+		}
+	}
 	    return;
 	}
 
@@ -731,50 +771,56 @@ public class Arrays {
 	    int l = off;
 	    int n = off + len - 1;
 	    if (len > 40) {        // Big arrays, pseudomedian of 9
-		int s = len/8;
+		final int s = len/8;
 		l = med3(x, l,     l+s, l+2*s);
 		m = med3(x, m-s,   m,   m+s);
 		n = med3(x, n-2*s, n-s, n);
 	    }
 	    m = med3(x, l, m, n); // Mid-size, med of 3
 	}
-	byte v = x[m];
+	final byte v = x[m];
 
 	// Establish Invariant: v* (<v)* (>v)* v*
 	int a = off, b = a, c = off + len - 1, d = c;
 	while(true) {
 	    while (b <= c && x[b] <= v) {
-		if (x[b] == v)
-		    swap(x, a++, b);
+		if (x[b] == v) {
+			swap(x, a++, b);
+		}
 		b++;
 	    }
 	    while (c >= b && x[c] >= v) {
-		if (x[c] == v)
-		    swap(x, c, d--);
+		if (x[c] == v) {
+			swap(x, c, d--);
+		}
 		c--;
 	    }
-	    if (b > c)
+	    if (b > c) {
 		break;
+	}
 	    swap(x, b++, c--);
 	}
 
 	// Swap partition elements back to middle
-	int s, n = off + len;
+	int s;
+	final int n = off + len;
 	s = Math.min(a-off, b-a  );  vecswap(x, off, b-s, s);
 	s = Math.min(d-c,   n-d-1);  vecswap(x, b,   n-s, s);
 
 	// Recursively sort non-partition-elements
-	if ((s = b-a) > 1)
-	    sort1(x, off, s);
-	if ((s = d-c) > 1)
-	    sort1(x, n-s, s);
+	if ((s = b-a) > 1) {
+		sort1(x, off, s);
+	}
+	if ((s = d-c) > 1) {
+		sort1(x, n-s, s);
+	}
     }
 
     /**
      * Swaps x[a] with x[b].
      */
-    private static void swap(byte x[], int a, int b) {
-	byte t = x[a];
+    private static void swap(final byte x[], final int a, final int b) {
+	final byte t = x[a];
 	x[a] = x[b];
 	x[b] = t;
     }
@@ -782,30 +828,33 @@ public class Arrays {
     /**
      * Swaps x[a .. (a+n-1)] with x[b .. (b+n-1)].
      */
-    private static void vecswap(byte x[], int a, int b, int n) {
-	for (int i=0; i<n; i++, a++, b++)
-	    swap(x, a, b);
+    private static void vecswap(final byte x[], int a, int b, final int n) {
+	for (int i=0; i<n; i++, a++, b++) {
+		swap(x, a, b);
+	}
     }
 
     /**
      * Returns the index of the median of the three indexed bytes.
      */
-    private static int med3(byte x[], int a, int b, int c) {
-	return (x[a] < x[b] ?
-		(x[b] < x[c] ? b : x[a] < x[c] ? c : a) :
-		(x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+    private static int med3(final byte x[], final int a, final int b, final int c) {
+	return x[a] < x[b] ?
+		x[b] < x[c] ? b : x[a] < x[c] ? c : a :
+		x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
 
     /**
      * Sorts the specified sub-array of doubles into ascending order.
      */
-    private static void sort1(double x[], int off, int len) {
+    private static void sort1(final double x[], final int off, final int len) {
 	// Insertion sort on smallest arrays
 	if (len < 7) {
-	    for (int i=off; i<len+off; i++)
-		for (int j=i; j>off && x[j-1]>x[j]; j--)
-		    swap(x, j, j-1);
+	    for (int i=off; i<len+off; i++) {
+		for (int j=i; j>off && x[j-1]>x[j]; j--) {
+			swap(x, j, j-1);
+		}
+	}
 	    return;
 	}
 
@@ -815,50 +864,56 @@ public class Arrays {
 	    int l = off;
 	    int n = off + len - 1;
 	    if (len > 40) {        // Big arrays, pseudomedian of 9
-		int s = len/8;
+		final int s = len/8;
 		l = med3(x, l,     l+s, l+2*s);
 		m = med3(x, m-s,   m,   m+s);
 		n = med3(x, n-2*s, n-s, n);
 	    }
 	    m = med3(x, l, m, n); // Mid-size, med of 3
 	}
-	double v = x[m];
+	final double v = x[m];
 
 	// Establish Invariant: v* (<v)* (>v)* v*
 	int a = off, b = a, c = off + len - 1, d = c;
 	while(true) {
 	    while (b <= c && x[b] <= v) {
-		if (x[b] == v)
-		    swap(x, a++, b);
+		if (x[b] == v) {
+			swap(x, a++, b);
+		}
 		b++;
 	    }
 	    while (c >= b && x[c] >= v) {
-		if (x[c] == v)
-		    swap(x, c, d--);
+		if (x[c] == v) {
+			swap(x, c, d--);
+		}
 		c--;
 	    }
-	    if (b > c)
+	    if (b > c) {
 		break;
+	}
 	    swap(x, b++, c--);
 	}
 
 	// Swap partition elements back to middle
-	int s, n = off + len;
+	int s;
+	final int n = off + len;
 	s = Math.min(a-off, b-a  );  vecswap(x, off, b-s, s);
 	s = Math.min(d-c,   n-d-1);  vecswap(x, b,   n-s, s);
 
 	// Recursively sort non-partition-elements
-	if ((s = b-a) > 1)
-	    sort1(x, off, s);
-	if ((s = d-c) > 1)
-	    sort1(x, n-s, s);
+	if ((s = b-a) > 1) {
+		sort1(x, off, s);
+	}
+	if ((s = d-c) > 1) {
+		sort1(x, n-s, s);
+	}
     }
 
     /**
      * Swaps x[a] with x[b].
      */
-    private static void swap(double x[], int a, int b) {
-	double t = x[a];
+    private static void swap(final double x[], final int a, final int b) {
+	final double t = x[a];
 	x[a] = x[b];
 	x[b] = t;
     }
@@ -866,30 +921,33 @@ public class Arrays {
     /**
      * Swaps x[a .. (a+n-1)] with x[b .. (b+n-1)].
      */
-    private static void vecswap(double x[], int a, int b, int n) {
-	for (int i=0; i<n; i++, a++, b++)
-	    swap(x, a, b);
+    private static void vecswap(final double x[], int a, int b, final int n) {
+	for (int i=0; i<n; i++, a++, b++) {
+		swap(x, a, b);
+	}
     }
 
     /**
      * Returns the index of the median of the three indexed doubles.
      */
-    private static int med3(double x[], int a, int b, int c) {
-	return (x[a] < x[b] ?
-		(x[b] < x[c] ? b : x[a] < x[c] ? c : a) :
-		(x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+    private static int med3(final double x[], final int a, final int b, final int c) {
+	return x[a] < x[b] ?
+		x[b] < x[c] ? b : x[a] < x[c] ? c : a :
+		x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
 
     /**
      * Sorts the specified sub-array of floats into ascending order.
      */
-    private static void sort1(float x[], int off, int len) {
+    private static void sort1(final float x[], final int off, final int len) {
 	// Insertion sort on smallest arrays
 	if (len < 7) {
-	    for (int i=off; i<len+off; i++)
-		for (int j=i; j>off && x[j-1]>x[j]; j--)
-		    swap(x, j, j-1);
+	    for (int i=off; i<len+off; i++) {
+		for (int j=i; j>off && x[j-1]>x[j]; j--) {
+			swap(x, j, j-1);
+		}
+	}
 	    return;
 	}
 
@@ -899,50 +957,56 @@ public class Arrays {
 	    int l = off;
 	    int n = off + len - 1;
 	    if (len > 40) {        // Big arrays, pseudomedian of 9
-		int s = len/8;
+		final int s = len/8;
 		l = med3(x, l,     l+s, l+2*s);
 		m = med3(x, m-s,   m,   m+s);
 		n = med3(x, n-2*s, n-s, n);
 	    }
 	    m = med3(x, l, m, n); // Mid-size, med of 3
 	}
-	float v = x[m];
+	final float v = x[m];
 
 	// Establish Invariant: v* (<v)* (>v)* v*
 	int a = off, b = a, c = off + len - 1, d = c;
 	while(true) {
 	    while (b <= c && x[b] <= v) {
-		if (x[b] == v)
-		    swap(x, a++, b);
+		if (x[b] == v) {
+			swap(x, a++, b);
+		}
 		b++;
 	    }
 	    while (c >= b && x[c] >= v) {
-		if (x[c] == v)
-		    swap(x, c, d--);
+		if (x[c] == v) {
+			swap(x, c, d--);
+		}
 		c--;
 	    }
-	    if (b > c)
+	    if (b > c) {
 		break;
+	}
 	    swap(x, b++, c--);
 	}
 
 	// Swap partition elements back to middle
-	int s, n = off + len;
+	int s;
+	final int n = off + len;
 	s = Math.min(a-off, b-a  );  vecswap(x, off, b-s, s);
 	s = Math.min(d-c,   n-d-1);  vecswap(x, b,   n-s, s);
 
 	// Recursively sort non-partition-elements
-	if ((s = b-a) > 1)
-	    sort1(x, off, s);
-	if ((s = d-c) > 1)
-	    sort1(x, n-s, s);
+	if ((s = b-a) > 1) {
+		sort1(x, off, s);
+	}
+	if ((s = d-c) > 1) {
+		sort1(x, n-s, s);
+	}
     }
 
     /**
      * Swaps x[a] with x[b].
      */
-    private static void swap(float x[], int a, int b) {
-	float t = x[a];
+    private static void swap(final float x[], final int a, final int b) {
+	final float t = x[a];
 	x[a] = x[b];
 	x[b] = t;
     }
@@ -950,18 +1014,19 @@ public class Arrays {
     /**
      * Swaps x[a .. (a+n-1)] with x[b .. (b+n-1)].
      */
-    private static void vecswap(float x[], int a, int b, int n) {
-	for (int i=0; i<n; i++, a++, b++)
-	    swap(x, a, b);
+    private static void vecswap(final float x[], int a, int b, final int n) {
+	for (int i=0; i<n; i++, a++, b++) {
+		swap(x, a, b);
+	}
     }
 
     /**
      * Returns the index of the median of the three indexed floats.
      */
-    private static int med3(float x[], int a, int b, int c) {
-	return (x[a] < x[b] ?
-		(x[b] < x[c] ? b : x[a] < x[c] ? c : a) :
-		(x[b] > x[c] ? b : x[a] > x[c] ? c : a));
+    private static int med3(final float x[], final int a, final int b, final int c) {
+	return x[a] < x[b] ?
+		x[b] < x[c] ? b : x[a] < x[c] ? c : a :
+		x[b] > x[c] ? b : x[a] > x[c] ? c : a;
     }
 
 
@@ -981,14 +1046,14 @@ public class Arrays {
      * lowest element in the high sublist).  This algorithm offers guaranteed
      * n*log(n) performance, and can approach linear performance on nearly
      * sorted lists.
-     * 
+     *
      * @param a the array to be sorted.
      * @throws  ClassCastException if the array contains elements that are not
      *		<i>mutually comparable</i> (for example, strings and integers).
      * @see Comparable
      */
-    public static void sort(Object[] a) {
-        Object aux[] = (Object[])a.clone();
+    public static void sort(final Object[] a) {
+        final Object aux[] = (Object[])a.clone();
         mergeSort(aux, a, 0, a.length);
     }
 
@@ -1009,7 +1074,7 @@ public class Arrays {
      * lowest element in the high sublist).  This algorithm offers guaranteed
      * n*log(n) performance, and can approach linear performance on nearly
      * sorted lists.
-     * 
+     *
      * @param a the array to be sorted.
      * @param fromIndex the index of the first element (inclusive) to be
      *        sorted.
@@ -1022,51 +1087,54 @@ public class Arrays {
      *		  integers).
      * @see Comparable
      */
-    public static void sort(Object[] a, int fromIndex, int toIndex) {
+    public static void sort(final Object[] a, final int fromIndex, final int toIndex) {
         rangeCheck(a.length, fromIndex, toIndex);
-        Object aux[] = (Object[])a.clone();  // Optimization opportunity
+        final Object aux[] = (Object[])a.clone();  // Optimization opportunity
         mergeSort(aux, a, fromIndex, toIndex);
     }
 
-    private static void mergeSort(Object src[], Object dest[],
-                                  int low, int high) {
-	int length = high - low;
+    private static void mergeSort(final Object src[], final Object dest[],
+                                  final int low, final int high) {
+	final int length = high - low;
 
 	// Insertion sort on smallest arrays
 	if (length < 7) {
-	    for (int i=low; i<high; i++)
+	    for (int i=low; i<high; i++) {
 		for (int j=i; j>low &&
-                 ((Comparable)dest[j-1]).compareTo((Comparable)dest[j])>0; j--)
-		    swap(dest, j, j-1);
+                 ((Comparable)dest[j-1]).compareTo(dest[j])>0; j--) {
+			swap(dest, j, j-1);
+		}
+	}
 	    return;
 	}
 
         // Recursively sort halves of dest into src
-        int mid = (low + high)/2;
+        final int mid = (low + high)/2;
         mergeSort(dest, src, low, mid);
         mergeSort(dest, src, mid, high);
 
         // If list is already sorted, just copy from src to dest.  This is an
         // optimization that results in faster sorts for nearly ordered lists.
-        if (((Comparable)src[mid-1]).compareTo((Comparable)src[mid]) <= 0) {
+        if (((Comparable)src[mid-1]).compareTo(src[mid]) <= 0) {
            System.arraycopy(src, low, dest, low, length);
            return;
         }
 
         // Merge sorted halves (now in src) into dest
         for(int i = low, p = low, q = mid; i < high; i++) {
-            if (q>=high || p<mid && ((Comparable)src[p]).compareTo(src[q])<=0)
-                dest[i] = src[p++];
-            else
-                dest[i] = src[q++];
+            if (q>=high || p<mid && ((Comparable)src[p]).compareTo(src[q])<=0) {
+		dest[i] = src[p++];
+	} else {
+		dest[i] = src[q++];
+	}
         }
     }
 
     /**
      * Swaps x[a] with x[b].
      */
-    private static void swap(Object x[], int a, int b) {
-	Object t = x[a];
+    private static void swap(final Object x[], final int a, final int b) {
+	final Object t = x[a];
 	x[a] = x[b];
 	x[b] = t;
     }
@@ -1093,8 +1161,8 @@ public class Arrays {
      *		not <i>mutually comparable</i> using the specified comparator.
      * @see Comparator
      */
-    public static void sort(Object[] a, Comparator c) {
-        Object aux[] = (Object[])a.clone();
+    public static void sort(final Object[] a, final Comparator c) {
+        final Object aux[] = (Object[])a.clone();
         mergeSort(aux, a, 0, a.length, c);
     }
 
@@ -1127,27 +1195,29 @@ public class Arrays {
      *	       <tt>toIndex &gt; a.length</tt>
      * @see Comparator
      */
-    public static void sort(Object[] a, int fromIndex, int toIndex,
-                            Comparator c) {
+    public static void sort(final Object[] a, final int fromIndex, final int toIndex,
+                            final Comparator c) {
         rangeCheck(a.length, fromIndex, toIndex);
-        Object aux[] = (Object[])a.clone();
+        final Object aux[] = (Object[])a.clone();
         mergeSort(aux, a, fromIndex, toIndex, c);
     }
 
-    private static void mergeSort(Object src[], Object dest[],
-                                  int low, int high, Comparator c) {
-	int length = high - low;
+    private static void mergeSort(final Object src[], final Object dest[],
+                                  final int low, final int high, final Comparator c) {
+	final int length = high - low;
 
 	// Insertion sort on smallest arrays
 	if (length < 7) {
-	    for (int i=low; i<high; i++)
-		for (int j=i; j>low && c.compare(dest[j-1], dest[j])>0; j--)
-		    swap(dest, j, j-1);
+	    for (int i=low; i<high; i++) {
+		for (int j=i; j>low && c.compare(dest[j-1], dest[j])>0; j--) {
+			swap(dest, j, j-1);
+		}
+	}
 	    return;
 	}
 
         // Recursively sort halves of dest into src
-        int mid = (low + high)/2;
+        final int mid = (low + high)/2;
         mergeSort(dest, src, low, mid, c);
         mergeSort(dest, src, mid, high, c);
 
@@ -1160,10 +1230,11 @@ public class Arrays {
 
         // Merge sorted halves (now in src) into dest
         for(int i = low, p = low, q = mid; i < high; i++) {
-            if (q>=high || p<mid && c.compare(src[p], src[q]) <= 0)
-                dest[i] = src[p++];
-            else
-                dest[i] = src[q++];
+            if (q>=high || p<mid && c.compare(src[p], src[q]) <= 0) {
+		dest[i] = src[p++];
+	} else {
+		dest[i] = src[q++];
+	}
         }
     }
 
@@ -1171,14 +1242,17 @@ public class Arrays {
      * Check that fromIndex and toIndex are in range, and throw an
      * appropriate exception if they aren't.
      */
-    private static void rangeCheck(int arrayLen, int fromIndex, int toIndex) {
-        if (fromIndex > toIndex)
-            throw new IllegalArgumentException("fromIndex(" + fromIndex +
-                       ") > toIndex(" + toIndex+")");
-        if (fromIndex < 0)
-            throw new ArrayIndexOutOfBoundsException(fromIndex);
-        if (toIndex > arrayLen)
-            throw new ArrayIndexOutOfBoundsException(toIndex);
+    private static void rangeCheck(final int arrayLen, final int fromIndex, final int toIndex) {
+        if (fromIndex > toIndex) {
+		throw new IllegalArgumentException("fromIndex(" + fromIndex +
+		               ") > toIndex(" + toIndex+")");
+	}
+        if (fromIndex < 0) {
+		throw new ArrayIndexOutOfBoundsException(fromIndex);
+	}
+        if (toIndex > arrayLen) {
+		throw new ArrayIndexOutOfBoundsException(toIndex);
+	}
     }
 
     // Searching
@@ -1203,20 +1277,22 @@ public class Arrays {
      *	       and only if the key is found.
      * @see #sort(long[])
      */
-    public static int binarySearch(long[] a, long key) {
+    public static int binarySearch(final long[] a, final long key) {
 	int low = 0;
 	int high = a.length-1;
 
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    long midVal = a[mid];
+	    final int mid =(low + high)/2;
+	    final long midVal = a[mid];
 
-	    if (midVal < key)
+	    if (midVal < key) {
 		low = mid + 1;
-	    else if (midVal > key)
+	} else if (midVal > key) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found.
     }
@@ -1242,20 +1318,22 @@ public class Arrays {
      *	       and only if the key is found.
      * @see #sort(int[])
      */
-    public static int binarySearch(int[] a, int key) {
+    public static int binarySearch(final int[] a, final int key) {
 	int low = 0;
 	int high = a.length-1;
 
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    int midVal = a[mid];
+	    final int mid =(low + high)/2;
+	    final int midVal = a[mid];
 
-	    if (midVal < key)
+	    if (midVal < key) {
 		low = mid + 1;
-	    else if (midVal > key)
+	} else if (midVal > key) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found.
     }
@@ -1280,20 +1358,22 @@ public class Arrays {
      *	       and only if the key is found.
      * @see #sort(short[])
      */
-    public static int binarySearch(short[] a, short key) {
+    public static int binarySearch(final short[] a, final short key) {
 	int low = 0;
 	int high = a.length-1;
 
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    short midVal = a[mid];
+	    final int mid =(low + high)/2;
+	    final short midVal = a[mid];
 
-	    if (midVal < key)
+	    if (midVal < key) {
 		low = mid + 1;
-	    else if (midVal > key)
+	} else if (midVal > key) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found.
     }
@@ -1318,20 +1398,22 @@ public class Arrays {
      *	       and only if the key is found.
      * @see #sort(char[])
      */
-    public static int binarySearch(char[] a, char key) {
+    public static int binarySearch(final char[] a, final char key) {
 	int low = 0;
 	int high = a.length-1;
 
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    char midVal = a[mid];
+	    final int mid =(low + high)/2;
+	    final char midVal = a[mid];
 
-	    if (midVal < key)
+	    if (midVal < key) {
 		low = mid + 1;
-	    else if (midVal > key)
+	} else if (midVal > key) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found.
     }
@@ -1356,20 +1438,22 @@ public class Arrays {
      *	       and only if the key is found.
      * @see #sort(byte[])
      */
-    public static int binarySearch(byte[] a, byte key) {
+    public static int binarySearch(final byte[] a, final byte key) {
 	int low = 0;
 	int high = a.length-1;
 
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    byte midVal = a[mid];
+	    final int mid =(low + high)/2;
+	    final byte midVal = a[mid];
 
-	    if (midVal < key)
+	    if (midVal < key) {
 		low = mid + 1;
-	    else if (midVal > key)
+	} else if (midVal > key) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found.
     }
@@ -1394,14 +1478,14 @@ public class Arrays {
      *	       and only if the key is found.
      * @see #sort(double[])
      */
-    public static int binarySearch(double[] a, double key) {
+    public static int binarySearch(final double[] a, final double key) {
         return binarySearch(a, key, 0, a.length-1);
     }
 
-    private static int binarySearch(double[] a, double key, int low,int high) {
+    private static int binarySearch(final double[] a, final double key, int low,int high) {
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    double midVal = a[mid];
+	    final int mid =(low + high)/2;
+	    final double midVal = a[mid];
 
             int cmp;
             if (midVal < key) {
@@ -1409,19 +1493,21 @@ public class Arrays {
             } else if (midVal > key) {
                 cmp = 1;    // Neither val is NaN, thisVal is larger
             } else {
-                long midBits = Double.doubleToLongBits(midVal);
-                long keyBits = Double.doubleToLongBits(key);
-                cmp = (midBits == keyBits ?  0 : // Values are equal
-                       (midBits < keyBits ? -1 : // (-0.0, 0.0) or (!NaN, NaN)
-                        1));                     // (0.0, -0.0) or (NaN, !NaN)
+                final long midBits = Double.doubleToLongBits(midVal);
+                final long keyBits = Double.doubleToLongBits(key);
+                cmp = midBits == keyBits ?  0 : // Values are equal
+                       midBits < keyBits ? -1 : // (-0.0, 0.0) or (!NaN, NaN)
+                        1;                     // (0.0, -0.0) or (NaN, !NaN)
             }
 
-	    if (cmp < 0)
+	    if (cmp < 0) {
 		low = mid + 1;
-	    else if (cmp > 0)
+	} else if (cmp > 0) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found.
     }
@@ -1446,14 +1532,14 @@ public class Arrays {
      *	       and only if the key is found.
      * @see #sort(float[])
      */
-    public static int binarySearch(float[] a, float key) {
+    public static int binarySearch(final float[] a, final float key) {
         return binarySearch(a, key, 0, a.length-1);
     }
 
-    private static int binarySearch(float[] a, float key, int low,int high) {
+    private static int binarySearch(final float[] a, final float key, int low,int high) {
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    float midVal = a[mid];
+	    final int mid =(low + high)/2;
+	    final float midVal = a[mid];
 
             int cmp;
             if (midVal < key) {
@@ -1461,19 +1547,21 @@ public class Arrays {
             } else if (midVal > key) {
                 cmp = 1;    // Neither val is NaN, thisVal is larger
             } else {
-                int midBits = Float.floatToIntBits(midVal);
-                int keyBits = Float.floatToIntBits(key);
-                cmp = (midBits == keyBits ?  0 : // Values are equal
-                       (midBits < keyBits ? -1 : // (-0.0, 0.0) or (!NaN, NaN)
-                        1));                     // (0.0, -0.0) or (NaN, !NaN)
+                final int midBits = Float.floatToIntBits(midVal);
+                final int keyBits = Float.floatToIntBits(key);
+                cmp = midBits == keyBits ?  0 : // Values are equal
+                       midBits < keyBits ? -1 : // (-0.0, 0.0) or (!NaN, NaN)
+                        1;                     // (0.0, -0.0) or (NaN, !NaN)
             }
 
-	    if (cmp < 0)
+	    if (cmp < 0) {
 		low = mid + 1;
-	    else if (cmp > 0)
+	} else if (cmp > 0) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found.
     }
@@ -1505,21 +1593,23 @@ public class Arrays {
      * @see Comparable
      * @see #sort(Object[])
      */
-    public static int binarySearch(Object[] a, Object key) {
+    public static int binarySearch(final Object[] a, final Object key) {
 	int low = 0;
 	int high = a.length-1;
 
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    Object midVal = a[mid];
-	    int cmp = ((Comparable)midVal).compareTo(key);
+	    final int mid =(low + high)/2;
+	    final Object midVal = a[mid];
+	    final int cmp = ((Comparable)midVal).compareTo(key);
 
-	    if (cmp < 0)
+	    if (cmp < 0) {
 		low = mid + 1;
-	    else if (cmp > 0)
+	} else if (cmp > 0) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found.
     }
@@ -1551,21 +1641,23 @@ public class Arrays {
      * @see Comparable
      * @see #sort(Object[], Comparator)
      */
-    public static int binarySearch(Object[] a, Object key, Comparator c) {
+    public static int binarySearch(final Object[] a, final Object key, final Comparator c) {
 	int low = 0;
 	int high = a.length-1;
 
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    Object midVal = a[mid];
-	    int cmp = c.compare(midVal, key);
+	    final int mid =(low + high)/2;
+	    final Object midVal = a[mid];
+	    final int cmp = c.compare(midVal, key);
 
-	    if (cmp < 0)
+	    if (cmp < 0) {
 		low = mid + 1;
-	    else if (cmp > 0)
+	} else if (cmp > 0) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found.
     }
@@ -1585,19 +1677,24 @@ public class Arrays {
      * @param a2 the other array to be tested for equality.
      * @return <tt>true</tt> if the two arrays are equal.
      */
-    public static boolean equals(long[] a, long[] a2) {
-        if (a==a2)
-            return true;
-        if (a==null || a2==null)
-            return false;
+    public static boolean equals(final long[] a, final long[] a2) {
+        if (a==a2) {
+		return true;
+	}
+        if (a==null || a2==null) {
+		return false;
+	}
 
-        int length = a.length;
-        if (a2.length != length)
-            return false;
+        final int length = a.length;
+        if (a2.length != length) {
+		return false;
+	}
 
-        for (int i=0; i<length; i++)
-            if (a[i] != a2[i])
-                return false;
+        for (int i=0; i<length; i++) {
+		if (a[i] != a2[i]) {
+			return false;
+		}
+	}
 
         return true;
     }
@@ -1614,19 +1711,24 @@ public class Arrays {
      * @param a2 the other array to be tested for equality.
      * @return <tt>true</tt> if the two arrays are equal.
      */
-    public static boolean equals(int[] a, int[] a2) {
-        if (a==a2)
-            return true;
-        if (a==null || a2==null)
-            return false;
+    public static boolean equals(final int[] a, final int[] a2) {
+        if (a==a2) {
+		return true;
+	}
+        if (a==null || a2==null) {
+		return false;
+	}
 
-        int length = a.length;
-        if (a2.length != length)
-            return false;
+        final int length = a.length;
+        if (a2.length != length) {
+		return false;
+	}
 
-        for (int i=0; i<length; i++)
-            if (a[i] != a2[i])
-                return false;
+        for (int i=0; i<length; i++) {
+		if (a[i] != a2[i]) {
+			return false;
+		}
+	}
 
         return true;
     }
@@ -1643,19 +1745,24 @@ public class Arrays {
      * @param a2 the other array to be tested for equality.
      * @return <tt>true</tt> if the two arrays are equal.
      */
-    public static boolean equals(short[] a, short a2[]) {
-        if (a==a2)
-            return true;
-        if (a==null || a2==null)
-            return false;
+    public static boolean equals(final short[] a, final short a2[]) {
+        if (a==a2) {
+		return true;
+	}
+        if (a==null || a2==null) {
+		return false;
+	}
 
-        int length = a.length;
-        if (a2.length != length)
-            return false;
+        final int length = a.length;
+        if (a2.length != length) {
+		return false;
+	}
 
-        for (int i=0; i<length; i++)
-            if (a[i] != a2[i])
-                return false;
+        for (int i=0; i<length; i++) {
+		if (a[i] != a2[i]) {
+			return false;
+		}
+	}
 
         return true;
     }
@@ -1672,19 +1779,24 @@ public class Arrays {
      * @param a2 the other array to be tested for equality.
      * @return <tt>true</tt> if the two arrays are equal.
      */
-    public static boolean equals(char[] a, char[] a2) {
-        if (a==a2)
-            return true;
-        if (a==null || a2==null)
-            return false;
+    public static boolean equals(final char[] a, final char[] a2) {
+        if (a==a2) {
+		return true;
+	}
+        if (a==null || a2==null) {
+		return false;
+	}
 
-        int length = a.length;
-        if (a2.length != length)
-            return false;
+        final int length = a.length;
+        if (a2.length != length) {
+		return false;
+	}
 
-        for (int i=0; i<length; i++)
-            if (a[i] != a2[i])
-                return false;
+        for (int i=0; i<length; i++) {
+		if (a[i] != a2[i]) {
+			return false;
+		}
+	}
 
         return true;
     }
@@ -1701,19 +1813,24 @@ public class Arrays {
      * @param a2 the other array to be tested for equality.
      * @return <tt>true</tt> if the two arrays are equal.
      */
-    public static boolean equals(byte[] a, byte[] a2) {
-        if (a==a2)
-            return true;
-        if (a==null || a2==null)
-            return false;
+    public static boolean equals(final byte[] a, final byte[] a2) {
+        if (a==a2) {
+		return true;
+	}
+        if (a==null || a2==null) {
+		return false;
+	}
 
-        int length = a.length;
-        if (a2.length != length)
-            return false;
+        final int length = a.length;
+        if (a2.length != length) {
+		return false;
+	}
 
-        for (int i=0; i<length; i++)
-            if (a[i] != a2[i])
-                return false;
+        for (int i=0; i<length; i++) {
+		if (a[i] != a2[i]) {
+			return false;
+		}
+	}
 
         return true;
     }
@@ -1730,19 +1847,24 @@ public class Arrays {
      * @param a2 the other array to be tested for equality.
      * @return <tt>true</tt> if the two arrays are equal.
      */
-    public static boolean equals(boolean[] a, boolean[] a2) {
-        if (a==a2)
-            return true;
-        if (a==null || a2==null)
-            return false;
+    public static boolean equals(final boolean[] a, final boolean[] a2) {
+        if (a==a2) {
+		return true;
+	}
+        if (a==null || a2==null) {
+		return false;
+	}
 
-        int length = a.length;
-        if (a2.length != length)
-            return false;
+        final int length = a.length;
+        if (a2.length != length) {
+		return false;
+	}
 
-        for (int i=0; i<length; i++)
-            if (a[i] != a2[i])
-                return false;
+        for (int i=0; i<length; i++) {
+		if (a[i] != a2[i]) {
+			return false;
+		}
+	}
 
         return true;
     }
@@ -1765,19 +1887,24 @@ public class Arrays {
      * @return <tt>true</tt> if the two arrays are equal.
      * @see Double#equals(Double)
      */
-    public static boolean equals(double[] a, double[] a2) {
-        if (a==a2)
-            return true;
-        if (a==null || a2==null)
-            return false;
+    public static boolean equals(final double[] a, final double[] a2) {
+        if (a==a2) {
+		return true;
+	}
+        if (a==null || a2==null) {
+		return false;
+	}
 
-        int length = a.length;
-        if (a2.length != length)
-            return false;
+        final int length = a.length;
+        if (a2.length != length) {
+		return false;
+	}
 
-        for (int i=0; i<length; i++)
-	    if (Double.doubleToLongBits(a[i])!=Double.doubleToLongBits(a2[i]))
-                return false;
+        for (int i=0; i<length; i++) {
+		if (Double.doubleToLongBits(a[i])!=Double.doubleToLongBits(a2[i])) {
+			return false;
+		}
+	}
 
         return true;
     }
@@ -1800,19 +1927,24 @@ public class Arrays {
      * @return <tt>true</tt> if the two arrays are equal.
      * @see Double#equals(Double)
      */
-    public static boolean equals(float[] a, float[] a2) {
-        if (a==a2)
-            return true;
-        if (a==null || a2==null)
-            return false;
+    public static boolean equals(final float[] a, final float[] a2) {
+        if (a==a2) {
+		return true;
+	}
+        if (a==null || a2==null) {
+		return false;
+	}
 
-        int length = a.length;
-        if (a2.length != length)
-            return false;
+        final int length = a.length;
+        if (a2.length != length) {
+		return false;
+	}
 
-        for (int i=0; i<length; i++)
-	    if (Float.floatToIntBits(a[i])!=Float.floatToIntBits(a2[i]))
-                return false;
+        for (int i=0; i<length; i++) {
+		if (Float.floatToIntBits(a[i])!=Float.floatToIntBits(a2[i])) {
+			return false;
+		}
+	}
 
         return true;
     }
@@ -1832,21 +1964,25 @@ public class Arrays {
      * @param a2 the other array to be tested for equality.
      * @return <tt>true</tt> if the two arrays are equal.
      */
-    public static boolean equals(Object[] a, Object[] a2) {
-        if (a==a2)
-            return true;
-        if (a==null || a2==null)
-            return false;
+    public static boolean equals(final Object[] a, final Object[] a2) {
+        if (a==a2) {
+		return true;
+	}
+        if (a==null || a2==null) {
+		return false;
+	}
 
-        int length = a.length;
-        if (a2.length != length)
-            return false;
+        final int length = a.length;
+        if (a2.length != length) {
+		return false;
+	}
 
         for (int i=0; i<length; i++) {
-            Object o1 = a[i];
-            Object o2 = a2[i];
-            if (!(o1==null ? o2==null : o1.equals(o2)))
-                return false;
+            final Object o1 = a[i];
+            final Object o2 = a2[i];
+            if (!(o1==null ? o2==null : o1.equals(o2))) {
+		return false;
+	}
         }
 
         return true;
@@ -1862,12 +1998,12 @@ public class Arrays {
      * @param a the array to be filled.
      * @param val the value to be stored in all elements of the array.
      */
-    public static void fill(long[] a, long val) {
+    public static void fill(final long[] a, final long val) {
         fill(a, 0, a.length, val);
     }
 
     /**
-     * Assigns the specified long value to each element of the specified 
+     * Assigns the specified long value to each element of the specified
      * range of the specified array of longs.
      *
      * @param a the array to be filled.
@@ -1880,10 +2016,11 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void fill(long[] a, int fromIndex, int toIndex, long val) {
+    public static void fill(final long[] a, final int fromIndex, final int toIndex, final long val) {
         rangeCheck(a.length, fromIndex, toIndex);
-        for (int i=fromIndex; i<toIndex; i++)
-            a[i] = val;
+        for (int i=fromIndex; i<toIndex; i++) {
+		a[i] = val;
+	}
     }
 
     /**
@@ -1893,12 +2030,12 @@ public class Arrays {
      * @param a the array to be filled.
      * @param val the value to be stored in all elements of the array.
      */
-    public static void fill(int[] a, int val) {
+    public static void fill(final int[] a, final int val) {
         fill(a, 0, a.length, val);
     }
 
     /**
-     * Assigns the specified int value to each element of the specified 
+     * Assigns the specified int value to each element of the specified
      * range of the specified array of ints.
      *
      * @param a the array to be filled.
@@ -1911,10 +2048,11 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void fill(int[] a, int fromIndex, int toIndex, int val) {
+    public static void fill(final int[] a, final int fromIndex, final int toIndex, final int val) {
         rangeCheck(a.length, fromIndex, toIndex);
-        for (int i=fromIndex; i<toIndex; i++)
-            a[i] = val;
+        for (int i=fromIndex; i<toIndex; i++) {
+		a[i] = val;
+	}
     }
 
     /**
@@ -1924,12 +2062,12 @@ public class Arrays {
      * @param a the array to be filled.
      * @param val the value to be stored in all elements of the array.
      */
-    public static void fill(short[] a, short val) {
+    public static void fill(final short[] a, final short val) {
         fill(a, 0, a.length, val);
     }
 
     /**
-     * Assigns the specified short value to each element of the specified 
+     * Assigns the specified short value to each element of the specified
      * range of the specified array of shorts.
      *
      * @param a the array to be filled.
@@ -1942,10 +2080,11 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void fill(short[] a, int fromIndex, int toIndex, short val) {
+    public static void fill(final short[] a, final int fromIndex, final int toIndex, final short val) {
         rangeCheck(a.length, fromIndex, toIndex);
-        for (int i=fromIndex; i<toIndex; i++)
-            a[i] = val;
+        for (int i=fromIndex; i<toIndex; i++) {
+		a[i] = val;
+	}
     }
 
     /**
@@ -1955,12 +2094,12 @@ public class Arrays {
      * @param a the array to be filled.
      * @param val the value to be stored in all elements of the array.
      */
-    public static void fill(char[] a, char val) {
+    public static void fill(final char[] a, final char val) {
         fill(a, 0, a.length, val);
     }
 
     /**
-     * Assigns the specified char value to each element of the specified 
+     * Assigns the specified char value to each element of the specified
      * range of the specified array of chars.
      *
      * @param a the array to be filled.
@@ -1973,10 +2112,11 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void fill(char[] a, int fromIndex, int toIndex, char val) {
+    public static void fill(final char[] a, final int fromIndex, final int toIndex, final char val) {
         rangeCheck(a.length, fromIndex, toIndex);
-        for (int i=fromIndex; i<toIndex; i++)
-            a[i] = val;
+        for (int i=fromIndex; i<toIndex; i++) {
+		a[i] = val;
+	}
     }
 
     /**
@@ -1986,12 +2126,12 @@ public class Arrays {
      * @param a the array to be filled.
      * @param val the value to be stored in all elements of the array.
      */
-    public static void fill(byte[] a, byte val) {
+    public static void fill(final byte[] a, final byte val) {
         fill(a, 0, a.length, val);
     }
 
     /**
-     * Assigns the specified byte value to each element of the specified 
+     * Assigns the specified byte value to each element of the specified
      * range of the specified array of bytes.
      *
      * @param a the array to be filled.
@@ -2004,10 +2144,11 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void fill(byte[] a, int fromIndex, int toIndex, byte val) {
+    public static void fill(final byte[] a, final int fromIndex, final int toIndex, final byte val) {
         rangeCheck(a.length, fromIndex, toIndex);
-        for (int i=fromIndex; i<toIndex; i++)
-            a[i] = val;
+        for (int i=fromIndex; i<toIndex; i++) {
+		a[i] = val;
+	}
     }
 
     /**
@@ -2017,12 +2158,12 @@ public class Arrays {
      * @param a the array to be filled.
      * @param val the value to be stored in all elements of the array.
      */
-    public static void fill(boolean[] a, boolean val) {
+    public static void fill(final boolean[] a, final boolean val) {
         fill(a, 0, a.length, val);
     }
 
     /**
-     * Assigns the specified boolean value to each element of the specified 
+     * Assigns the specified boolean value to each element of the specified
      * range of the specified array of booleans.
      *
      * @param a the array to be filled.
@@ -2035,11 +2176,12 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void fill(boolean[] a, int fromIndex, int toIndex,
-                            boolean val) {
+    public static void fill(final boolean[] a, final int fromIndex, final int toIndex,
+                            final boolean val) {
         rangeCheck(a.length, fromIndex, toIndex);
-        for (int i=fromIndex; i<toIndex; i++)
-            a[i] = val;
+        for (int i=fromIndex; i<toIndex; i++) {
+		a[i] = val;
+	}
     }
 
     /**
@@ -2049,12 +2191,12 @@ public class Arrays {
      * @param a the array to be filled.
      * @param val the value to be stored in all elements of the array.
      */
-    public static void fill(double[] a, double val) {
+    public static void fill(final double[] a, final double val) {
         fill(a, 0, a.length, val);
     }
 
     /**
-     * Assigns the specified double value to each element of the specified 
+     * Assigns the specified double value to each element of the specified
      * range of the specified array of doubles.
      *
      * @param a the array to be filled.
@@ -2067,10 +2209,11 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void fill(double[] a, int fromIndex, int toIndex,double val){
+    public static void fill(final double[] a, final int fromIndex, final int toIndex,final double val){
         rangeCheck(a.length, fromIndex, toIndex);
-        for (int i=fromIndex; i<toIndex; i++)
-            a[i] = val;
+        for (int i=fromIndex; i<toIndex; i++) {
+		a[i] = val;
+	}
     }
 
     /**
@@ -2080,12 +2223,12 @@ public class Arrays {
      * @param a the array to be filled.
      * @param val the value to be stored in all elements of the array.
      */
-    public static void fill(float[] a, float val) {
+    public static void fill(final float[] a, final float val) {
         fill(a, 0, a.length, val);
     }
 
     /**
-     * Assigns the specified float value to each element of the specified 
+     * Assigns the specified float value to each element of the specified
      * range of the specified array of floats.
      *
      * @param a the array to be filled.
@@ -2098,10 +2241,11 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void fill(float[] a, int fromIndex, int toIndex, float val) {
+    public static void fill(final float[] a, final int fromIndex, final int toIndex, final float val) {
         rangeCheck(a.length, fromIndex, toIndex);
-        for (int i=fromIndex; i<toIndex; i++)
-            a[i] = val;
+        for (int i=fromIndex; i<toIndex; i++) {
+		a[i] = val;
+	}
     }
 
     /**
@@ -2111,12 +2255,12 @@ public class Arrays {
      * @param a the array to be filled.
      * @param val the value to be stored in all elements of the array.
      */
-    public static void fill(Object[] a, Object val) {
+    public static void fill(final Object[] a, final Object val) {
         fill(a, 0, a.length, val);
     }
 
     /**
-     * Assigns the specified Object reference to each element of the specified 
+     * Assigns the specified Object reference to each element of the specified
      * range of the specified array of Objects.
      *
      * @param a the array to be filled.
@@ -2129,10 +2273,11 @@ public class Arrays {
      * @throws ArrayIndexOutOfBoundsException if <tt>fromIndex &lt; 0</tt> or
      *	       <tt>toIndex &gt; a.length</tt>
      */
-    public static void fill(Object[] a, int fromIndex, int toIndex,Object val){
+    public static void fill(final Object[] a, final int fromIndex, final int toIndex,final Object val){
         rangeCheck(a.length, fromIndex, toIndex);
-        for (int i=fromIndex; i<toIndex; i++)
-            a[i] = val;
+        for (int i=fromIndex; i<toIndex; i++) {
+		a[i] = val;
+	}
     }
 
 
@@ -2149,7 +2294,7 @@ public class Arrays {
      * @return a list view of the specified array.
      * @see Collection#toArray()
      */
-    public static List asList(Object[] a) {
+    public static List asList(final Object[] a) {
 	return new ArrayList(a);
     }
 
@@ -2157,45 +2302,49 @@ public class Arrays {
     				   implements java.io.Serializable
     {
         private static final long serialVersionUID = -2764017481108945198L;
-	private Object[] a;
+	private final Object[] a;
 
-	ArrayList(Object[] array) {
-	    a = array;
+	ArrayList(final Object[] array) {
+	    this.a = array;
 	}
 
 	public int size() {
-	    return a.length;
+	    return this.a.length;
 	}
 
 	public Object[] toArray() {
-	    return (Object[]) a.clone();
+	    return (Object[]) this.a.clone();
 	}
 
-	public Object get(int index) {
-	    return a[index];
+	public Object get(final int index) {
+	    return this.a[index];
 	}
 
-	public Object set(int index, Object element) {
-	    Object oldValue = a[index];
-	    a[index] = element;
+	public Object set(final int index, final Object element) {
+	    final Object oldValue = this.a[index];
+	    this.a[index] = element;
 	    return oldValue;
 	}
 
-        public int indexOf(Object o) {
+        public int indexOf(final Object o) {
             if (o==null) {
-                for (int i=0; i<a.length; i++)
-                    if (a[i]==null)
-                        return i;
+                for (int i=0; i<this.a.length; i++) {
+			if (this.a[i]==null) {
+				return i;
+			}
+		}
             } else {
-                for (int i=0; i<a.length; i++)
-                    if (o.equals(a[i]))
-                        return i;
+                for (int i=0; i<this.a.length; i++) {
+			if (o.equals(this.a[i])) {
+				return i;
+			}
+		}
             }
             return -1;
         }
 
-        public boolean contains(Object o) {
-            return indexOf(o) != -1;
+        public boolean contains(final Object o) {
+            return this.indexOf(o) != -1;
         }
     }
 }

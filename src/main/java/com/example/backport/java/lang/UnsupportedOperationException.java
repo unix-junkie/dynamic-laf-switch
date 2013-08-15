@@ -15,6 +15,8 @@ package com.example.backport.java.lang;
  * @since   JDK1.2
  */
 public class UnsupportedOperationException extends RuntimeException {
+	private static final long serialVersionUID = -1540314224475368138L;
+
     /**
      * Constructs an UnsupportedOperationException with no detail message.
      */
@@ -25,7 +27,7 @@ public class UnsupportedOperationException extends RuntimeException {
      * Constructs an UnsupportedOperationException with the specified
      * detail message.
      */
-    public UnsupportedOperationException(String message) {
+    public UnsupportedOperationException(final String message) {
 	super(message);
     }
 }
