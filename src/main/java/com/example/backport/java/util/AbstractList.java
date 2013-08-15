@@ -5,7 +5,11 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package java.util;
+package com.example.backport.java.util;
+
+import java.util.NoSuchElementException;
+
+import com.example.backport.java.lang.UnsupportedOperationException;
 
 /**
  * This class provides a skeletal implementation of the <tt>List</tt>

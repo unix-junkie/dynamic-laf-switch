@@ -5,7 +5,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package java.util;
+package com.example.backport.java.util;
 
 /**
  * An iterator over a collection.  Iterator takes the place of Enumeration in

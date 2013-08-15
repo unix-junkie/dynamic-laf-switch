@@ -5,7 +5,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package java.util;
+package com.example.backport.java.util;
 
 /**
  * Resizable-array implementation of the <tt>List</tt> interface.  Implements

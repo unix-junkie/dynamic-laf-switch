@@ -5,7 +5,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package java.lang;
+package com.example.backport.java.lang;
 
 /**
  * Thrown to indicate that the requested operation is not supported.

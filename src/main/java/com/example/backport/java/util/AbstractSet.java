@@ -5,7 +5,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package java.util;
+package com.example.backport.java.util;
 
 /**
  * This class provides a skeletal implementation of the <tt>Set</tt>

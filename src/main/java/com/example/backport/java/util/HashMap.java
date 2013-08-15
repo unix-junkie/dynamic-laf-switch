@@ -5,8 +5,9 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package java.util;
+package com.example.backport.java.util;
 import java.io.*;
+import java.util.NoSuchElementException;
 
 /**
  * Hash table based implementation of the <tt>Map</tt> interface.  This

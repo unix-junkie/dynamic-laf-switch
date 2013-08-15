@@ -5,7 +5,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package java.lang;
+package com.example.backport.java.lang;
 
 /**
  * This interface imposes a total ordering on the objects of each class that

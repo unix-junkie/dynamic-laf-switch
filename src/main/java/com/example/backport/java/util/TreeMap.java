@@ -5,7 +5,11 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package java.util;
+package com.example.backport.java.util;
+
+import java.util.NoSuchElementException;
+
+import com.example.backport.java.lang.Comparable;
 
 /**
  * Red-Black tree based implementation of the <tt>SortedMap</tt> interface.
@@ -530,7 +534,7 @@ public class TreeMap extends AbstractMap
     public Set keySet() {
 	if (keySet == null) {
 	    keySet = new AbstractSet() {
-		public java.util.Iterator iterator() {
+		public com.example.backport.java.util.Iterator iterator() {
 		    return new Iterator(KEYS);
 		}
 
@@ -570,7 +574,7 @@ public class TreeMap extends AbstractMap
     public Collection values() {
 	if (values == null) {
             values = new AbstractCollection() {
-                public java.util.Iterator iterator() {
+                public com.example.backport.java.util.Iterator iterator() {
                     return new Iterator(VALUES);
                 }
 
@@ -620,7 +624,7 @@ public class TreeMap extends AbstractMap
     public Set entrySet() {
 	if (entrySet == null) {
 	    entrySet = new AbstractSet() {
-                public java.util.Iterator iterator() {
+                public com.example.backport.java.util.Iterator iterator() {
                     return new Iterator(ENTRIES);
                 }
 
@@ -850,7 +854,7 @@ public class TreeMap extends AbstractMap
 	    public int size() {
 		if (size == -1 || sizeModCount != TreeMap.this.modCount) {
 		    size = 0;  sizeModCount = TreeMap.this.modCount;
-		    java.util.Iterator i = iterator();
+		    com.example.backport.java.util.Iterator i = iterator();
 		    while (i.hasNext()) {
 			size++;
 			i.next();
@@ -890,7 +894,7 @@ public class TreeMap extends AbstractMap
                 return false;
 	    }
 
-	    public java.util.Iterator iterator() {
+	    public com.example.backport.java.util.Iterator iterator() {
 		return new Iterator(
                     (fromStart ? firstEntry() : getCeilEntry(fromKey)),
                     (toEnd     ? null	      : getCeilEntry(toKey)));
@@ -937,7 +941,7 @@ public class TreeMap extends AbstractMap
     /**
      * TreeMap Iterator.
      */
-    private class Iterator implements java.util.Iterator {
+    private class Iterator implements com.example.backport.java.util.Iterator {
 	private int type;
 	private int expectedModCount = TreeMap.this.modCount;
 	private Entry lastReturned = null;
@@ -1437,7 +1441,7 @@ public class TreeMap extends AbstractMap
 	s.writeInt(size);
 
         // Write out keys and values (alternating)
-	for (java.util.Iterator i = entrySet().iterator(); i.hasNext(); ) {
+	for (com.example.backport.java.util.Iterator i = entrySet().iterator(); i.hasNext(); ) {
             Entry e = (Entry)i.next();
             s.writeObject(e.key);
             s.writeObject(e.value);
@@ -1507,7 +1511,7 @@ public class TreeMap extends AbstractMap
      * @throws ClassNotFoundException propagated from readObject. 
      *         This cannot occur if str is null.
      */
-    private void buildFromSorted(int size, java.util.Iterator it,
+    private void buildFromSorted(int size, com.example.backport.java.util.Iterator it,
                                   java.io.ObjectInputStream str,
                                   Object defaultVal)
         throws  java.io.IOException, ClassNotFoundException {
@@ -1532,7 +1536,7 @@ public class TreeMap extends AbstractMap
      */
     private static Entry buildFromSorted(int level, int lo, int hi,
                                          int redLevel,
-                                         java.util.Iterator it, 
+                                         com.example.backport.java.util.Iterator it, 
                                          java.io.ObjectInputStream str,
                                          Object defaultVal) 
         throws  java.io.IOException, ClassNotFoundException {

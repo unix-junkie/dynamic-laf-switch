@@ -5,8 +5,9 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package java.util;
-import java.util.Map.Entry;
+package com.example.backport.java.util;
+import com.example.backport.java.lang.UnsupportedOperationException;
+import com.example.backport.java.util.Map.Entry;
 
 /**
  * This class provides a skeletal implementation of the <tt>Map</tt>
