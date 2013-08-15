@@ -27,7 +27,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -50,7 +49,7 @@ abstract class Main {
 	private static short ACC_ABSTRACT = 0x0400;
 
 	private Main() {
-		assert false;
+		// empty
 	}
 
 	/**
@@ -61,8 +60,16 @@ abstract class Main {
 			return new String[0];
 		}
 		final String pathSeparator = System.getProperty("path.separator");
-		final String[] entries = path.split("\\Q" + pathSeparator + "\\E");
-		return entries == null ? new String[0] : entries;
+		int fromIndex = 0;
+		int toIndex;
+		final List pathElements = new ArrayList();
+		while ((toIndex = path.indexOf(pathSeparator, fromIndex)) != -1) {
+			final String pathElement = path.substring(fromIndex, toIndex);
+			pathElements.add(pathElement);
+			fromIndex = toIndex + 1;
+		}
+		pathElements.add(pathElements.isEmpty() ? path : path.substring(fromIndex));
+		return (String[]) pathElements.toArray(new String[0]);
 	}
 
 	/**
@@ -128,10 +135,6 @@ abstract class Main {
 								continue;
 							}
 							final String className = entryName.substring(0, indexOfDotClass).replace('/', '.');
-							if (skipAnonymousClasses && className.matches(".*[^\\$](\\$\\d+)+$")) {
-								continue;
-							}
-
 							if (skipInnerClasses && className.indexOf('$') != -1) {
 								continue;
 							}
@@ -212,13 +215,6 @@ abstract class Main {
 					UIManager.setLookAndFeel(lookAndFeel);
 					themeMenu.setEnabled(lookAndFeel instanceof MetalLookAndFeel);
 					SwingUtilities.updateComponentTreeUI(frame);
-
-					if (JFrame.isDefaultLookAndFeelDecorated()) {
-						frame.dispose();
-						frame.setUndecorated(lookAndFeel instanceof MetalLookAndFeel);
-						frame.getRootPane().setWindowDecorationStyle(JRootPane.FRAME);
-						frame.setVisible(true);
-					}
 				} catch (final Exception e1) {
 					menuItem.setEnabled(false);
 				}
@@ -282,8 +278,6 @@ abstract class Main {
 				"sunw"
 		});
 
-		JFrame.setDefaultLookAndFeelDecorated(true);
-
 		final JFrame frame = new JFrame();
 
 		final JMenu themeMenu = new JMenu();
@@ -301,7 +295,7 @@ abstract class Main {
 					/*-
 					 * In 1.4 and earlier versions, we have no mechanism
 					 * to determine currently selected metal theme.
-					 * 
+					 *
 					 * So just select the first menu item
 					 * and set the appropriate theme.
 					 */
@@ -349,7 +343,6 @@ abstract class Main {
 
 		frame.setJMenuBar(menuBar);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setUndecorated(UIManager.getLookAndFeel() instanceof MetalLookAndFeel);
 
 		final JPanel contentPane = (JPanel) frame.getContentPane();
 		contentPane.setPreferredSize(new Dimension(320, 240));
