@@ -109,7 +109,6 @@ abstract class Main {
 			/**
 			 * @see Comparator#compare
 			 */
-			@Override
 			public int compare(final @Nullable Class<? extends T> class0, final @Nullable Class<? extends T> class1) {
 				if (class0 == null || class1 == null) {
 					throw new IllegalArgumentException();
@@ -219,7 +218,7 @@ abstract class Main {
 		if (lookAndFeel == null) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		final JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem();
 		menuItem.setText(lookAndFeel.getName());
 		menuItem.setToolTipText(lookAndFeel.getClass().getName());
@@ -229,7 +228,6 @@ abstract class Main {
 			/**
 			 * @see ActionListener#actionPerformed(ActionEvent)
 			 */
-			@Override
 			public void actionPerformed(final @Nullable ActionEvent e) {
 				try {
 					setLookAndFeel(lookAndFeel);
@@ -239,7 +237,7 @@ abstract class Main {
 					if (isDefaultLookAndFeelDecorated()) {
 						frame.dispose();
 						frame.setUndecorated(lookAndFeel instanceof MetalLookAndFeel);
-						frame.getRootPane().setWindowDecorationStyle(FRAME);						
+						frame.getRootPane().setWindowDecorationStyle(FRAME);
 						frame.setVisible(true);
 					}
 				} catch (final Exception e1) {
@@ -268,7 +266,6 @@ abstract class Main {
 			/**
 			 * @see ActionListener#actionPerformed(ActionEvent)
 			 */
-			@Override
 			public void actionPerformed(final @Nullable ActionEvent e) {
 				try {
 					setCurrentTheme(metalTheme);
@@ -335,7 +332,7 @@ abstract class Main {
 		 * See the discussions at
 		 *
 		 * http://stackoverflow.com/questions/3981579/java-type-safety-a-generic-array-of-a-is-created-for-a-varargs-parameter and
-		 * http://stackoverflow.com/questions/1445233/is-it-possible-to-solve-the-a-generic-array-of-t-is-created-for-a-varargs-param 
+		 * http://stackoverflow.com/questions/1445233/is-it-possible-to-solve-the-a-generic-array-of-t-is-created-for-a-varargs-param
 		 */
 		@SuppressWarnings("unchecked")
 		final List<Class<? extends LookAndFeel>> exclusions = asList(MultiLookAndFeel.class, SynthLookAndFeel.class);
@@ -393,7 +390,6 @@ abstract class Main {
 								/**
 								 * @see Runnable#run()
 								 */
-								@Override
 								public void run() {
 									final String themeClassName = getCurrentTheme().getClass().getName();
 									for (final AbstractButton button : list(themeMenuGroup.getElements())) {
