@@ -12,6 +12,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -186,7 +187,7 @@ abstract class Main {
 				} finally {
 					in.close();
 				}
-			} catch (final Exception ioe) {
+			} catch (final IOException ioe) {
 				// ignore
 			}
 		}
