@@ -295,7 +295,9 @@ abstract class Main {
 				"java",
 				"javax.crypto",
 				"javax.net.ssl",
+				"javax.swing.text",
 				"oracle",
+				"org.apache.xalan.extensions",
 				"sun",
 				"sunw"
 		);
