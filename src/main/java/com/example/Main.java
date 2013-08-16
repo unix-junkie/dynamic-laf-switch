@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,6 +31,7 @@ import javax.swing.plaf.metal.MetalTheme;
 
 import com.example.backport.java.util.ArrayList;
 import com.example.backport.java.util.Arrays;
+import com.example.backport.java.util.Collections;
 import com.example.backport.java.util.Comparator;
 import com.example.backport.java.util.Iterator;
 import com.example.backport.java.util.List;
@@ -288,23 +290,11 @@ abstract class Main {
 		themeMenu.setText("Themes");
 		themeMenu.setMnemonic('T');
 		themeMenu.setEnabled(UIManager.getLookAndFeel() instanceof MetalLookAndFeel);
-		int i = 0;
-		for (final Iterator it = listDescendants(MetalTheme.class, false, false, true, true, packagesToSkip).iterator(); it.hasNext(); i++) {
+		for (final Iterator it = listDescendants(MetalTheme.class, false, false, true, true, packagesToSkip).iterator(); it.hasNext(); ) {
 			try {
 				final Class clazz = (Class) it.next();
 				final MetalTheme metalTheme = (MetalTheme) clazz.newInstance();
 				final JRadioButtonMenuItem menuItem = fromMetalTheme(metalTheme, frame);
-				if (i == 0) {
-					/*-
-					 * In 1.4 and earlier versions, we have no mechanism
-					 * to determine currently selected metal theme.
-					 *
-					 * So just select the first menu item
-					 * and set the appropriate theme.
-					 */
-					menuItem.setSelected(true);
-					MetalLookAndFeel.setCurrentTheme(metalTheme);
-				}
 				themeMenu.add(menuItem);
 				themeMenuGroup.add(menuItem);
 			} catch (final InstantiationException ie) {
@@ -353,5 +343,24 @@ abstract class Main {
 
 		frame.pack();
 		frame.setVisible(true);
+
+		/*-
+		 * In 1.4 and earlier versions, we have no mechanism
+		 * to determine currently selected metal theme.
+		 *
+		 * So just select the first menu item
+		 * and set the appropriate theme.
+		 */
+		SwingUtilities.invokeLater(new Runnable() {
+			/**
+			 * @see Runnable#run()
+			 */
+			public void run() {
+				final Iterator it = Collections.list(themeMenuGroup.getElements()).iterator();
+				if (it.hasNext()) {
+					((AbstractButton) it.next()).doClick();
+				}
+			}
+		});
 	}
 }
