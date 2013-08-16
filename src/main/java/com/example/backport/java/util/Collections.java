@@ -6,6 +6,7 @@
  */
 
 package com.example.backport.java.util;
+
 import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
@@ -75,10 +76,10 @@ public class Collections {
      *	       list-iterator does not support the <tt>set</tt> operation.
      * @see Comparable
      */
-    public static void sort(List list) {
-	Object a[] = list.toArray();
+    public static void sort(final List list) {
+	final Object a[] = list.toArray();
 	Arrays.sort(a);
-	ListIterator i = list.listIterator();
+	final ListIterator i = list.listIterator();
 	for (int j=0; j<a.length; j++) {
 	    i.next();
 	    i.set(a[j]);
@@ -116,10 +117,10 @@ public class Collections {
      *	       list-iterator does not support the <tt>set</tt> operation.
      * @see Comparator
      */
-    public static void sort(List list, Comparator c) {
-	Object a[] = list.toArray();
+    public static void sort(final List list, final Comparator c) {
+	final Object a[] = list.toArray();
 	Arrays.sort(a, c);
-	ListIterator i = list.listIterator();
+	final ListIterator i = list.listIterator();
 	for (int j=0; j<a.length; j++) {
 	    i.next();
 	    i.set(a[j]);
@@ -163,16 +164,18 @@ public class Collections {
      * @see    Comparable
      * @see #sort(List)
      */
-    public static int binarySearch(List list, Object key) {
+    public static int binarySearch(final List list, final Object key) {
 	// Do a sequential search if appropriate
 	if (list instanceof AbstractSequentialList) {
-	    ListIterator i = list.listIterator();
+	    final ListIterator i = list.listIterator();
 	    while (i.hasNext()) {
-		int cmp = ((Comparable)(i.next())).compareTo(key);
-		if (cmp == 0)
-		    return i.previousIndex();
-		else if (cmp > 0)
-		    return -i.nextIndex();  // key not found.
+		final int cmp = ((Comparable)i.next()).compareTo(key);
+		if (cmp == 0) {
+			return i.previousIndex();
+		} else if (cmp > 0)
+		 {
+			return -i.nextIndex();  // key not found.
+		}
 	    }
 	    return -i.nextIndex()-1;  // key not found, list exhausted
 	}
@@ -182,16 +185,18 @@ public class Collections {
 	int high = list.size()-1;
 
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    Object midVal = list.get(mid);
-	    int cmp = ((Comparable)midVal).compareTo(key);
+	    final int mid =(low + high)/2;
+	    final Object midVal = list.get(mid);
+	    final int cmp = ((Comparable)midVal).compareTo(key);
 
-	    if (cmp < 0)
+	    if (cmp < 0) {
 		low = mid + 1;
-	    else if (cmp > 0)
+	} else if (cmp > 0) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found
     }
@@ -233,16 +238,18 @@ public class Collections {
      * @see    Comparable
      * @see #sort(List, Comparator)
      */
-    public static int binarySearch(List list, Object key, Comparator c) {
+    public static int binarySearch(final List list, final Object key, final Comparator c) {
 	// Do a sequential search if appropriate
 	if (list instanceof AbstractSequentialList) {
-	    ListIterator i = list.listIterator();
+	    final ListIterator i = list.listIterator();
 	    while (i.hasNext()) {
-		int cmp = c.compare(i.next(), key);
-		if (cmp == 0)
-		    return i.previousIndex();
-		else if (cmp > 0)
-		    return -i.nextIndex();  // key not found.
+		final int cmp = c.compare(i.next(), key);
+		if (cmp == 0) {
+			return i.previousIndex();
+		} else if (cmp > 0)
+		 {
+			return -i.nextIndex();  // key not found.
+		}
 	    }
 	    return -i.nextIndex()-1;  // key not found, list exhausted
 	}
@@ -252,16 +259,18 @@ public class Collections {
 	int high = list.size()-1;
 
 	while (low <= high) {
-	    int mid =(low + high)/2;
-	    Object midVal = list.get(mid);
-	    int cmp = c.compare(midVal, key);
+	    final int mid =(low + high)/2;
+	    final Object midVal = list.get(mid);
+	    final int cmp = c.compare(midVal, key);
 
-	    if (cmp < 0)
+	    if (cmp < 0) {
 		low = mid + 1;
-	    else if (cmp > 0)
+	} else if (cmp > 0) {
 		high = mid - 1;
-	    else
+	}
+	else {
 		return mid; // key found
+	}
 	}
 	return -(low + 1);  // key not found
     }
@@ -275,10 +284,10 @@ public class Collections {
      * @throws UnsupportedOperationException if the specified list's
      *	       list-iterator does not support the <tt>set</tt> operation.
      */
-    public static void reverse(List l) {
-        ListIterator fwd = l.listIterator(), rev = l.listIterator(l.size());
+    public static void reverse(final List l) {
+        final ListIterator fwd = l.listIterator(), rev = l.listIterator(l.size());
         for (int i=0, n=l.size()/2; i<n; i++) {
-            Object tmp = fwd.next();
+            final Object tmp = fwd.next();
             fwd.set(rev.previous());
             rev.set(tmp);
         }
@@ -309,7 +318,7 @@ public class Collections {
      * @throws UnsupportedOperationException if the specified list's
      *         list-iterator does not support the <tt>set</tt> operation.
      */
-    public static void shuffle(List list) {
+    public static void shuffle(final List list) {
         shuffle(list, r);
     }
     private static Random r = new Random();
@@ -334,16 +343,17 @@ public class Collections {
      * @throws UnsupportedOperationException if the specified list's
      *         list-iterator does not support the <tt>set</tt> operation.
      */
-    public static void shuffle(List list, Random rnd) {
-        for (int i=list.size(); i>1; i--)
-            swap(list, i-1, rnd.nextInt(i));
+    public static void shuffle(final List list, final Random rnd) {
+        for (int i=list.size(); i>1; i--) {
+		swap(list, i-1, rnd.nextInt(i));
+	}
     }
 
     /**
      * Swaps the two specified elements in the specified list.
      */
-    private static void swap(List a, int i, int j) {
-        Object tmp = a.get(i);
+    private static void swap(final List a, final int i, final int j) {
+        final Object tmp = a.get(i);
         a.set(i, a.get(j));
         a.set(j, tmp);
     }
@@ -359,8 +369,8 @@ public class Collections {
      * @throws UnsupportedOperationException if the specified list's
      *	       list-iterator does not support the <tt>set</tt> operation.
      */
-    public static void fill(List list, Object o) {
-        for (ListIterator i = list.listIterator(); i.hasNext(); ) {
+    public static void fill(final List list, final Object o) {
+        for (final ListIterator i = list.listIterator(); i.hasNext(); ) {
             i.next();
             i.set(o);
         }
@@ -382,14 +392,14 @@ public class Collections {
      * @throws UnsupportedOperationException if the destination list's
      *         list-iterator does not support the <tt>set</tt> operation.
      */
-    public static void copy (List dest, List src) {
+    public static void copy (final List dest, final List src) {
         try {
 	    for (ListIterator di=dest.listIterator(), si=src.listIterator();
 		 si.hasNext(); ) {
                 di.next();
                 di.set(si.next());
             }
-	} catch(NoSuchElementException e) {
+	} catch(final NoSuchElementException e) {
            throw new IndexOutOfBoundsException("Source does not fit in dest.");
         }
     }
@@ -415,13 +425,14 @@ public class Collections {
      * @throws NoSuchElementException if the collection is empty.
      * @see Comparable
      */
-    public static Object min(Collection coll) {
-	Iterator i = coll.iterator();
-	Comparable candidate = (Comparable)(i.next());
+    public static Object min(final Collection coll) {
+	final Iterator i = coll.iterator();
+	Comparable candidate = (Comparable)i.next();
 	while (i.hasNext()) {
-	    Comparable next = (Comparable)(i.next());
-	    if (next.compareTo(candidate) < 0)
+	    final Comparable next = (Comparable)i.next();
+	    if (next.compareTo(candidate) < 0) {
 		candidate = next;
+	}
 	}
 	return candidate;
     }
@@ -445,13 +456,14 @@ public class Collections {
      * @throws NoSuchElementException if the collection is empty.
      * @see Comparable
      */
-    public static Object min(Collection coll, Comparator comp) {
-	Iterator i = coll.iterator();
+    public static Object min(final Collection coll, final Comparator comp) {
+	final Iterator i = coll.iterator();
 	Object candidate = i.next();
 	while (i.hasNext()) {
-	    Object next = i.next();
-	    if (comp.compare(next, candidate) < 0)
+	    final Object next = i.next();
+	    if (comp.compare(next, candidate) < 0) {
 		candidate = next;
+	}
 	}
 	return candidate;
     }
@@ -477,13 +489,14 @@ public class Collections {
      * @throws NoSuchElementException if the collection is empty.
      * @see Comparable
      */
-    public static Object max(Collection coll) {
-	Iterator i = coll.iterator();
-	Comparable candidate = (Comparable)(i.next());
+    public static Object max(final Collection coll) {
+	final Iterator i = coll.iterator();
+	Comparable candidate = (Comparable)i.next();
 	while (i.hasNext()) {
-	    Comparable next = (Comparable)(i.next());
-	    if (next.compareTo(candidate) > 0)
+	    final Comparable next = (Comparable)i.next();
+	    if (next.compareTo(candidate) > 0) {
 		candidate = next;
+	}
 	}
 	return candidate;
     }
@@ -507,13 +520,14 @@ public class Collections {
      * @throws NoSuchElementException if the collection is empty.
      * @see Comparable
      */
-    public static Object max(Collection coll, Comparator comp) {
-	Iterator i = coll.iterator();
+    public static Object max(final Collection coll, final Comparator comp) {
+	final Iterator i = coll.iterator();
 	Object candidate = i.next();
 	while (i.hasNext()) {
-	    Object next = i.next();
-	    if (comp.compare(next, candidate) > 0)
+	    final Object next = i.next();
+	    if (comp.compare(next, candidate) > 0) {
 		candidate = next;
+	}
 	}
 	return candidate;
     }
@@ -536,56 +550,60 @@ public class Collections {
      * that the backing collection is a set or a list.<p>
      *
      * The returned collection will be serializable if the specified collection
-     * is serializable. 
+     * is serializable.
      *
      * @param  c the collection for which an unmodifiable view is to be
      *	       returned.
      * @return an unmodifiable view of the specified collection.
      */
-    public static Collection unmodifiableCollection(Collection c) {
+    public static Collection unmodifiableCollection(final Collection c) {
 	return new UnmodifiableCollection(c);
     }
 
     static class UnmodifiableCollection implements Collection, Serializable {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -3667270770690864937L;
 	Collection c;
 
-	UnmodifiableCollection(Collection c) {this.c = c;}
+	UnmodifiableCollection(final Collection c) {this.c = c;}
 
-	public int size() 		    {return c.size();}
-	public boolean isEmpty() 	    {return c.isEmpty();}
-	public boolean contains(Object o)   {return c.contains(o);}
-	public Object[] toArray() 	    {return c.toArray();}
-	public Object[] toArray(Object[] a) {return c.toArray(a);}
+	public int size() 		    {return this.c.size();}
+	public boolean isEmpty() 	    {return this.c.isEmpty();}
+	public boolean contains(final Object o)   {return this.c.contains(o);}
+	public Object[] toArray() 	    {return this.c.toArray();}
+	public Object[] toArray(final Object[] a) {return this.c.toArray(a);}
 
 	public Iterator iterator() {
 	    return new Iterator() {
-		Iterator i = c.iterator();
+		Iterator i = UnmodifiableCollection.this.c.iterator();
 
-		public boolean hasNext() {return i.hasNext();}
-		public Object next() 	 {return i.next();}
+		public boolean hasNext() {return this.i.hasNext();}
+		public Object next() 	 {return this.i.next();}
 		public void remove() {
 		    throw new UnsupportedOperationException();
                 }
 	    };
         }
 
-	public boolean add(Object o){
+	public boolean add(final Object o){
 	    throw new UnsupportedOperationException();
         }
-	public boolean remove(Object o) {
+	public boolean remove(final Object o) {
 	    throw new UnsupportedOperationException();
         }
 
-	public boolean containsAll(Collection coll) {
-	    return c.containsAll(coll);
+	public boolean containsAll(final Collection coll) {
+	    return this.c.containsAll(coll);
         }
-	public boolean addAll(Collection coll) {
+	public boolean addAll(final Collection coll) {
 	    throw new UnsupportedOperationException();
         }
-	public boolean removeAll(Collection coll) {
+	public boolean removeAll(final Collection coll) {
 	    throw new UnsupportedOperationException();
         }
-	public boolean retainAll(Collection coll) {
+	public boolean retainAll(final Collection coll) {
 	    throw new UnsupportedOperationException();
         }
 	public void clear() {
@@ -601,22 +619,24 @@ public class Collections {
      * iterator, result in an <tt>UnsupportedOperationException</tt>.<p>
      *
      * The returned set will be serializable if the specified set
-     * is serializable. 
+     * is serializable.
      *
      * @param  s the set for which an unmodifiable view is to be returned.
      * @return an unmodifiable view of the specified set.
      */
 
-    public static Set unmodifiableSet(Set s) {
+    public static Set unmodifiableSet(final Set s) {
 	return new UnmodifiableSet(s);
     }
 
     static class UnmodifiableSet extends UnmodifiableCollection
-    				 implements Set, Serializable {
-	UnmodifiableSet(Set s) 		{super(s);}
+    				 implements Set {
+	private static final long serialVersionUID = -8030089987476292319L;
 
-	public boolean equals(Object o) {return c.equals(o);}
-	public int hashCode() 		{return c.hashCode();}
+	UnmodifiableSet(final Set s) 		{super(s);}
+
+	public boolean equals(final Object o) {return this.c.equals(o);}
+	public int hashCode() 		{return this.c.hashCode();}
     }
 
     /**
@@ -629,36 +649,38 @@ public class Collections {
      * an <tt>UnsupportedOperationException</tt>.<p>
      *
      * The returned sorted set will be serializable if the specified sorted set
-     * is serializable. 
+     * is serializable.
      *
      * @param s the sorted set for which an unmodifiable view is to be
-     *        returned. 
+     *        returned.
      * @return an unmodifiable view of the specified sorted set.
      */
-    public static SortedSet unmodifiableSortedSet(SortedSet s) {
+    public static SortedSet unmodifiableSortedSet(final SortedSet s) {
 	return new UnmodifiableSortedSet(s);
     }
 
     static class UnmodifiableSortedSet extends UnmodifiableSet
-    				 implements SortedSet, Serializable {
-        private SortedSet ss;
+    				 implements SortedSet {
+	private static final long serialVersionUID = -5274635770611632962L;
 
-	UnmodifiableSortedSet(SortedSet s) {super(s); ss = s;}
+	private final SortedSet ss;
 
-        public Comparator comparator()     {return ss.comparator();}
+	UnmodifiableSortedSet(final SortedSet s) {super(s); this.ss = s;}
 
-        public SortedSet subSet(Object fromElement, Object toElement) {
-            return new UnmodifiableSortedSet(ss.subSet(fromElement,toElement));
+        public Comparator comparator()     {return this.ss.comparator();}
+
+        public SortedSet subSet(final Object fromElement, final Object toElement) {
+            return new UnmodifiableSortedSet(this.ss.subSet(fromElement,toElement));
         }
-        public SortedSet headSet(Object toElement) {
-            return new UnmodifiableSortedSet(ss.headSet(toElement));
+        public SortedSet headSet(final Object toElement) {
+            return new UnmodifiableSortedSet(this.ss.headSet(toElement));
         }
-        public SortedSet tailSet(Object fromElement) {
-            return new UnmodifiableSortedSet(ss.tailSet(fromElement));
+        public SortedSet tailSet(final Object fromElement) {
+            return new UnmodifiableSortedSet(this.ss.tailSet(fromElement));
         }
 
-        public Object first() 	           {return ss.first();}
-        public Object last()  	           {return ss.last();}
+        public Object first() 	           {return this.ss.first();}
+        public Object last()  	           {return this.ss.last();}
     }
 
     /**
@@ -670,69 +692,71 @@ public class Collections {
      * <tt>UnsupportedOperationException</tt>.<p>
      *
      * The returned list will be serializable if the specified list
-     * is serializable. 
+     * is serializable.
      *
      * @param  list the list for which an unmodifiable view is to be returned.
      * @return an unmodifiable view of the specified list.
      */
-    public static List unmodifiableList(List list) {
+    public static List unmodifiableList(final List list) {
 	return new UnmodifiableList(list);
     }
 
     static class UnmodifiableList extends UnmodifiableCollection
     				  implements List {
-	private List list;
+	private static final long serialVersionUID = -2561208740524521422L;
 
-	UnmodifiableList(List list) {
+	final List list;
+
+	UnmodifiableList(final List list) {
 	    super(list);
 	    this.list = list;
 	}
 
-	public boolean equals(Object o) {return list.equals(o);}
-	public int hashCode() 		{return list.hashCode();}
+	public boolean equals(final Object o) {return this.list.equals(o);}
+	public int hashCode() 		{return this.list.hashCode();}
 
-	public Object get(int index) {return list.get(index);}
-	public Object set(int index, Object element) {
+	public Object get(final int index) {return this.list.get(index);}
+	public Object set(final int index, final Object element) {
 	    throw new UnsupportedOperationException();
         }
-	public void add(int index, Object element) {
+	public void add(final int index, final Object element) {
 	    throw new UnsupportedOperationException();
         }
-	public Object remove(int index) {
+	public Object remove(final int index) {
 	    throw new UnsupportedOperationException();
         }
-	public int indexOf(Object o)            {return list.indexOf(o);}
-	public int lastIndexOf(Object o)        {return list.lastIndexOf(o);}
-	public boolean addAll(int index, Collection c) {
+	public int indexOf(final Object o)            {return this.list.indexOf(o);}
+	public int lastIndexOf(final Object o)        {return this.list.lastIndexOf(o);}
+	public boolean addAll(final int index, final Collection c) {
 	    throw new UnsupportedOperationException();
         }
-	public ListIterator listIterator() 	{return listIterator(0);}
+	public ListIterator listIterator() 	{return this.listIterator(0);}
 
 	public ListIterator listIterator(final int index) {
 	    return new ListIterator() {
-		ListIterator i = list.listIterator(index);
+		ListIterator i = UnmodifiableList.this.list.listIterator(index);
 
-		public boolean hasNext()     {return i.hasNext();}
-		public Object next()         {return i.next();}
-		public boolean hasPrevious() {return i.hasPrevious();}
-		public Object previous()     {return i.previous();}
-		public int nextIndex()       {return i.nextIndex();}
-		public int previousIndex()   {return i.previousIndex();}
+		public boolean hasNext()     {return this.i.hasNext();}
+		public Object next()         {return this.i.next();}
+		public boolean hasPrevious() {return this.i.hasPrevious();}
+		public Object previous()     {return this.i.previous();}
+		public int nextIndex()       {return this.i.nextIndex();}
+		public int previousIndex()   {return this.i.previousIndex();}
 
 		public void remove() {
 		    throw new UnsupportedOperationException();
                 }
-		public void set(Object o) {
+		public void set(final Object o) {
 		    throw new UnsupportedOperationException();
                 }
-		public void add(Object o) {
+		public void add(final Object o) {
 		    throw new UnsupportedOperationException();
                 }
 	    };
 	}
 
-	public List subList(int fromIndex, int toIndex) {
-            return new UnmodifiableList(list.subList(fromIndex, toIndex));
+	public List subList(final int fromIndex, final int toIndex) {
+            return new UnmodifiableList(this.list.subList(fromIndex, toIndex));
         }
     }
 
@@ -745,33 +769,37 @@ public class Collections {
      * <tt>UnsupportedOperationException</tt>.<p>
      *
      * The returned map will be serializable if the specified map
-     * is serializable. 
+     * is serializable.
      *
      * @param  m the map for which an unmodifiable view is to be returned.
      * @return an unmodifiable view of the specified map.
      */
-    public static Map unmodifiableMap(Map m) {
+    public static Map unmodifiableMap(final Map m) {
 	return new UnmodifiableMap(m);
     }
 
     private static class UnmodifiableMap implements Map, Serializable {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 2288897531685569830L;
 	private final Map m;
 
-	UnmodifiableMap(Map m) 		         {this.m = m;}
+	UnmodifiableMap(final Map m) 		         {this.m = m;}
 
-	public int size() 		         {return m.size();}
-	public boolean isEmpty() 	         {return m.isEmpty();}
-	public boolean containsKey(Object key)   {return m.containsKey(key);}
-	public boolean containsValue(Object val) {return m.containsValue(val);}
-	public Object get(Object key) 	         {return m.get(key);}
+	public int size() 		         {return this.m.size();}
+	public boolean isEmpty() 	         {return this.m.isEmpty();}
+	public boolean containsKey(final Object key)   {return this.m.containsKey(key);}
+	public boolean containsValue(final Object val) {return this.m.containsValue(val);}
+	public Object get(final Object key) 	         {return this.m.get(key);}
 
-	public Object put(Object key, Object value) {
+	public Object put(final Object key, final Object value) {
 	    throw new UnsupportedOperationException();
         }
-	public Object remove(Object key) {
+	public Object remove(final Object key) {
 	    throw new UnsupportedOperationException();
         }
-	public void putAll(Map t) {
+	public void putAll(final Map t) {
 	    throw new UnsupportedOperationException();
         }
 	public void clear() {
@@ -783,25 +811,28 @@ public class Collections {
 	private transient Collection values = null;
 
 	public Set keySet() {
-	    if (keySet==null)
-		keySet = unmodifiableSet(m.keySet());
-	    return keySet;
+	    if (this.keySet==null) {
+		this.keySet = unmodifiableSet(this.m.keySet());
+	}
+	    return this.keySet;
 	}
 
 	public Set entrySet() {
-	    if (entrySet==null)
-		entrySet = new UnmodifiableEntrySet(m.entrySet());
-	    return entrySet;
+	    if (this.entrySet==null) {
+		this.entrySet = new UnmodifiableEntrySet(this.m.entrySet());
+	}
+	    return this.entrySet;
 	}
 
 	public Collection values() {
-	    if (values==null)
-		values = unmodifiableCollection(m.values());
-	    return values;
+	    if (this.values==null) {
+		this.values = unmodifiableCollection(this.m.values());
+	}
+	    return this.values;
 	}
 
-	public boolean equals(Object o) {return m.equals(o);}
-	public int hashCode()           {return m.hashCode();}
+	public boolean equals(final Object o) {return this.m.equals(o);}
+	public int hashCode()           {return this.m.hashCode();}
 
 
         /**
@@ -811,19 +842,24 @@ public class Collections {
          * many possible attacks that must be thwarted.
          */
         static class UnmodifiableEntrySet extends UnmodifiableSet {
-            UnmodifiableEntrySet(Set s) {
+            /**
+		 *
+		 */
+		private static final long serialVersionUID = -4867454309214303478L;
+
+	UnmodifiableEntrySet(final Set s) {
                 super(s);
             }
 
             public Iterator iterator() {
                 return new Iterator() {
-                    Iterator i = c.iterator();
+                    Iterator i = UnmodifiableEntrySet.this.c.iterator();
 
                     public boolean hasNext() {
-                        return i.hasNext();
+                        return this.i.hasNext();
                     }
                     public Object next() 	 {
-                        return new UnmodifiableEntry((Map.Entry)i.next());
+                        return new UnmodifiableEntry((Map.Entry)this.i.next());
                     }
                     public void remove() {
                         throw new UnsupportedOperationException();
@@ -832,28 +868,32 @@ public class Collections {
             }
 
             public Object[] toArray() {
-                Object[] a = c.toArray();
-                for (int i=0; i<a.length; i++)
-                    a[i] = new UnmodifiableEntry((Map.Entry)a[i]);
+                final Object[] a = this.c.toArray();
+                for (int i=0; i<a.length; i++) {
+			a[i] = new UnmodifiableEntry((Map.Entry)a[i]);
+		}
                 return a;
             }
 
-            public Object[] toArray(Object a[]) {
+            public Object[] toArray(final Object a[]) {
                 // We don't pass a to c.toArray, to avoid window of
                 // vulnerability wherein an unscrupulous multithreaded client
                 // could get his hands on raw (unwrapped) Entries from c.
-                Object[] arr = c.toArray(a.length==0 ? a :
+                final Object[] arr = this.c.toArray(a.length==0 ? a :
                             (Object[])java.lang.reflect.Array.newInstance(
                                           a.getClass().getComponentType(), 0));
-                for (int i=0; i<arr.length; i++)
-                    arr[i] = new UnmodifiableEntry((Map.Entry)arr[i]);
+                for (int i=0; i<arr.length; i++) {
+			arr[i] = new UnmodifiableEntry((Map.Entry)arr[i]);
+		}
 
-                if (arr.length > a.length)
-                    return arr;
+                if (arr.length > a.length) {
+			return arr;
+		}
 
                 System.arraycopy(arr, 0, a, 0, arr.length);
-                if (a.length > arr.length)
-                    a[arr.length] = null;
+                if (a.length > arr.length) {
+			a[arr.length] = null;
+		}
                 return a;
             }
 
@@ -863,10 +903,11 @@ public class Collections {
              * that the equality-candidate is Map.Entry and calls its
              * setValue method.
              */
-            public boolean contains(Object o) {
-                if (!(o instanceof Map.Entry))
-                    return false;
-                return c.contains(new UnmodifiableEntry((Map.Entry)o));
+            public boolean contains(final Object o) {
+                if (!(o instanceof Map.Entry)) {
+			return false;
+		}
+                return this.c.contains(new UnmodifiableEntry((Map.Entry)o));
             }
 
             /**
@@ -874,23 +915,28 @@ public class Collections {
              * an unscrupulous List whose contains(Object o) method senses
              * when o is a Map.Entry, and calls o.setValue.
              */
-            public boolean containsAll(Collection coll) {
-                Iterator e = coll.iterator();
-                while (e.hasNext())
-                    if(!contains(e.next())) // Invokes safe contains() above
-                        return false;
+            public boolean containsAll(final Collection coll) {
+                final Iterator e = coll.iterator();
+                while (e.hasNext()) {
+			if(!this.contains(e.next())) {
+				return false;
+			}
+		}
                 return true;
             }
-            public boolean equals(Object o) {
-                if (o == this)
-                    return true;
+            public boolean equals(final Object o) {
+                if (o == this) {
+			return true;
+		}
 
-                if (!(o instanceof Set))
-                    return false;
-                Set s = (Set) o;
-                if (s.size() != c.size())
-                    return false;
-                return containsAll(s); // Invokes safe containsAll() above
+                if (!(o instanceof Set)) {
+			return false;
+		}
+                final Set s = (Set) o;
+                if (s.size() != this.c.size()) {
+			return false;
+		}
+                return this.containsAll(s); // Invokes safe containsAll() above
             }
 
             /**
@@ -901,24 +947,25 @@ public class Collections {
              * Map Entry when asked to perform an equality check.
              */
             private static class UnmodifiableEntry implements Map.Entry {
-                private Map.Entry e;
+                private final Map.Entry e;
 
-                UnmodifiableEntry(Map.Entry e) {this.e = e;}
+                UnmodifiableEntry(final Map.Entry e) {this.e = e;}
 
-                public Object getKey()	  {return e.getKey();}
-                public Object getValue()  {return e.getValue();}
-                public Object setValue(Object value) {
+                public Object getKey()	  {return this.e.getKey();}
+                public Object getValue()  {return this.e.getValue();}
+                public Object setValue(final Object value) {
                     throw new UnsupportedOperationException();
                 }
-                public int hashCode()	  {return e.hashCode();}
-                public boolean equals(Object o) {
-                    if (!(o instanceof Map.Entry))
-                        return false;
-                    Map.Entry t = (Map.Entry)o;
-                    return eq(e.getKey(),   t.getKey()) &&
-                           eq(e.getValue(), t.getValue());
+                public int hashCode()	  {return this.e.hashCode();}
+                public boolean equals(final Object o) {
+                    if (!(o instanceof Map.Entry)) {
+			return false;
+		}
+                    final Map.Entry t = (Map.Entry)o;
+                    return eq(this.e.getKey(),   t.getKey()) &&
+                           eq(this.e.getValue(), t.getValue());
                 }
-                public String toString()  {return e.toString();}
+                public String toString()  {return this.e.toString();}
             }
         }
     }
@@ -933,36 +980,38 @@ public class Collections {
      * an <tt>UnsupportedOperationException</tt>.<p>
      *
      * The returned sorted map will be serializable if the specified sorted map
-     * is serializable. 
+     * is serializable.
      *
      * @param m the sorted map for which an unmodifiable view is to be
-     *        returned. 
+     *        returned.
      * @return an unmodifiable view of the specified sorted map.
      */
-    public static SortedMap unmodifiableSortedMap(SortedMap m) {
+    public static SortedMap unmodifiableSortedMap(final SortedMap m) {
 	return new UnmodifiableSortedMap(m);
     }
 
     static class UnmodifiableSortedMap extends UnmodifiableMap
-    				 implements SortedMap, Serializable {
-        private SortedMap sm;
+    				 implements SortedMap {
+	private static final long serialVersionUID = -8700365885619028569L;
 
-	UnmodifiableSortedMap(SortedMap m) {super(m); sm = m;}
+	private final SortedMap sm;
 
-        public Comparator comparator()     {return sm.comparator();}
+	UnmodifiableSortedMap(final SortedMap m) {super(m); this.sm = m;}
 
-        public SortedMap subMap(Object fromKey, Object toKey) {
-            return new UnmodifiableSortedMap(sm.subMap(fromKey, toKey));
+        public Comparator comparator()     {return this.sm.comparator();}
+
+        public SortedMap subMap(final Object fromKey, final Object toKey) {
+            return new UnmodifiableSortedMap(this.sm.subMap(fromKey, toKey));
         }
-        public SortedMap headMap(Object toKey) {
-            return new UnmodifiableSortedMap(sm.headMap(toKey));
+        public SortedMap headMap(final Object toKey) {
+            return new UnmodifiableSortedMap(this.sm.headMap(toKey));
         }
-        public SortedMap tailMap(Object fromKey) {
-            return new UnmodifiableSortedMap(sm.tailMap(fromKey));
+        public SortedMap tailMap(final Object fromKey) {
+            return new UnmodifiableSortedMap(this.sm.tailMap(fromKey));
         }
 
-        public Object firstKey()           {return sm.firstKey();}
-        public Object lastKey()            {return sm.lastKey();}
+        public Object firstKey()           {return this.sm.firstKey();}
+        public Object lastKey()            {return this.sm.lastKey();}
     }
 
 
@@ -994,71 +1043,75 @@ public class Collections {
      * that the backing collection is a set or a list.<p>
      *
      * The returned collection will be serializable if the specified collection
-     * is serializable. 
+     * is serializable.
      *
      * @param  c the collection to be "wrapped" in a synchronized collection.
      * @return a synchronized view of the specified collection.
      */
-    public static Collection synchronizedCollection(Collection c) {
+    public static Collection synchronizedCollection(final Collection c) {
 	return new SynchronizedCollection(c);
     }
 
-    static Collection synchronizedCollection(Collection c, Object mutex) {
+    static Collection synchronizedCollection(final Collection c, final Object mutex) {
 	return new SynchronizedCollection(c, mutex);
     }
 
     static class SynchronizedCollection implements Collection, Serializable {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 5247158193211725141L;
 	Collection c;	   // Backing Collection
 	Object	   mutex;  // Object on which to synchronize
 
-	SynchronizedCollection(Collection c) {
-	    this.c = c; mutex = this;
+	SynchronizedCollection(final Collection c) {
+	    this.c = c; this.mutex = this;
         }
-	SynchronizedCollection(Collection c, Object mutex) {
+	SynchronizedCollection(final Collection c, final Object mutex) {
 	    this.c = c; this.mutex = mutex;
         }
 
 	public int size() {
-	    synchronized(mutex) {return c.size();}
+	    synchronized(this.mutex) {return this.c.size();}
         }
 	public boolean isEmpty() {
-	    synchronized(mutex) {return c.isEmpty();}
+	    synchronized(this.mutex) {return this.c.isEmpty();}
         }
-	public boolean contains(Object o) {
-	    synchronized(mutex) {return c.contains(o);}
+	public boolean contains(final Object o) {
+	    synchronized(this.mutex) {return this.c.contains(o);}
         }
 	public Object[] toArray() {
-	    synchronized(mutex) {return c.toArray();}
+	    synchronized(this.mutex) {return this.c.toArray();}
         }
-	public Object[] toArray(Object[] a) {
-	    synchronized(mutex) {return c.toArray(a);}
+	public Object[] toArray(final Object[] a) {
+	    synchronized(this.mutex) {return this.c.toArray(a);}
         }
 
 	public Iterator iterator() {
-            return c.iterator(); // Must be manually synched by user!
+            return this.c.iterator(); // Must be manually synched by user!
         }
 
-	public boolean add(Object o) {
-	    synchronized(mutex) {return c.add(o);}
+	public boolean add(final Object o) {
+	    synchronized(this.mutex) {return this.c.add(o);}
         }
-	public boolean remove(Object o) {
-	    synchronized(mutex) {return c.remove(o);}
+	public boolean remove(final Object o) {
+	    synchronized(this.mutex) {return this.c.remove(o);}
         }
 
-	public boolean containsAll(Collection coll) {
-	    synchronized(mutex) {return c.containsAll(coll);}
+	public boolean containsAll(final Collection coll) {
+	    synchronized(this.mutex) {return this.c.containsAll(coll);}
         }
-	public boolean addAll(Collection coll) {
-	    synchronized(mutex) {return c.addAll(coll);}
+	public boolean addAll(final Collection coll) {
+	    synchronized(this.mutex) {return this.c.addAll(coll);}
         }
-	public boolean removeAll(Collection coll) {
-	    synchronized(mutex) {return c.removeAll(coll);}
+	public boolean removeAll(final Collection coll) {
+	    synchronized(this.mutex) {return this.c.removeAll(coll);}
         }
-	public boolean retainAll(Collection coll) {
-	    synchronized(mutex) {return c.retainAll(coll);}
+	public boolean retainAll(final Collection coll) {
+	    synchronized(this.mutex) {return this.c.retainAll(coll);}
         }
 	public void clear() {
-	    synchronized(mutex) {c.clear();}
+	    synchronized(this.mutex) {this.c.clear();}
         }
     }
 
@@ -1087,28 +1140,32 @@ public class Collections {
      * @param  s the set to be "wrapped" in a synchronized set.
      * @return a synchronized view of the specified set.
      */
-    public static Set synchronizedSet(Set s) {
+    public static Set synchronizedSet(final Set s) {
 	return new SynchronizedSet(s);
     }
 
-    static Set synchronizedSet(Set s, Object mutex) {
+    static Set synchronizedSet(final Set s, final Object mutex) {
 	return new SynchronizedSet(s, mutex);
     }
 
     static class SynchronizedSet extends SynchronizedCollection
 			         implements Set {
-	SynchronizedSet(Set s) {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 150482378911212577L;
+	SynchronizedSet(final Set s) {
             super(s);
         }
-	SynchronizedSet(Set s, Object mutex) {
+	SynchronizedSet(final Set s, final Object mutex) {
             super(s, mutex);
         }
 
-	public boolean equals(Object o) {
-	    synchronized(mutex) {return c.equals(o);}
+	public boolean equals(final Object o) {
+	    synchronized(this.mutex) {return this.c.equals(o);}
         }
 	public int hashCode() {
-	    synchronized(mutex) {return c.hashCode();}
+	    synchronized(this.mutex) {return this.c.hashCode();}
         }
     }
 
@@ -1149,50 +1206,54 @@ public class Collections {
      * @param  s the sorted set to be "wrapped" in a synchronized sorted set.
      * @return a synchronized view of the specified sorted set.
      */
-    public static SortedSet synchronizedSortedSet(SortedSet s) {
+    public static SortedSet synchronizedSortedSet(final SortedSet s) {
 	return new SynchronizedSortedSet(s);
     }
 
     static class SynchronizedSortedSet extends SynchronizedSet
 			         implements SortedSet
     {
-        private SortedSet ss;
+        /**
+	 *
+	 */
+	private static final long serialVersionUID = 8245191640861687527L;
+	private final SortedSet ss;
 
-	SynchronizedSortedSet(SortedSet s) {
+	SynchronizedSortedSet(final SortedSet s) {
             super(s);
-            ss = s;
+            this.ss = s;
         }
-	SynchronizedSortedSet(SortedSet s, Object mutex) {
+	SynchronizedSortedSet(final SortedSet s, final Object mutex) {
             super(s, mutex);
-            ss = s;
+            this.ss = s;
         }
 
 	public Comparator comparator() {
-	    synchronized(mutex) {return ss.comparator();}
+	    synchronized(this.mutex) {return this.ss.comparator();}
         }
 
-        public SortedSet subSet(Object fromElement, Object toElement) {
-	    synchronized(mutex) {
+        public SortedSet subSet(final Object fromElement, final Object toElement) {
+	    synchronized(this.mutex) {
                 return new SynchronizedSortedSet(
-                    ss.subSet(fromElement, toElement), mutex);
+                    this.ss.subSet(fromElement, toElement), this.mutex);
             }
         }
-        public SortedSet headSet(Object toElement) {
-	    synchronized(mutex) {
-                return new SynchronizedSortedSet(ss.headSet(toElement), mutex);
+        public SortedSet headSet(final Object toElement) {
+	    synchronized(this.mutex) {
+                return new SynchronizedSortedSet(this.ss.headSet(toElement), this.mutex);
             }
         }
-        public SortedSet tailSet(Object fromElement) {
-	    synchronized(mutex) {
-               return new SynchronizedSortedSet(ss.tailSet(fromElement),mutex);
+        public SortedSet tailSet(final Object fromElement) {
+	    synchronized(this.mutex) {
+               return new SynchronizedSortedSet(this.ss.tailSet(fromElement),this.mutex);
             }
         }
 
         public Object first() {
-	    synchronized(mutex) {return ss.first();}
+	    synchronized(this.mutex) {return this.ss.first();}
         }
         public Object last() {
-	    synchronized(mutex) {return ss.last();}
+	    synchronized(this.mutex) {return this.ss.last();}
         }
     }
 
@@ -1221,70 +1282,74 @@ public class Collections {
      * @param  list the list to be "wrapped" in a synchronized list.
      * @return a synchronized view of the specified list.
      */
-    public static List synchronizedList(List list) {
+    public static List synchronizedList(final List list) {
 	return new SynchronizedList(list);
     }
 
-    static List synchronizedList(List list, Object mutex) {
+    static List synchronizedList(final List list, final Object mutex) {
 	return new SynchronizedList(list, mutex);
     }
 
     static class SynchronizedList extends SynchronizedCollection
     			          implements List {
-	private List list;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 7512331162356771531L;
+	private final List list;
 
-	SynchronizedList(List list) {
+	SynchronizedList(final List list) {
 	    super(list);
 	    this.list = list;
 	}
-	SynchronizedList(List list, Object mutex) {
+	SynchronizedList(final List list, final Object mutex) {
             super(list, mutex);
 	    this.list = list;
         }
 
-	public boolean equals(Object o) {
-	    synchronized(mutex) {return list.equals(o);}
+	public boolean equals(final Object o) {
+	    synchronized(this.mutex) {return this.list.equals(o);}
         }
 	public int hashCode() {
-	    synchronized(mutex) {return list.hashCode();}
+	    synchronized(this.mutex) {return this.list.hashCode();}
         }
 
-	public Object get(int index) {
-	    synchronized(mutex) {return list.get(index);}
+	public Object get(final int index) {
+	    synchronized(this.mutex) {return this.list.get(index);}
         }
-	public Object set(int index, Object element) {
-	    synchronized(mutex) {return list.set(index, element);}
+	public Object set(final int index, final Object element) {
+	    synchronized(this.mutex) {return this.list.set(index, element);}
         }
-	public void add(int index, Object element) {
-	    synchronized(mutex) {list.add(index, element);}
+	public void add(final int index, final Object element) {
+	    synchronized(this.mutex) {this.list.add(index, element);}
         }
-	public Object remove(int index) {
-	    synchronized(mutex) {return list.remove(index);}
-        }
-
-	public int indexOf(Object o) {
-	    synchronized(mutex) {return list.indexOf(o);}
-        }
-	public int lastIndexOf(Object o) {
-	    synchronized(mutex) {return list.lastIndexOf(o);}
+	public Object remove(final int index) {
+	    synchronized(this.mutex) {return this.list.remove(index);}
         }
 
-	public boolean addAll(int index, Collection c) {
-	    synchronized(mutex) {return list.addAll(index, c);}
+	public int indexOf(final Object o) {
+	    synchronized(this.mutex) {return this.list.indexOf(o);}
+        }
+	public int lastIndexOf(final Object o) {
+	    synchronized(this.mutex) {return this.list.lastIndexOf(o);}
+        }
+
+	public boolean addAll(final int index, final Collection c) {
+	    synchronized(this.mutex) {return this.list.addAll(index, c);}
         }
 
 	public ListIterator listIterator() {
-	    return list.listIterator(); // Must be manually synched by user
+	    return this.list.listIterator(); // Must be manually synched by user
         }
 
-	public ListIterator listIterator(int index) {
-	    return list.listIterator(index); // Must be manually synched by usr
+	public ListIterator listIterator(final int index) {
+	    return this.list.listIterator(index); // Must be manually synched by usr
         }
 
-	public List subList(int fromIndex, int toIndex) {
-	    synchronized(mutex) {
-                return new SynchronizedList(list.subList(fromIndex, toIndex),
-                                            mutex);
+	public List subList(final int fromIndex, final int toIndex) {
+	    synchronized(this.mutex) {
+                return new SynchronizedList(this.list.subList(fromIndex, toIndex),
+                                            this.mutex);
             }
         }
     }
@@ -1316,49 +1381,53 @@ public class Collections {
      * @param  m the map to be "wrapped" in a synchronized map.
      * @return a synchronized view of the specified map.
      */
-    public static Map synchronizedMap(Map m) {
+    public static Map synchronizedMap(final Map m) {
 	return new SynchronizedMap(m);
     }
 
     private static class SynchronizedMap implements Map, Serializable {
-	private Map m;	        // Backing Map
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 6038956312966651938L;
+	private final Map m;	        // Backing Map
         Object      mutex;	// Object on which to synchronize
 
-	SynchronizedMap(Map m) {
-            this.m = m;	 mutex = this;
+	SynchronizedMap(final Map m) {
+            this.m = m;	 this.mutex = this;
         }
 
-	SynchronizedMap(Map m, Object mutex) {
+	SynchronizedMap(final Map m, final Object mutex) {
             this.m = m;	 this.mutex = mutex;
         }
 
 	public int size() {
-	    synchronized(mutex) {return m.size();}
+	    synchronized(this.mutex) {return this.m.size();}
         }
 	public boolean isEmpty(){
-	    synchronized(mutex) {return m.isEmpty();}
+	    synchronized(this.mutex) {return this.m.isEmpty();}
         }
-	public boolean containsKey(Object key) {
-	    synchronized(mutex) {return m.containsKey(key);}
+	public boolean containsKey(final Object key) {
+	    synchronized(this.mutex) {return this.m.containsKey(key);}
         }
-	public boolean containsValue(Object value){
-	    synchronized(mutex) {return m.containsValue(value);}
+	public boolean containsValue(final Object value){
+	    synchronized(this.mutex) {return this.m.containsValue(value);}
         }
-	public Object get(Object key) {
-	    synchronized(mutex) {return m.get(key);}
+	public Object get(final Object key) {
+	    synchronized(this.mutex) {return this.m.get(key);}
         }
 
-	public Object put(Object key, Object value) {
-	    synchronized(mutex) {return m.put(key, value);}
+	public Object put(final Object key, final Object value) {
+	    synchronized(this.mutex) {return this.m.put(key, value);}
         }
-	public Object remove(Object key) {
-	    synchronized(mutex) {return m.remove(key);}
+	public Object remove(final Object key) {
+	    synchronized(this.mutex) {return this.m.remove(key);}
         }
-	public void putAll(Map map) {
-	    synchronized(mutex) {m.putAll(map);}
+	public void putAll(final Map map) {
+	    synchronized(this.mutex) {this.m.putAll(map);}
         }
 	public void clear() {
-	    synchronized(mutex) {m.clear();}
+	    synchronized(this.mutex) {this.m.clear();}
         }
 
 	private transient Set keySet = null;
@@ -1366,34 +1435,37 @@ public class Collections {
 	private transient Collection values = null;
 
 	public Set keySet() {
-            synchronized(mutex) {
-                if (keySet==null)
-                    keySet = new SynchronizedSet(m.keySet(), this);
-                return keySet;
+            synchronized(this.mutex) {
+                if (this.keySet==null) {
+			this.keySet = new SynchronizedSet(this.m.keySet(), this);
+		}
+                return this.keySet;
             }
 	}
 
 	public Set entrySet() {
-            synchronized(mutex) {
-                if (entrySet==null)
-                    entrySet = new SynchronizedSet(m.entrySet(), this);
-                return entrySet;
+            synchronized(this.mutex) {
+                if (this.entrySet==null) {
+			this.entrySet = new SynchronizedSet(this.m.entrySet(), this);
+		}
+                return this.entrySet;
             }
 	}
 
 	public Collection values() {
-            synchronized(mutex) {
-                if (values==null)
-                    values = new SynchronizedCollection(m.values(), this);
-                return values;
+            synchronized(this.mutex) {
+                if (this.values==null) {
+			this.values = new SynchronizedCollection(this.m.values(), this);
+		}
+                return this.values;
             }
         }
 
-	public boolean equals(Object o) {
-            synchronized(mutex) {return m.equals(o);}
+	public boolean equals(final Object o) {
+            synchronized(this.mutex) {return this.m.equals(o);}
         }
 	public int hashCode() {
-            synchronized(mutex) {return m.hashCode();}
+            synchronized(this.mutex) {return this.m.hashCode();}
         }
     }
 
@@ -1439,7 +1511,7 @@ public class Collections {
      * @param  m the sorted map to be "wrapped" in a synchronized sorted map.
      * @return a synchronized view of the specified sorted map.
      */
-    public static SortedMap synchronizedSortedMap(SortedMap m) {
+    public static SortedMap synchronizedSortedMap(final SortedMap m) {
 	return new SynchronizedSortedMap(m);
     }
 
@@ -1447,43 +1519,47 @@ public class Collections {
     static class SynchronizedSortedMap extends SynchronizedMap
 			         implements SortedMap
     {
-        private SortedMap sm;
+        /**
+	 *
+	 */
+	private static final long serialVersionUID = -5693395712145026239L;
+	private final SortedMap sm;
 
-	SynchronizedSortedMap(SortedMap m) {
+	SynchronizedSortedMap(final SortedMap m) {
             super(m);
-            sm = m;
+            this.sm = m;
         }
-	SynchronizedSortedMap(SortedMap m, Object mutex) {
+	SynchronizedSortedMap(final SortedMap m, final Object mutex) {
             super(m, mutex);
-            sm = m;
+            this.sm = m;
         }
 
 	public Comparator comparator() {
-	    synchronized(mutex) {return sm.comparator();}
+	    synchronized(this.mutex) {return this.sm.comparator();}
         }
 
-        public SortedMap subMap(Object fromKey, Object toKey) {
-	    synchronized(mutex) {
+        public SortedMap subMap(final Object fromKey, final Object toKey) {
+	    synchronized(this.mutex) {
                 return new SynchronizedSortedMap(
-                    sm.subMap(fromKey, toKey), mutex);
+                    this.sm.subMap(fromKey, toKey), this.mutex);
             }
         }
-        public SortedMap headMap(Object toKey) {
-	    synchronized(mutex) {
-                return new SynchronizedSortedMap(sm.headMap(toKey), mutex);
+        public SortedMap headMap(final Object toKey) {
+	    synchronized(this.mutex) {
+                return new SynchronizedSortedMap(this.sm.headMap(toKey), this.mutex);
             }
         }
-        public SortedMap tailMap(Object fromKey) {
-	    synchronized(mutex) {
-               return new SynchronizedSortedMap(sm.tailMap(fromKey),mutex);
+        public SortedMap tailMap(final Object fromKey) {
+	    synchronized(this.mutex) {
+               return new SynchronizedSortedMap(this.sm.tailMap(fromKey),this.mutex);
             }
         }
 
         public Object firstKey() {
-	    synchronized(mutex) {return sm.firstKey();}
+	    synchronized(this.mutex) {return this.sm.firstKey();}
         }
         public Object lastKey() {
-	    synchronized(mutex) {return sm.lastKey();}
+	    synchronized(this.mutex) {return this.sm.lastKey();}
         }
     }
 
@@ -1496,7 +1572,13 @@ public class Collections {
     public static final Set EMPTY_SET = new EmptySet();
 
     private static class EmptySet extends AbstractSet implements Serializable {
-        public Iterator iterator() {
+	private static final long serialVersionUID = 6156926943123123201L;
+
+	EmptySet() {
+		// empty
+	}
+
+	public Iterator iterator() {
             return new Iterator() {
                 public boolean hasNext() {
                     return false;
@@ -1512,7 +1594,7 @@ public class Collections {
 
         public int size() {return 0;}
 
-        public boolean contains(Object obj) {return false;}
+        public boolean contains(final Object obj) {return false;}
     }
 
     /**
@@ -1522,11 +1604,17 @@ public class Collections {
 
     private static class EmptyList extends AbstractList
                                    implements Serializable {
-        public int size() {return 0;}
+	private static final long serialVersionUID = -941676809523447274L;
 
-        public boolean contains(Object obj) {return false;}
+	EmptyList() {
+		// empty
+	}
 
-        public Object get(int index) {
+	public int size() {return 0;}
+
+        public boolean contains(final Object obj) {return false;}
+
+        public Object get(final int index) {
             throw new IndexOutOfBoundsException("Index: "+index);
         }
     }
@@ -1537,27 +1625,29 @@ public class Collections {
      *
      * @return an immutable set containing only the specified object.
      */
-    public static Set singleton(Object o) {
+    public static Set singleton(final Object o) {
 	return new SingletonSet(o);
     }
 
     private static class SingletonSet extends AbstractSet
                                       implements Serializable
     {
-        private Object element;
+	private static final long serialVersionUID = 3543566247715090095L;
 
-        SingletonSet(Object o) {element = o;}
+	final Object element;
+
+        SingletonSet(final Object o) {this.element = o;}
 
         public Iterator iterator() {
             return new Iterator() {
                 private boolean hasNext = true;
                 public boolean hasNext() {
-                    return hasNext;
+                    return this.hasNext;
                 }
                 public Object next() {
-                    if (hasNext) {
-                        hasNext = false;
-                        return element;
+                    if (this.hasNext) {
+                        this.hasNext = false;
+                        return SingletonSet.this.element;
                     }
                     throw new NoSuchElementException();
                 }
@@ -1569,7 +1659,7 @@ public class Collections {
 
         public int size() {return 1;}
 
-        public boolean contains(Object o) {return eq(o, element);}
+        public boolean contains(final Object o) {return eq(o, this.element);}
     }
 
     /**
@@ -1587,36 +1677,42 @@ public class Collections {
      * @see    List#addAll(Collection)
      * @see    List#addAll(int, Collection)
      */
-    public static List nCopies(int n, Object o) {
+    public static List nCopies(final int n, final Object o) {
         return new CopiesList(n, o);
     }
 
     private static class CopiesList extends AbstractList
                                     implements Serializable
     {
-        int n;
+        /**
+	 *
+	 */
+	private static final long serialVersionUID = -8511394365323709595L;
+	int n;
         Object element;
 
-        CopiesList(int n, Object o) {
-            if (n < 0)
-                throw new IllegalArgumentException("List length = " + n);
+        CopiesList(final int n, final Object o) {
+            if (n < 0) {
+		throw new IllegalArgumentException("List length = " + n);
+	}
             this.n = n;
-            element = o;
+            this.element = o;
         }
 
         public int size() {
-            return n;
+            return this.n;
         }
 
-        public boolean contains(Object obj) {
-            return n != 0 && eq(obj, element);
+        public boolean contains(final Object obj) {
+            return this.n != 0 && eq(obj, this.element);
         }
 
-        public Object get(int index) {
-            if (index<0 || index>=n)
-                throw new IndexOutOfBoundsException("Index: "+index+
-                                                    ", Size: "+n);
-            return element;
+        public Object get(final int index) {
+            if (index<0 || index>=this.n) {
+		throw new IndexOutOfBoundsException("Index: "+index+
+                                                    ", Size: "+this.n);
+	}
+            return this.element;
         }
     }
 
@@ -1646,9 +1742,15 @@ public class Collections {
     private static final Comparator REVERSE_ORDER = new ReverseComparator();
 
     private static class ReverseComparator implements Comparator,Serializable {
-        public int compare(Object o1, Object o2) {
-            Comparable c1 = (Comparable)o1;
-            Comparable c2 = (Comparable)o2;
+	private static final long serialVersionUID = 8956579072019723321L;
+
+	ReverseComparator() {
+		// empty
+	}
+
+	public int compare(final Object o1, final Object o2) {
+            final Comparable c1 = (Comparable)o1;
+            final Comparable c2 = (Comparable)o2;
             return -c1.compareTo(c2);
         }
     }
@@ -1666,11 +1768,11 @@ public class Collections {
 	    Iterator i = c.iterator();
 
 	    public boolean hasMoreElements() {
-		return i.hasNext();
+		return this.i.hasNext();
 	    }
 
 	    public Object nextElement() {
-		return i.next();
+		return this.i.next();
 	    }
         };
     }
@@ -1690,17 +1792,18 @@ public class Collections {
      * @see Enumeration
      * @see ArrayList
      */
-    public static ArrayList list(Enumeration e) {
-        ArrayList l = new ArrayList();
-        while (e.hasMoreElements())
-            l.add(e.nextElement());
+    public static ArrayList list(final Enumeration e) {
+        final ArrayList l = new ArrayList();
+        while (e.hasMoreElements()) {
+		l.add(e.nextElement());
+	}
         return l;
     }
 
     /**
      * Returns true if the specified arguments are equal, or both null.
      */
-    private static boolean eq(Object o1, Object o2) {
-        return (o1==null ? o2==null : o1.equals(o2));
+    static boolean eq(final Object o1, final Object o2) {
+        return o1==null ? o2==null : o1.equals(o2);
     }
 }

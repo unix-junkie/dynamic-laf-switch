@@ -9,6 +9,8 @@ package com.example.backport.java.util;
 
 import java.util.NoSuchElementException;
 
+import com.example.backport.java.lang.UnsupportedOperationException;
+
 /**
  * This class provides a skeletal implementation of the <tt>List</tt>
  * interface to minimize the effort required to implement this interface
@@ -67,12 +69,12 @@ public abstract class AbstractSequentialList extends AbstractList {
      * 		  IndexOutOfBoundsException if the specified index is out of
      * 		  range (<tt>index &lt; 0 || index &gt;= size()</tt>).
      */
-    public Object get(int index) {
-	ListIterator e = listIterator(index);
+    public Object get(final int index) {
+	final ListIterator e = this.listIterator(index);
 	try {
-	    return(e.next());
-	} catch(NoSuchElementException exc) {
-	    throw(new IndexOutOfBoundsException("Index: "+index));
+	    return e.next();
+	} catch(final NoSuchElementException exc) {
+	    throw new IndexOutOfBoundsException("Index: "+index);
 	}
     }
 
@@ -104,14 +106,14 @@ public abstract class AbstractSequentialList extends AbstractList {
      *		  <tt>(index &lt; 0 || index &gt;= size()</tt>).
      * @throws    IllegalArgumentException fromIndex &gt; toIndex.
      */
-    public Object set(int index, Object element) {
-	ListIterator e = listIterator(index);
+    public Object set(final int index, final Object element) {
+	final ListIterator e = this.listIterator(index);
 	try {
-	    Object oldVal = e.next();
+	    final Object oldVal = e.next();
 	    e.set(element);
 	    return oldVal;
-	} catch(NoSuchElementException exc) {
-	    throw(new IndexOutOfBoundsException("Index: "+index));
+	} catch(final NoSuchElementException exc) {
+	    throw new IndexOutOfBoundsException("Index: "+index);
 	}
     }
 
@@ -142,8 +144,8 @@ public abstract class AbstractSequentialList extends AbstractList {
      * @throws IndexOutOfBoundsException if the specified index is out of
      *            range (<tt>index &lt; 0 || index &gt; size()</tt>).
      */
-    public void add(int index, Object element) {
-	ListIterator e = listIterator(index);
+    public void add(final int index, final Object element) {
+	final ListIterator e = this.listIterator(index);
 	e.add(element);
     }
 
@@ -166,16 +168,16 @@ public abstract class AbstractSequentialList extends AbstractList {
      * @throws IndexOutOfBoundsException if the specified index is out of
      * 		  range (index &lt; 0 || index &gt;= size()).
      */
-    public Object remove(int index) {
-	ListIterator e = listIterator(index);
+    public Object remove(final int index) {
+	final ListIterator e = this.listIterator(index);
 	Object outCast;
 	try {
 	    outCast = e.next();
-	} catch(NoSuchElementException exc) {
-	    throw(new IndexOutOfBoundsException("Index: "+index));
+	} catch(final NoSuchElementException exc) {
+	    throw new IndexOutOfBoundsException("Index: "+index);
 	}
 	e.remove();
-	return(outCast);
+	return outCast;
     }
 
 
@@ -220,10 +222,10 @@ public abstract class AbstractSequentialList extends AbstractList {
      * @throws IndexOutOfBoundsException if the specified index is out of
      *            range (<tt>index &lt; 0 || index &gt; size()</tt>).
      */
-    public boolean addAll(int index, Collection c) {
+    public boolean addAll(final int index, final Collection c) {
 	boolean modified = false;
-	ListIterator e1 = listIterator(index);
-	Iterator e2 = c.iterator();
+	final ListIterator e1 = this.listIterator(index);
+	final Iterator e2 = c.iterator();
 	while (e2.hasNext()) {
 	    e1.add(e2.next());
 	    e1.next();	// Skip over the element that we just added
@@ -237,14 +239,14 @@ public abstract class AbstractSequentialList extends AbstractList {
 
     /**
      * Returns an iterator over the elements in this list (in proper
-     * sequence).<p> 
+     * sequence).<p>
      *
      * This implementation merely returns a list iterator over the list.
      *
      * @return an iterator over the elements in this list (in proper sequence).
      */
     public Iterator iterator() {
-        return listIterator();
+        return this.listIterator();
     }
 
     /**
