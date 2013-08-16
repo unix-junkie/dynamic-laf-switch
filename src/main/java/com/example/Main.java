@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -201,7 +202,7 @@ abstract class Main {
 				} finally {
 					in.close();
 				}
-			} catch (final Exception ioe) {
+			} catch (final IOException ioe) {
 				// ignore
 			}
 		}
