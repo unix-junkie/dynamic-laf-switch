@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -276,6 +278,7 @@ abstract class Main {
 				"java",
 				"javax.crypto",
 				"javax.net.ssl",
+				"javax.swing.text",
 				"oracle",
 				"org.apache.xalan.extensions",
 				"sun",
@@ -291,23 +294,11 @@ abstract class Main {
 		themeMenu.setText("Themes");
 		themeMenu.setMnemonic('T');
 		themeMenu.setEnabled(UIManager.getLookAndFeel() instanceof MetalLookAndFeel);
-		int i = 0;
-		for (final Iterator it = listDescendants(MetalTheme.class, false, false, true, true, packagesToSkip).iterator(); it.hasNext(); i++) {
+		for (final Iterator it = listDescendants(MetalTheme.class, false, false, true, true, packagesToSkip).iterator(); it.hasNext(); ) {
 			try {
 				final Class clazz = (Class) it.next();
 				final MetalTheme metalTheme = (MetalTheme) clazz.newInstance();
 				final JRadioButtonMenuItem menuItem = fromMetalTheme(metalTheme, frame);
-				if (i == 0) {
-					/*-
-					 * In 1.4 and earlier versions, we have no mechanism
-					 * to determine currently selected metal theme.
-					 * 
-					 * So just select the first menu item
-					 * and set the appropriate theme.
-					 */
-					menuItem.setSelected(true);
-					MetalLookAndFeel.setCurrentTheme(metalTheme);
-				}
 				themeMenu.add(menuItem);
 				themeMenuGroup.add(menuItem);
 			} catch (final InstantiationException ie) {
@@ -322,12 +313,6 @@ abstract class Main {
 		lookAndFeelMenu.setText("Look & Feel");
 		lookAndFeelMenu.setMnemonic('L');
 		final SortedSet descendants = listDescendants(LookAndFeel.class, false, false, true, true, packagesToSkip);
-		/*-
-		 * See the discussions at
-		 *
-		 * http://stackoverflow.com/questions/3981579/java-type-safety-a-generic-array-of-a-is-created-for-a-varargs-parameter and
-		 * http://stackoverflow.com/questions/1445233/is-it-possible-to-solve-the-a-generic-array-of-t-is-created-for-a-varargs-param
-		 */
 		final List exclusions = Arrays.asList(new Class[] {MultiLookAndFeel.class});
 		descendants.removeAll(exclusions);
 		for (final Iterator it = descendants.iterator(); it.hasNext(); ) {
@@ -358,5 +343,24 @@ abstract class Main {
 
 		frame.pack();
 		frame.setVisible(true);
+
+		/*-
+		 * In 1.4 and earlier versions, we have no mechanism
+		 * to determine currently selected metal theme.
+		 *
+		 * So just select the first menu item
+		 * and set the appropriate theme.
+		 */
+		SwingUtilities.invokeLater(new Runnable() {
+			/**
+			 * @see Runnable#run()
+			 */
+			public void run() {
+				final Iterator it = Collections.list(themeMenuGroup.getElements()).iterator();
+				if (it.hasNext()) {
+					((AbstractButton) it.next()).doClick();
+				}
+			}
+		});
 	}
 }
