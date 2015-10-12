@@ -4,8 +4,8 @@
 package com.example;
 
 import static java.awt.BorderLayout.CENTER;
-import static java.lang.Class.forName;
 import static java.lang.System.getProperty;
+import static java.lang.Thread.currentThread;
 import static java.util.Arrays.asList;
 import static java.util.Collections.list;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
@@ -29,6 +29,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -159,27 +161,30 @@ abstract class Main {
 					}
 
 					try {
-						final Class<?> clazz = forName(className);
-						if (!baseClass.isAssignableFrom(clazz)) {
-							continue;
-						}
+						final URL urls[] = {file.toURI().toURL()};
+						try (final URLClassLoader classLoader = new URLClassLoader(urls, currentThread().getContextClassLoader())) {
+							final Class<?> clazz = classLoader.loadClass(className);
+							if (!baseClass.isAssignableFrom(clazz)) {
+								continue;
+							}
 
-						final int modifiers = clazz.getModifiers();
-						if (skipNonPublic && (modifiers & ACC_PUBLIC) == 0) {
-							continue;
-						}
+							final int modifiers = clazz.getModifiers();
+							if (skipNonPublic && (modifiers & ACC_PUBLIC) == 0) {
+								continue;
+							}
 
-						if (skipAbstract && (clazz.getModifiers() & ACC_ABSTRACT) != 0) {
-							continue;
-						}
+							if (skipAbstract && (clazz.getModifiers() & ACC_ABSTRACT) != 0) {
+								continue;
+							}
 
-						if (skipDeprecated && clazz.isAnnotationPresent(Deprecated.class)) {
-							continue;
-						}
+							if (skipDeprecated && clazz.isAnnotationPresent(Deprecated.class)) {
+								continue;
+							}
 
-						@SuppressWarnings("unchecked")
-						final Class<? extends T> class2 = (Class<? extends T>) clazz;
-						classes.add(class2);
+							@SuppressWarnings("unchecked")
+							final Class<? extends T> class2 = (Class<? extends T>) clazz;
+							classes.add(class2);
+						}
 					} catch (final ClassNotFoundException | UnsatisfiedLinkError | ExceptionInInitializerError | NoClassDefFoundError e) {
 						// ignore
 					} catch (final OutOfMemoryError oome) {
