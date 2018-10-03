@@ -22,6 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jdt.annotation_1.1.100.v20140704-0625.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
