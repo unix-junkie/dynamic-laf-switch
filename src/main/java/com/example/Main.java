@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -150,7 +152,9 @@ abstract class Main {
 							}
 
 							try {
-								final Class clazz = Class.forName(className);
+								final URL urls[] = {file.toURL()};
+								final ClassLoader classLoader = new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
+								final Class clazz = classLoader.loadClass(className);
 								if (!baseClass.isAssignableFrom(clazz)) {
 									continue;
 								}
